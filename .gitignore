@@ -1,0 +1,12 @@
+examples/
+.DS_Store
+*.bak
+*.cache
+*.resharperoptions
+*.suo
+*.user
+*.vsprops
+*\bin*
+*\obj*
+*.cachefile*
+*.zip
