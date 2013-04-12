@@ -161,7 +161,13 @@ namespace FinalProject
             if (keyboardState.IsKeyDown(Keys.D))
                 Position += (Side * movementSpeed);
 
-            //RestrictPositionToTerrain(previousPosition);
+            RestrictPosition(previousPosition);
+        }
+
+        // This provides sub classes a hook to enforce restrictions on the camera's position
+        protected virtual void RestrictPosition(Vector3 previousPosition)
+        {
+            return;
         }
 
         //private void RestrictPositionToTerrain(Vector3 previousPosition)
@@ -190,18 +196,24 @@ namespace FinalProject
         {
             UpdateYaw();
             UpdatePitch();
+            UpdateRoll();
         }
 
-        private void UpdateYaw()
+        protected virtual void UpdateYaw()
         {
             float yawAngle = CalculateYawRotationAngleFromKeyboard();
             ApplyYawRotation(yawAngle);
         }
 
-        private void UpdatePitch()
+        protected virtual void UpdatePitch()
         {
             float pitchAngle = CalculatePitchRotationAngleFromKeyboard();
             ApplyPitchRotation(pitchAngle);
+        }
+
+        protected virtual void UpdateRoll()
+        {
+            return;
         }
 
         private float CalculateYawRotationAngleFromKeyboard()
@@ -235,6 +247,12 @@ namespace FinalProject
             currentYaw += yawAngle;
         }
 
+        // Hook for subclasses to enforce yaw restrictions
+        protected virtual void RestrictYawRotation(Vector3 previousDirection)
+        {
+            return;
+        }
+
         private void ApplyPitchRotation(float pitchAngle)
         {
             Matrix pitchMatrix = Matrix.CreateFromAxisAngle(Side, pitchAngle);
@@ -243,11 +261,23 @@ namespace FinalProject
             currentPitch += pitchAngle;
         }
 
+        // Hook for subclasses to enforce pitch restrictions
+        protected virtual void RestrictPitchRotation(Vector3 previousDirection, Vector3 previousUp)
+        {
+            return;
+        }
+
         private void ApplyRollRotation(float rollAngle)
         {
             Matrix rollMatrix = Matrix.CreateFromAxisAngle(Direction, rollAngle);
             Up = Vector3.Transform(Up, rollMatrix);
             currentRoll += rollAngle;
+        }
+
+        // Hook for subclasses to enforce roll restrictions
+        protected virtual void RestrictRollRotation(Vector3 previousUp)
+        {
+            return;
         }
 
         public override void Draw(GameTime gameTime)
