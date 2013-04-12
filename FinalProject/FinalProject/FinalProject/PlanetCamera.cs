@@ -27,28 +27,29 @@ namespace FinalProject
         // This provides sub classes a hook to enforce restrictions on the camera's position
         protected override void RestrictPosition(Vector3 previousPosition)
         {
-            float maxX = terrain.LimitX;
-            float minX = -maxX;
+            // Get the range of coordinates allowed in the world
+            float maxX = terrain.MaxX;
+            float minX = terrain.MinX;
 
-            float maxZ = terrain.LimitZ;
-            float minZ = -maxZ;
+            float maxZ = terrain.MaxZ;
+            float minZ = terrain.MinZ;
 
-            float newX = Position.X;
-            float newY = Position.Y;
-            float newZ = Position.Z;
+            float x = Position.X;
+            float y = Position.Y;
+            float z = Position.Z;
 
             // Make sure the move won't place the camera outside the world
             if (Position.X < minX || Position.X > maxX)
-                newX = previousPosition.X;
+                x = previousPosition.X;
 
             if (Position.Z < minZ || Position.Z > maxZ)
-                newZ = previousPosition.Z;
+                z = previousPosition.Z;
 
             // Ensure the camera moves along the ground
-            float height = terrain.GetHeight(newX, newZ) + POSITION_ABOVE_GROUND;
-            newY = height;
+            float height = terrain.GetHeight(x, z) + POSITION_ABOVE_GROUND;
+            y = height;
 
-            Position = new Vector3(newX, newY, newZ);
+            Position = new Vector3(x, y, z);
         }
 
     }

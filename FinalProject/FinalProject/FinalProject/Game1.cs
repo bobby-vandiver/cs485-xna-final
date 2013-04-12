@@ -19,10 +19,13 @@ namespace FinalProject
         public SpriteFont Font { get; private set; }
         public Camera Camera { get; private set; }
 
+        public Random RandomNumberGenerator { get; private set; }
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            RandomNumberGenerator = new Random();
         }
 
         protected override void Initialize()
@@ -33,9 +36,19 @@ namespace FinalProject
 
         private void InitializeCamera()
         {
+            Terrain terrain = InitializeTerrain();
+
             Vector3 position = new Vector3(0, 40, 5);
-            Camera = new Camera(this, Vector3.Forward, Vector3.Up, position);
+            Camera = new PlanetCamera(this, Vector3.Forward, Vector3.Up, position, terrain);
             Components.Add(Camera);
+        }
+
+        private Terrain InitializeTerrain()
+        {
+            Terrain terrain = new Terrain(this, 1.0f, 100.0f);
+            terrain.DrawOrder = 1;
+            Components.Add(terrain);
+            return terrain;
         }
 
         protected override void LoadContent()
