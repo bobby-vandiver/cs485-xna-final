@@ -80,7 +80,8 @@ namespace FinalProject
         float nearPlane = 0.001f;
         float farPlane = 1000f;
 
-        float fieldOfView = MathHelper.PiOver4;
+        const float DEFAULT_FIELD_OF_VIEW = MathHelper.PiOver4;
+        float fieldOfView;
 
         float movementSpeed = 0.5f;
 
@@ -115,8 +116,8 @@ namespace FinalProject
             get { return currentRoll; }
             set { currentRoll = value; }
         }
-        
-        public Camera(Game game, Vector3 direction, Vector3 up, Vector3 position)
+
+        public Camera(Game game, Vector3 direction, Vector3 up, Vector3 position, float fieldOfView = DEFAULT_FIELD_OF_VIEW)
             : base(game)
         {
             // Use the property setters to ensure vectors are unit length
@@ -124,10 +125,12 @@ namespace FinalProject
             this.Up = up;
             this.Position = position;
 
+            this.fieldOfView = fieldOfView;
+
             // Use the default rotation rate
-            YawRotationRate = DEFAULT_ROTATION_RATE;
-            PitchRotationRate = DEFAULT_ROTATION_RATE;
-            RollRotationRate = DEFAULT_ROTATION_RATE;
+            this.YawRotationRate = DEFAULT_ROTATION_RATE;
+            this.PitchRotationRate = DEFAULT_ROTATION_RATE;
+            this.RollRotationRate = DEFAULT_ROTATION_RATE;
         }
 
         public override void Initialize()
@@ -210,19 +213,29 @@ namespace FinalProject
 
         protected virtual void UpdateYaw()
         {
+            Vector3 previousDirection = Direction;
+
             float yawAngle = CalculateYawRotationAngleFromKeyboard();
             ApplyYawRotation(yawAngle);
+
+            RestrictYawRotation(previousDirection, yawAngle);
         }
 
         protected virtual void UpdatePitch()
         {
+            Vector3 previousDirection = Direction;
+            Vector3 previousUp = Up;
+
             float pitchAngle = CalculatePitchRotationAngleFromKeyboard();
             ApplyPitchRotation(pitchAngle);
+            
+            RestrictPitchRotation(previousDirection, previousUp, pitchAngle);
         }
 
         protected virtual void UpdateRoll()
         {
-            return;
+            Vector3 previousUp = Up;
+            RestrictRollRotation(previousUp, 0);
         }
 
         private float CalculateYawRotationAngleFromKeyboard()
@@ -257,7 +270,7 @@ namespace FinalProject
         }
 
         // Hook for subclasses to enforce yaw restrictions
-        protected virtual void RestrictYawRotation(Vector3 previousDirection)
+        protected virtual void RestrictYawRotation(Vector3 previousDirection, float previousYawAngle)
         {
             return;
         }
@@ -271,7 +284,7 @@ namespace FinalProject
         }
 
         // Hook for subclasses to enforce pitch restrictions
-        protected virtual void RestrictPitchRotation(Vector3 previousDirection, Vector3 previousUp)
+        protected virtual void RestrictPitchRotation(Vector3 previousDirection, Vector3 previousUp, float previousPitchAngle)
         {
             return;
         }
@@ -284,7 +297,7 @@ namespace FinalProject
         }
 
         // Hook for subclasses to enforce roll restrictions
-        protected virtual void RestrictRollRotation(Vector3 previousUp)
+        protected virtual void RestrictRollRotation(Vector3 previousUp, float previousRollAngle)
         {
             return;
         }
