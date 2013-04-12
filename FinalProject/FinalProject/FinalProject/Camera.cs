@@ -131,6 +131,7 @@ namespace FinalProject
 
         protected override void LoadContent()
         {
+            // Need this for displaying debug messages
             spriteBatch = new SpriteBatch(GraphicsDevice);
             base.LoadContent();
         }
@@ -231,16 +232,22 @@ namespace FinalProject
         {
             Matrix yawMatrix = Matrix.CreateFromAxisAngle(Up, yawAngle);
             Direction = Vector3.Transform(Direction, yawMatrix);
+            currentYaw += yawAngle;
         }
 
         private void ApplyPitchRotation(float pitchAngle)
         {
-            //if (Math.Abs(currentPitch + pitchAngle) < totalPitch)
-            //{
-                Matrix pitchMatrix = Matrix.CreateFromAxisAngle(Side, pitchAngle);
-                Direction = Vector3.Transform(Direction, pitchMatrix);
-                currentPitch += pitchAngle;
-            //}
+            Matrix pitchMatrix = Matrix.CreateFromAxisAngle(Side, pitchAngle);
+            Direction = Vector3.Transform(Direction, pitchMatrix);
+            Up = Vector3.Transform(Up, pitchMatrix);            
+            currentPitch += pitchAngle;
+        }
+
+        private void ApplyRollRotation(float rollAngle)
+        {
+            Matrix rollMatrix = Matrix.CreateFromAxisAngle(Direction, rollAngle);
+            Up = Vector3.Transform(Up, rollMatrix);
+            currentRoll += rollAngle;
         }
 
         public override void Draw(GameTime gameTime)
