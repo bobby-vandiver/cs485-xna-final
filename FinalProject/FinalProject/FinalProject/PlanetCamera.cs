@@ -15,18 +15,18 @@ namespace FinalProject
     public class PlanetCamera : Camera
     {
         const float POSITION_ABOVE_GROUND = 8.5f;
+        
+        Terrain terrain;
 
-        public PlanetCamera(Game game, Vector3 direction, Vector3 up, Vector3 position)
+        public PlanetCamera(Game game, Vector3 direction, Vector3 up, Vector3 position, Terrain terrain)
             : base(game, direction, up, position)
         {
-            // TODO: Construct any child components here
+            this.terrain = terrain;
         }
 
         // This provides sub classes a hook to enforce restrictions on the camera's position
-        protected override void RestrictPosition(Vector3 previousPosition, Terrain terrain)
+        protected override void RestrictPosition(Vector3 previousPosition)
         {
-            //Terrain terrain = ((Game1)Game).Terrain;
-
             float maxX = terrain.LimitX;
             float minX = -maxX;
 
