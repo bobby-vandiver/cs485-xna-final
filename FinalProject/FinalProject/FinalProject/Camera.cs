@@ -85,11 +85,33 @@ namespace FinalProject
         float movementSpeed = 0.5f;
 
         const float ROTATION_RATE = MathHelper.PiOver4 / 125;
-        const float POSITION_ABOVE_GROUND = 8.5f;
 
-        float totalPitch = MathHelper.PiOver4 / 2;
+        
+        //const float POSITION_ABOVE_GROUND = 8.5f;
+
         float currentPitch = 0;
+        float currentYaw = 0;
+        float currentRoll = 0;
 
+        // Sub classes can access the current yaw/pitch/roll via properties
+        protected float Pitch
+        {
+            get { return currentPitch; }
+            set { currentPitch = value; }
+        }
+
+        protected float Yaw
+        {
+            get { return currentYaw; }
+            set { currentYaw = value; }
+        }
+
+        protected float Roll
+        {
+            get { return currentRoll; }
+            set { currentRoll = value; }
+        }
+        
         public Camera(Game game, Vector3 direction, Vector3 up, Vector3 position)
             : base(game)
         {
