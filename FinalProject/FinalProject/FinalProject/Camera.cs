@@ -14,11 +14,16 @@ namespace FinalProject
     public class Camera : Microsoft.Xna.Framework.DrawableGameComponent
     {
         SpriteBatch spriteBatch;
+        
+        // Access these via their respective properties to ensure normalization
+        Vector3 direction;
+        Vector3 up;
+        Vector3 position;
 
+        #region Camera Axes and Matrices Properties
         public Matrix View { get; private set; }
         public Matrix Projection { get; private set; }
 
-        Vector3 direction;
         public Vector3 Direction
         {
             get
@@ -32,7 +37,6 @@ namespace FinalProject
             }
         }
 
-        Vector3 up;
         public Vector3 Up
         {
             get
@@ -46,7 +50,6 @@ namespace FinalProject
             }
         }
 
-        Vector3 position;
         public Vector3 Position
         {
             get
@@ -76,6 +79,7 @@ namespace FinalProject
                 return side;
             }
         }
+        #endregion
 
         float nearPlane = 0.001f;
         float farPlane = 1000f;
@@ -87,16 +91,19 @@ namespace FinalProject
 
         const float DEFAULT_ROTATION_RATE = MathHelper.PiOver4 / 125;
 
-        // Subclasses can override these values if different rotation rates are need for each axis
+        // Subclasses can specify different rotation rates for each axis if needed
+        #region Rotation Rates
         protected float YawRotationRate;
         protected float PitchRotationRate;
         protected float RollRotationRate;
+        #endregion
 
         float currentPitch = 0;
         float currentYaw = 0;
         float currentRoll = 0;
 
         // Subclasses can access the current yaw/pitch/roll via properties
+        #region Current Pitch/Yaw/Roll properties
         protected float Pitch
         {
             get { return currentPitch; }
@@ -114,6 +121,7 @@ namespace FinalProject
             get { return currentRoll; }
             set { currentRoll = value; }
         }
+        #endregion
 
         public Camera(Game game, Vector3 direction, Vector3 up, Vector3 position, float fieldOfView = DEFAULT_FIELD_OF_VIEW)
             : base(game)
