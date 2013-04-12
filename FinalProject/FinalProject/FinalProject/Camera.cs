@@ -91,8 +91,6 @@ namespace FinalProject
         protected float YawRotationRate;
         protected float PitchRotationRate;
         protected float RollRotationRate;
-        
-        //const float POSITION_ABOVE_GROUND = 8.5f;
 
         float currentPitch = 0;
         float currentYaw = 0;
@@ -181,28 +179,6 @@ namespace FinalProject
         {
             return;
         }
-
-        //private void RestrictPositionToTerrain(Vector3 previousPosition)
-        //{
-        //    Terrain terrain = ((Game1)Game).Terrain;
-
-        //    float maxX = terrain.LimitX;
-        //    float minX = -maxX;
-
-        //    float maxZ = terrain.LimitZ;
-        //    float minZ = -maxZ;
-
-        //    // Make sure the move won't place the camera outside the world
-        //    if (position.X < minX || position.X > maxX)
-        //        position.X = previousPosition.X;
-
-        //    if (position.Z < minZ || position.Z > maxZ)
-        //        position.Z = previousPosition.Z;
-
-        //    // Ensure the camera moves along the ground
-        //    float height = terrain.GetHeight(position.X, position.Z) + POSITION_ABOVE_GROUND;
-        //    position.Y = height;
-        //}
 
         private void UpdateDirectionFromKeyboard()
         {
