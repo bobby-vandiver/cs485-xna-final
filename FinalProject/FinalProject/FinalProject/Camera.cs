@@ -84,8 +84,12 @@ namespace FinalProject
 
         float movementSpeed = 0.5f;
 
-        const float ROTATION_RATE = MathHelper.PiOver4 / 125;
+        const float DEFAULT_ROTATION_RATE = MathHelper.PiOver4 / 125;
 
+        // Subclasses can override these values if different rotation rates are need for each axis
+        protected float YawRotationRate;
+        protected float PitchRotationRate;
+        protected float RollRotationRate;
         
         //const float POSITION_ABOVE_GROUND = 8.5f;
 
@@ -93,7 +97,7 @@ namespace FinalProject
         float currentYaw = 0;
         float currentRoll = 0;
 
-        // Sub classes can access the current yaw/pitch/roll via properties
+        // Subclasses can access the current yaw/pitch/roll via properties
         protected float Pitch
         {
             get { return currentPitch; }
@@ -119,6 +123,11 @@ namespace FinalProject
             this.Direction = direction;
             this.Up = up;
             this.Position = position;
+
+            // Use the default rotation rate
+            YawRotationRate = DEFAULT_ROTATION_RATE;
+            PitchRotationRate = DEFAULT_ROTATION_RATE;
+            RollRotationRate = DEFAULT_ROTATION_RATE;
         }
 
         public override void Initialize()
@@ -221,9 +230,9 @@ namespace FinalProject
             float yawAngle = 0f;
 
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                yawAngle = ROTATION_RATE;
+                yawAngle = YawRotationRate;
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                yawAngle = -ROTATION_RATE;
+                yawAngle = -YawRotationRate;
 
             return yawAngle;
         }
@@ -233,9 +242,9 @@ namespace FinalProject
             float pitchAngle = 0f;
 
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                pitchAngle = -ROTATION_RATE;
+                pitchAngle = -PitchRotationRate;
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                pitchAngle = ROTATION_RATE;
+                pitchAngle = PitchRotationRate;
 
             return pitchAngle;
         }
