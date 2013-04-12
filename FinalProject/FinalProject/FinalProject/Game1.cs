@@ -40,6 +40,7 @@ namespace FinalProject
 
             Vector3 position = new Vector3(0, 40, 5);
             Camera = new PlanetCamera(this, Vector3.Forward, Vector3.Up, position, terrain);
+            Camera.DrawOrder = 2;
             Components.Add(Camera);
         }
 

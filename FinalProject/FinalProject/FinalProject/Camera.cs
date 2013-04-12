@@ -197,23 +197,26 @@ namespace FinalProject
 
         protected virtual void UpdateYaw()
         {
+            float previousYawAngle = currentYaw;
             Vector3 previousDirection = Direction;
-
+            
             float yawAngle = CalculateYawRotationAngleFromKeyboard();
             ApplyYawRotation(yawAngle);
 
-            RestrictYawRotation(previousDirection, yawAngle);
+            RestrictYawRotation(previousDirection, previousYawAngle);
         }
 
         protected virtual void UpdatePitch()
         {
+            float previousPitchAngle = currentPitch;
+
             Vector3 previousDirection = Direction;
             Vector3 previousUp = Up;
 
             float pitchAngle = CalculatePitchRotationAngleFromKeyboard();
             ApplyPitchRotation(pitchAngle);
             
-            RestrictPitchRotation(previousDirection, previousUp, pitchAngle);
+            RestrictPitchRotation(previousDirection, previousUp, previousPitchAngle);
         }
 
         protected virtual void UpdateRoll()

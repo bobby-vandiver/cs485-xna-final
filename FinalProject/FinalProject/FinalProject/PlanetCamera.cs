@@ -52,5 +52,20 @@ namespace FinalProject
             Position = new Vector3(x, y, z);
         }
 
+        protected override void RestrictPitchRotation(Vector3 previousDirection, Vector3 previousUp, float previousPitchAngle)
+        {
+            float totalPitch = MathHelper.PiOver4 / 2;
+
+            // Enforce min/max pitch rotation
+            if (Math.Abs(Pitch) >= totalPitch)
+            {
+                // Reset pitch and axes to previously known valid states
+                Direction = previousDirection;
+                Up = previousUp;
+                Pitch = previousPitchAngle;
+            }
+
+            return;
+        }
     }
 }
