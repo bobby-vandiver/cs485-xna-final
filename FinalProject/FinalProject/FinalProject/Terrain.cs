@@ -14,7 +14,6 @@ namespace FinalProject
 {
     public class Terrain : Microsoft.Xna.Framework.DrawableGameComponent
     {
-
         // Vertex data
         VertexPositionNormalTexture[] vertices;
 
@@ -121,7 +120,7 @@ namespace FinalProject
 
         private void PrepareBasicEffectForDrawing3D()
         {
-            Camera camera = ((Game1)Game).Camera;
+            Camera camera = (Camera)Game.Services.GetService(typeof(Camera));
 
             // Set matrices
             basicEffect.World = Matrix.Identity;
@@ -148,7 +147,7 @@ namespace FinalProject
         // Generates a random point in the world and on the terrain
         public Vector3 GetRandomPoint()
         {
-            Random randomNumberGenerator = ((Game1)Game).RandomNumberGenerator;
+            Random randomNumberGenerator = (Random)Game.Services.GetService(typeof(Random));
 
             // Find a random point in the world
             float x = (float)randomNumberGenerator.NextDouble() * (MaxX - MinX) + MinX;

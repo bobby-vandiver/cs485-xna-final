@@ -291,8 +291,7 @@ namespace FinalProject
 
         public override void Draw(GameTime gameTime)
         {
-
-            SpriteFont font = ((Game1)Game).Font;
+            SpriteFont font = (SpriteFont)Game.Services.GetService(typeof(SpriteFont));
 
             spriteBatch.Begin();
 
