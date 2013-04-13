@@ -56,12 +56,14 @@ namespace FinalProject
         {
             float totalPitch = MathHelper.PiOver4 / 2;
 
+            // We don't want the up vector to ever be altered
+            Up = previousUp;
+
             // Enforce min/max pitch rotation
             if (Math.Abs(Pitch) >= totalPitch)
             {
                 // Reset pitch and axes to previously known valid states
                 Direction = previousDirection;
-                Up = previousUp;
                 Pitch = previousPitchAngle;
             }
 
