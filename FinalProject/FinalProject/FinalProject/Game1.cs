@@ -26,7 +26,8 @@ namespace FinalProject
         public enum LevelState { Start, Play, End }
         public LevelState CurrentLevelState;
 
-        const int LEVEL_COUNT = 3;
+        //const int LEVEL_COUNT = 3;
+        const int LEVEL_COUNT = 1;
         int currentLevel = 0;
         Level level;
 
@@ -118,6 +119,7 @@ namespace FinalProject
 
                     // Progress to the next level
                     currentLevel++;
+                    CurrentLevelState = LevelState.Start;
                     
                     // See if we've reached the end of the game
                     if (currentLevel >= LEVEL_COUNT)

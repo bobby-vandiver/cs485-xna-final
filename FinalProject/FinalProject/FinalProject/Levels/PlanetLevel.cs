@@ -59,11 +59,13 @@ namespace FinalProject
             base.LoadContent();
         }
 
-        protected override void UnloadContent()
-        {
+        protected override void UnloadResources()
+         {
             Game.Components.Remove(camera);
             Game.Components.Remove(terrain);
             Game.Services.RemoveService(typeof(Camera));
+
+
             base.UnloadContent();
         }
 
@@ -82,7 +84,8 @@ namespace FinalProject
         }
         protected override bool LevelOver()
         {
-            return false;
+            return camera.Position.X > 65;
+            //return false;
         }
 
     }

@@ -23,9 +23,17 @@ namespace FinalProject
         {
             // Update the game state when the end of level is reached
             if (LevelOver())
+            {
                 ((Game1)Game).CurrentLevelState = Game1.LevelState.End;
+                UnloadResources();
+            }
 
             base.Update(gameTime);
+        }
+
+        // Remove components and other non-graphics resources via this method
+        protected virtual void UnloadResources()
+        {
         }
 
         // Override this to provide logic necessary to determine end of level
