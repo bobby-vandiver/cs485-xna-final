@@ -30,5 +30,13 @@ namespace FinalProject
 
         // Override this to provide logic necessary to determine end of level
         protected abstract bool LevelOver();
+
+        protected void PrepareGraphicsDeviceForDrawing3D()
+        {
+            // Reset state in case SpriteBatch is used somewhere
+            GraphicsDevice.BlendState = BlendState.Opaque;
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+        }
     }
 }

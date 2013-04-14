@@ -16,6 +16,7 @@ namespace FinalProject
     {
         Camera camera;
         Terrain terrain;
+        LaserGun laserGun;
 
         public PlanetLevel(Game game)
             : base(game)
@@ -25,6 +26,8 @@ namespace FinalProject
         public override void Initialize()
         {
             InitializeCamera();
+            // The gun model needs to be render after everything so it appears 'on top'
+            this.DrawOrder = 3;
             base.Initialize();
         }
 
@@ -48,6 +51,14 @@ namespace FinalProject
             return terrain;
         }
 
+        protected override void LoadContent()
+        {
+            Model laserGunModel = Game.Content.Load<Model>(@"Models\Weapons\lasergun");
+            laserGun = new LaserGun(laserGunModel);
+
+            base.LoadContent();
+        }
+
         protected override void UnloadContent()
         {
             Game.Components.Remove(camera);
@@ -63,9 +74,16 @@ namespace FinalProject
             base.Update(gameTime);
         }
 
+        public override void Draw(GameTime gameTime)
+        {
+            PrepareGraphicsDeviceForDrawing3D();
+            laserGun.Draw(camera);
+            base.Draw(gameTime);
+        }
         protected override bool LevelOver()
         {
             return false;
-        }
+        }
+
     }
 }
