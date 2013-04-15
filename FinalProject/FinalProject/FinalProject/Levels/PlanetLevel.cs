@@ -17,6 +17,7 @@ namespace FinalProject
         Camera camera;
         Terrain terrain;
         LaserGun laserGun;
+        Skybox skybox;
 
         public PlanetLevel(Game game)
             : base(game)
@@ -35,7 +36,11 @@ namespace FinalProject
         {
             Terrain terrain = InitializeTerrain();
 
-            Vector3 position = new Vector3(0, 40, 5);
+            // Start in the center of the world
+            float midX = (float)(terrain.MinX + terrain.MaxX) / 2.0f;
+            float midZ = (float)(terrain.MinZ + terrain.MaxZ) / 2.0f;
+            Vector3 position = new Vector3(midX, 0, midZ);
+
             camera = new PlanetCamera(Game, Vector3.Forward, Vector3.Up, position, terrain);
             camera.DrawOrder = 2;
             
@@ -56,6 +61,10 @@ namespace FinalProject
             Model laserGunModel = Game.Content.Load<Model>(@"Models\Weapons\lasergun");
             laserGun = new LaserGun(laserGunModel);
 
+            skybox = new Skybox(Game, @"Backgrounds\Sunset", 500f);
+            skybox.DrawOrder = 0;
+            Game.Components.Add(skybox);
+
             base.LoadContent();
         }
 
@@ -63,9 +72,8 @@ namespace FinalProject
          {
             Game.Components.Remove(camera);
             Game.Components.Remove(terrain);
+            Game.Components.Remove(skybox);
             Game.Services.RemoveService(typeof(Camera));
-
-
             base.UnloadContent();
         }
 
@@ -84,8 +92,7 @@ namespace FinalProject
         }
         protected override bool LevelOver()
         {
-            return camera.Position.X > 65;
-            //return false;
+            return false;
         }
 
     }

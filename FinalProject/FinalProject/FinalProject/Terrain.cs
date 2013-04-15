@@ -89,8 +89,8 @@ namespace FinalProject
 
         public override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
-            DrawBackground();
+            //GraphicsDevice.Clear(Color.Black);
+            //DrawBackground();
 
             PrepareGraphicsDeviceForDrawing3D();
             PrepareBasicEffectForDrawing3D();
