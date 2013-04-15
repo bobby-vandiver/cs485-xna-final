@@ -1,3 +1,0 @@
-List of external resources used and their locations/copyright info.
-
-Asteroids models/textures: Learning XNA 4.0 - Chapter 17 sample code
