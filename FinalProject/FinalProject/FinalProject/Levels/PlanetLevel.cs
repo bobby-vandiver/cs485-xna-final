@@ -16,8 +16,15 @@ namespace FinalProject
     {
         Camera camera;
         Terrain terrain;
+
         LaserGun laserGun;
         Skybox skybox;
+
+        // Randomly generate the number of aliens
+        const int MIN_ALIEN_COUNT = 1;
+        const int MAX_ALIEN_COUNT = 6;
+
+        List<Alien> aliens;
 
         public PlanetLevel(Game game)
             : base(game)
@@ -58,14 +65,73 @@ namespace FinalProject
 
         protected override void LoadContent()
         {
+            LoadLaserGun();
+            LoadSkybox();
+            LoadAliens();
+            base.LoadContent();
+        }
+
+        private void LoadLaserGun()
+        {
             Model laserGunModel = Game.Content.Load<Model>(@"Models\Weapons\lasergun");
             laserGun = new LaserGun(laserGunModel);
+        }
 
+        private void LoadSkybox()
+        {
             skybox = new Skybox(Game, @"Backgrounds\Sunset", 500f);
             skybox.DrawOrder = 0;
             Game.Components.Add(skybox);
+        }
 
-            base.LoadContent();
+        private void LoadAliens()
+        {
+            Model alienModel = Game.Content.Load<Model>(@"Models\alien");
+
+            Random randomNumberGenerator = (Random)Game.Services.GetService(typeof(Random));
+            int alienCount = randomNumberGenerator.Next(MIN_ALIEN_COUNT, MAX_ALIEN_COUNT);
+
+            aliens = new List<Alien>();
+
+            for (int i = 0; i < alienCount; i++)
+            {
+                // Place each alien at a random point on the terrain
+                Vector3 position = GetUniqueRandomPointInWorld(randomNumberGenerator);
+                Alien alien = new Alien(alienModel, position);
+                aliens.Add(alien);
+
+                Console.WriteLine("Alien[" + i + "]: " + alien.Position);
+            }
+        }
+
+        private Vector3 GetUniqueRandomPointInWorld(Random randomNumberGenerator)
+        {
+            // Be optimistic that a unique position will be found after one try
+            bool unique = true;
+
+            // Arbitrary distance between objects in the world to avoid multiple objects overlapping
+            float minimumDistanceAllowed = 5.0f;
+
+            Vector3 randomPosition;
+            
+            do
+            {
+                // Generate a random point and see if anything else is there
+                randomPosition = terrain.GetRandomPoint();
+
+                // Check for overlap with camera
+                if (Vector3.Distance(randomPosition, camera.Position) < minimumDistanceAllowed)
+                    unique = false;
+
+                // Check for overlap with existent aliens
+                foreach (Alien a in aliens)
+                {
+                    if (Vector3.Distance(randomPosition, a.Position) < minimumDistanceAllowed)
+                        unique = false;
+                }
+            } while(!unique);
+
+            return randomPosition;
         }
 
         protected override void UnloadResources()
@@ -88,6 +154,10 @@ namespace FinalProject
         {
             PrepareGraphicsDeviceForDrawing3D();
             laserGun.Draw(camera);
+
+            foreach (Alien a in aliens)
+                a.Draw(camera);
+
             base.Draw(gameTime);
         }
         protected override bool LevelOver()
