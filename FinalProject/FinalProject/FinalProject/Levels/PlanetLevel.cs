@@ -22,7 +22,8 @@ namespace FinalProject
 
         // Randomly generate the number of aliens
         const int MIN_ALIEN_COUNT = 1;
-        const int MAX_ALIEN_COUNT = 6;
+        //const int MAX_ALIEN_COUNT = 6;
+        const int MAX_ALIEN_COUNT = 1;
 
         List<Alien> aliens;
 
@@ -96,8 +97,12 @@ namespace FinalProject
             for (int i = 0; i < alienCount; i++)
             {
                 // Place each alien at a random point on the terrain
-                Vector3 position = GetUniqueRandomPointInWorld(randomNumberGenerator);
-                Alien alien = new Alien(alienModel, position);
+                //Vector3 position = GetUniqueRandomPointInWorld(randomNumberGenerator);
+
+                Vector3 position = camera.Position - new Vector3(0, 0, 100.0f);
+                position.Y = terrain.GetHeight(position.X, position.Z);
+
+                Alien alien = new Alien(alienModel, position, Vector3.UnitZ);
                 aliens.Add(alien);
 
                 Console.WriteLine("Alien[" + i + "]: " + alien.Position);
@@ -145,7 +150,11 @@ namespace FinalProject
 
         public override void Update(GameTime gameTime)
         {
-            // TODO: Add your update code here
+            for (int i = 0; i < aliens.Count; i++)
+            {
+                Alien alien = aliens[i];
+                alien.Update(camera, terrain);
+            }
 
             base.Update(gameTime);
         }
