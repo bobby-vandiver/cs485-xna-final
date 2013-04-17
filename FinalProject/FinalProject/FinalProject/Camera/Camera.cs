@@ -16,7 +16,7 @@ namespace FinalProject
         SpriteBatch spriteBatch;
         
         // Access these via their respective properties to ensure normalization
-       public Vector3 direction;
+        public Vector3 direction;
         public Vector3 up;
         public Vector3 position;
 
@@ -115,9 +115,9 @@ namespace FinalProject
         protected float RollRotationRate;
         #endregion
 
-        float currentPitch = 0;
-        float currentYaw = 0;
-        float currentRoll = 0;
+        public float currentPitch = 0;
+        public float currentYaw = 0;
+        public float currentRoll = 0;
 
         // Subclasses can access the current yaw/pitch/roll via properties
         #region Current Pitch/Yaw/Roll properties
@@ -190,7 +190,7 @@ namespace FinalProject
             base.Update(gameTime);
         }
 
-        private void UpdatePositionFromKeyboard()
+        protected virtual void UpdatePositionFromKeyboard()
         {
             KeyboardState keyboardState = Keyboard.GetState();
 

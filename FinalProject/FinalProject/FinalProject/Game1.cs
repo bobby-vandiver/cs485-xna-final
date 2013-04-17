@@ -158,6 +158,9 @@ namespace FinalProject
             switch (currentLevel)
             {
                 case 0:
+                    level = new SpaceLevel(this);
+                    break;
+                case 1:
                     level = new PlanetLevel(this);
                     break;
                 default:
