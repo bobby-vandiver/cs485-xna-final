@@ -25,7 +25,7 @@ namespace FinalProject
             }
         }
 
-        float movementSpeed = 0.1f;
+        float movementSpeed = 0.2f;
 
         // The aliens will waddle across the screen
         // The model used has a single bone, thus making programmatic animation impossible
@@ -33,6 +33,19 @@ namespace FinalProject
 
         float rollRate = MathHelper.PiOver4 / 100;
         float rollAngle = 0.0f;
+
+        // When the alien hits the edge of the map, it will turn around slowly
+        // so we need a way to know when this happening to ensure smooth turn around
+        bool isTurning = false;
+
+        const float MIN_YAW_ANGLE = 0.0f;
+        const float MAX_YAW_ANGLE = MathHelper.Pi;
+
+        float yawRate = MathHelper.PiOver4 / 100;
+        float yawAngle = 0.0f;
+
+        // This is unused and is merely a placeholder in case its needed in the future
+        float pitchAngle = 0.0f;
 
         // Offset the terrain boundaries to make "hitting the wall" more natural
         const float MODEL_OFFSET = 5.0f;
@@ -48,6 +61,7 @@ namespace FinalProject
         public void Update(Camera camera, Terrain terrain)
         {
             UpdateRollAngle();
+            UpdateYawAngle();
             UpdatePosition(camera, terrain);
         }
 
@@ -58,6 +72,22 @@ namespace FinalProject
             // Do the pendulum dance!
             if (Math.Abs(rollAngle) > MAX_ROLL_ANGLE)
                 rollRate *= -1;
+        }
+
+        private void UpdateYawAngle()
+        {
+            // Only do a yaw rotation when turning around to face the opposite direction
+            if (isTurning)
+            {
+                yawAngle += yawRate;
+
+                // Stop rotating after making a complete turn around
+                if (yawAngle > MAX_YAW_ANGLE || yawAngle < MIN_YAW_ANGLE)
+                {
+                    isTurning = false;
+                    yawRate *= -1;
+                }
+            }
         }
 
         private void UpdatePosition(Camera camera, Terrain terrain)
@@ -82,17 +112,22 @@ namespace FinalProject
 
             // Change direction once we hit the edge of the map
             if (Position.X < minX || Position.X > maxX)
+            {
                 direction.X *= -1;
+                isTurning = true;
+            }
 
             if (Position.Z < minZ || Position.Z > maxZ)
+            {
                 direction.Z *= -1;
-
+                isTurning = true;
+            }
         }
 
         protected override Matrix GetWorld(Matrix meshTransform, Camera camera)
         {
             Matrix scale = Matrix.CreateScale(0.1f);
-            Matrix rotation = Matrix.CreateRotationZ(rollAngle);
+            Matrix rotation = Matrix.CreateFromYawPitchRoll(yawAngle, pitchAngle, rollAngle);
             Matrix translation = Matrix.CreateTranslation(Position);
             return meshTransform * scale * rotation * translation;
         }
