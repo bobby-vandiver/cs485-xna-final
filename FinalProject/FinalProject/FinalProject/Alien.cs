@@ -50,6 +50,8 @@ namespace FinalProject
         // Offset the terrain boundaries to make "hitting the wall" more natural
         const float MODEL_OFFSET = 5.0f;
 
+        const float BOUNDING_SPHERE_RADIUS = 25.0f;
+
         public Alien(Model model, Vector3 position, Vector3 direction)
             : base(model)
         {
@@ -60,7 +62,7 @@ namespace FinalProject
 
         protected override BoundingSphere GetBoundingSphere()
         {
-            return new BoundingSphere(Position, 15.0f); 
+            return new BoundingSphere(Position, BOUNDING_SPHERE_RADIUS); 
         }
 
         public void Update(Camera camera, Terrain terrain)

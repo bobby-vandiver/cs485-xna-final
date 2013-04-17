@@ -219,10 +219,14 @@ namespace FinalProject
                 if (laserBeamModel.Collides(alien))
                 {
                     aliens.RemoveAt(i);
-                    Game.Components.Remove(laserBeam);
-                    laserBeam = null;
+                    RemoveLaserBeam();
                 }
             }
+        }
+
+        private void RemoveLaserBeam()
+        {
+            Game.Components.Remove(laserBeam);
         }
 
         public override void Draw(GameTime gameTime)
