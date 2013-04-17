@@ -49,7 +49,7 @@ namespace FinalProject
             float midZ = (float)(terrain.MinZ + terrain.MaxZ) / 2.0f;
             Vector3 position = new Vector3(midX, 0, midZ);
 
-            camera = new PlanetCamera(Game, Vector3.Forward, Vector3.Up, position, terrain);
+            camera = new PlanetCamera(Game, -Vector3.Forward, Vector3.Up, position, terrain);
             camera.DrawOrder = 2;
             
             Game.Components.Add(camera);
@@ -99,7 +99,7 @@ namespace FinalProject
                 // Place each alien at a random point on the terrain
                 //Vector3 position = GetUniqueRandomPointInWorld(randomNumberGenerator);
 
-                Vector3 position = camera.Position - new Vector3(0, 0, 100.0f);
+                Vector3 position = camera.Position + new Vector3(0, 0, 175.0f);
                 position.Y = terrain.GetHeight(position.X, position.Z);
 
                 Alien alien = new Alien(alienModel, position, Vector3.UnitZ);

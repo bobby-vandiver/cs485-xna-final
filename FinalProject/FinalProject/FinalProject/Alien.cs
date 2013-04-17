@@ -34,6 +34,9 @@ namespace FinalProject
         float rollRate = MathHelper.PiOver4 / 100;
         float rollAngle = 0.0f;
 
+        // Offset the terrain boundaries to make "hitting the wall" more natural
+        const float MODEL_OFFSET = 5.0f;
+
         public Alien(Model model, Vector3 position, Vector3 direction)
             : base(model)
         {
@@ -62,8 +65,28 @@ namespace FinalProject
             // Move in a straight line along the direction the alien is facing
             Position += Direction * movementSpeed;
 
+            // Keep the alien moving on the terrain
+            RestrictPositionToTerrainBoundaries(terrain);
+
             // Ensure the alien still appears on the terrain
             Position.Y = terrain.GetHeight(Position.X, Position.Z) + POSITION_ABOVE_GROUND;
+        }
+
+        private void RestrictPositionToTerrainBoundaries(Terrain terrain)
+        {
+            float maxX = terrain.MaxX - MODEL_OFFSET;
+            float minX = terrain.MinX + MODEL_OFFSET;
+
+            float maxZ = terrain.MaxZ - MODEL_OFFSET;
+            float minZ = terrain.MinZ + MODEL_OFFSET;
+
+            // Change direction once we hit the edge of the map
+            if (Position.X < minX || Position.X > maxX)
+                direction.X *= -1;
+
+            if (Position.Z < minZ || Position.Z > maxZ)
+                direction.Z *= -1;
+
         }
 
         protected override Matrix GetWorld(Matrix meshTransform, Camera camera)
