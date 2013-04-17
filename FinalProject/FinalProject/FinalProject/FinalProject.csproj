@@ -113,6 +113,7 @@
     <Compile Include="BasicModel.cs" />
     <Compile Include="Camera\Camera.cs" />
     <Compile Include="Alien.cs" />
+    <Compile Include="LaserBeam.cs" />
     <Compile Include="LaserGun.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="Camera\PlanetCamera.cs" />

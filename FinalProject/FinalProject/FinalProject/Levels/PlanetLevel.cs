@@ -15,10 +15,12 @@ namespace FinalProject
     public class PlanetLevel : Level
     {
         Camera camera;
+
         Terrain terrain;
+        Skybox skybox;
 
         LaserGun laserGun;
-        Skybox skybox;
+        LaserBeam laserBeam;
 
         // Randomly generate the number of aliens
         const int MIN_ALIEN_COUNT = 1;
@@ -35,7 +37,7 @@ namespace FinalProject
         public override void Initialize()
         {
             InitializeCamera();
-            // The gun model needs to be render after everything so it appears 'on top'
+            // The gun model needs to be rendered after everything so it appears 'on top'
             this.DrawOrder = 3;
             base.Initialize();
         }
@@ -150,13 +152,40 @@ namespace FinalProject
 
         public override void Update(GameTime gameTime)
         {
+            UpdateAliens();
+            UpdateLaserBeam();
+            base.Update(gameTime);
+        }
+
+        private void UpdateLaserBeam()
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                bool isLaserBeamNull = laserBeam == null;
+                bool isComponentRemoved = !Game.Components.Contains(laserBeam);
+
+                // Allow only one beam in the world at a time
+                if (isLaserBeamNull || (!isLaserBeamNull && isComponentRemoved))
+                {
+                    CreateLaserBeam();
+                }
+            }
+        }
+
+        private void CreateLaserBeam()
+        {
+            laserBeam = new LaserBeam(Game, camera);
+            laserBeam.DrawOrder = 4;
+            Game.Components.Add(laserBeam);
+        }
+
+        private void UpdateAliens()
+        {
             for (int i = 0; i < aliens.Count; i++)
             {
                 Alien alien = aliens[i];
                 alien.Update(camera, terrain);
             }
-
-            base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
