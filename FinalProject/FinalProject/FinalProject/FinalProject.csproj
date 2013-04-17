@@ -110,6 +110,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alien.cs" />
+    <Compile Include="LaserBeamModel.cs" />
+    <Compile Include="LaserBeam.cs" />
     <Compile Include="BasicModel.cs" />
     <Compile Include="Camera\Camera.cs" />
     <Compile Include="Asteroid.cs" />
@@ -126,6 +129,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Terrain.cs" />
+    <Compile Include="Effects\Skybox.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
