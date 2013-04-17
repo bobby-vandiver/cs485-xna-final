@@ -28,10 +28,11 @@ namespace FinalProject
         Effect myeff;
         Texture2D picture; 
         public float milliseconds;
-        //const int LEVEL_COUNT = 3;
-        const int LEVEL_COUNT = 1;
+        const int LEVEL_COUNT = 2;
+
         int currentLevel = 0;
         Level level;
+        
         Camera c;
         Model model;
 
