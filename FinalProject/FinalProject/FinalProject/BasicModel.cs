@@ -6,13 +6,23 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FinalProject
 {
-    class BasicModel
+    public class BasicModel
     {
         public Model Model { get; protected set; }
+
+        private BoundingSphere boundingSphere
+        {
+            get { return GetBoundingSphere(); }
+        }
 
         public BasicModel(Model model)
         {
             this.Model = model;
+        }
+
+        protected virtual BoundingSphere GetBoundingSphere()
+        {
+            return new BoundingSphere(Vector3.Zero, 0);
         }
 
         public virtual void Update(GameTime gameTime)
@@ -45,6 +55,18 @@ namespace FinalProject
         protected virtual Matrix GetWorld(Matrix meshTransform, Camera camera)
         {
             return Matrix.Identity * meshTransform;
+        }
+
+        // Provides rudimentary collision detection with points
+        public virtual bool Collides(Vector3 point)
+        {
+            return boundingSphere.Contains(point) != ContainmentType.Disjoint;
+        }
+
+        // Provides rudimentary collision detection with models
+        public virtual bool Collides(BasicModel otherModel)
+        {
+            return boundingSphere.Contains(otherModel.boundingSphere) != ContainmentType.Disjoint;
         }
     }
 }
