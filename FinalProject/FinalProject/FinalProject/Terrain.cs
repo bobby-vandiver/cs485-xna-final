@@ -89,11 +89,25 @@ namespace FinalProject
 
         public override void Draw(GameTime gameTime)
         {
+            GraphicsDevice.Clear(Color.Black);
+            DrawBackground();
+
             PrepareGraphicsDeviceForDrawing3D();
             PrepareBasicEffectForDrawing3D();
             GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, vertices, 0, totalVertices, indices, 0, totalCells * 2); 
 
             base.Draw(gameTime);
+        }
+
+        private void DrawBackground()
+        {
+            int windowWidth = Game.Window.ClientBounds.Width;
+            int windowHeight = Game.Window.ClientBounds.Height;
+            var destination = new Rectangle(0, 0, windowWidth, windowHeight);
+
+            spriteBatch.Begin();
+            spriteBatch.Draw(backgroundTexture, destination, Color.White);
+            spriteBatch.End();
         }
 
         private void PrepareGraphicsDeviceForDrawing3D()

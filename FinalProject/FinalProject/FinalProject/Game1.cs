@@ -27,7 +27,7 @@ namespace FinalProject
         public LevelState CurrentLevelState;
 
         //const int LEVEL_COUNT = 3;
-        const int LEVEL_COUNT = 1;
+        const int LEVEL_COUNT = 2;
         int currentLevel = 0;
         Level level;
 
@@ -138,6 +138,9 @@ namespace FinalProject
             switch (currentLevel)
             {
                 case 0:
+                    level = new SpaceLevel(this);
+                    break;
+                case 1:
                     level = new PlanetLevel(this);
                     break;
                 default:

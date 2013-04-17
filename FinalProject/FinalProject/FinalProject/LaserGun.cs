@@ -18,7 +18,8 @@ namespace FinalProject
         {
             Matrix scale = Matrix.CreateScale(0.2f);
             Matrix rotation = Matrix.CreateRotationY(MathHelper.Pi);
-            Matrix translation = Matrix.CreateTranslation(new Vector3(0f, -0.7f, -1.8f));
+            Matrix translation = Matrix.CreateTranslation(new Vector3(0.7f, -0.7f, -1.8f));
+
             return meshTransform * scale * rotation * translation * Matrix.Invert(camera.View);
         }
     }

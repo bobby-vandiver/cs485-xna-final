@@ -56,7 +56,7 @@ namespace FinalProject
             {
                 return position;
             }
-            set
+            protected set
             {
                 position = value;
             }
@@ -98,9 +98,9 @@ namespace FinalProject
         protected float RollRotationRate;
         #endregion
 
-        float currentPitch = 0;
-        float currentYaw = 0;
-        float currentRoll = 0;
+        public float currentPitch = 0;
+        public float currentYaw = 0;
+        public float currentRoll = 0;
 
         // Subclasses can access the current yaw/pitch/roll via properties
         #region Current Pitch/Yaw/Roll properties
@@ -163,7 +163,7 @@ namespace FinalProject
             base.Update(gameTime);
         }
 
-        private void UpdatePositionFromKeyboard()
+        protected virtual void UpdatePositionFromKeyboard()
         {
             KeyboardState keyboardState = Keyboard.GetState();
 
@@ -276,7 +276,7 @@ namespace FinalProject
             return;
         }
 
-        private void ApplyRollRotation(float rollAngle)
+        protected virtual void ApplyRollRotation(float rollAngle)
         {
             Matrix rollMatrix = Matrix.CreateFromAxisAngle(Direction, rollAngle);
             Up = Vector3.Transform(Up, rollMatrix);
