@@ -31,6 +31,8 @@ namespace FinalProject
             }
         }
 
+        public bool IsAlive = false;
+
         // Use this to determine when to have the beam remove itself
         float maxDistance;
 
@@ -51,6 +53,7 @@ namespace FinalProject
             this.Position = this.initialPosition = camera.Position + 0.42f * Direction;
             this.maxDistance = maxDistance;
             this.movementSpeed = movementSpeed;
+            this.IsAlive = true;
         }
 
         protected override void LoadContent()
@@ -62,7 +65,10 @@ namespace FinalProject
 
         public override void Update(GameTime gameTime)
         {
-            UpdatePosition();
+            if (IsAlive)
+            {
+                UpdatePosition();
+            }
             base.Update(gameTime);
         }
 
@@ -71,17 +77,39 @@ namespace FinalProject
             Position += Direction * movementSpeed;
             LaserBeamModel.Position = Position;
 
+            CheckDistanceTraveled();
+            CheckTerrainCollision();
+        }
+
+        private void CheckDistanceTraveled()
+        {
             float distanceTraveled = Vector3.Distance(initialPosition, Position);
             if (distanceTraveled > maxDistance)
             {
-                Game.Components.Remove(this);
+                Console.WriteLine("Max distance traveled...");
+                IsAlive = false;
+            }
+        }
+
+        // TODO: Improve!!!
+        private void CheckTerrainCollision()
+        {
+            Terrain terrain = (Terrain)Game.Services.GetService(typeof(Terrain));
+            float minHeightAllowed = terrain.GetHeight(Position.X, Position.Z);
+            if (Position.Y <= minHeightAllowed)
+            {
+                Console.WriteLine("Collided with the ground...");
+                IsAlive = false;
             }
         }
 
         public override void Draw(GameTime gameTime)
         {
-            Camera camera = (Camera)Game.Services.GetService(typeof(Camera));
-            LaserBeamModel.Draw(camera);
+            if (IsAlive)
+            {
+                Camera camera = (Camera)Game.Services.GetService(typeof(Camera));
+                LaserBeamModel.Draw(camera);
+            }
             base.Draw(gameTime);
         }
     }

@@ -10,7 +10,7 @@ namespace FinalProject
     {
         public Vector3 Position;
 
-        const float BOUNDING_SPHERE_RADIUS = 10.0f;
+        const float BOUNDING_SPHERE_RADIUS = 20.0f;
 
         public LaserBeamModel(Model model, Vector3 position)
             : base(model)
@@ -20,7 +20,6 @@ namespace FinalProject
 
         protected override BoundingSphere GetBoundingSphere()
         {
-            Console.WriteLine("lbm: " + Position);
             return new BoundingSphere(Position, BOUNDING_SPHERE_RADIUS);
         }
 

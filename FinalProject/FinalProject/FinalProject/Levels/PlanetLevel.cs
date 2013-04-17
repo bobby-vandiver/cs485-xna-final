@@ -23,8 +23,10 @@ namespace FinalProject
         LaserBeam laserBeam;
 
         // Randomly generate the number of aliens
-        const int MIN_ALIEN_COUNT = 1;
-        const int MAX_ALIEN_COUNT = 6;
+        const int MIN_ALIEN_COUNT = 6;
+        const int MAX_ALIEN_COUNT = 15;
+
+        //const int MIN_ALIEN_COUNT = 1;
         //const int MAX_ALIEN_COUNT = 1;
 
         List<Alien> aliens;
@@ -63,6 +65,7 @@ namespace FinalProject
             terrain = new Terrain(Game, 1.0f, 100.0f);
             terrain.DrawOrder = 1;
             Game.Components.Add(terrain);
+            Game.Services.AddService(typeof(Terrain), terrain);
             return terrain;
         }
 
@@ -147,6 +150,7 @@ namespace FinalProject
             Game.Components.Remove(terrain);
             Game.Components.Remove(skybox);
             Game.Services.RemoveService(typeof(Camera));
+            Game.Services.RemoveService(typeof(Terrain));
             base.UnloadContent();
         }
 
@@ -163,10 +167,12 @@ namespace FinalProject
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
                 bool isLaserBeamNull = laserBeam == null;
-                bool isComponentRemoved = !Game.Components.Contains(laserBeam);
 
+                if (!isLaserBeamNull && !laserBeam.IsAlive)
+                    RemoveLaserBeam();
+                
                 // Allow only one beam in the world at a time
-                if (isLaserBeamNull || (!isLaserBeamNull && isComponentRemoved))
+                if (isLaserBeamNull || (!isLaserBeamNull && !laserBeam.IsAlive))
                 {
                     CreateLaserBeam();
                 }
@@ -226,6 +232,8 @@ namespace FinalProject
 
         private void RemoveLaserBeam()
         {
+            Console.WriteLine("Removing laser beam...");
+            laserBeam.IsAlive = false;
             Game.Components.Remove(laserBeam);
         }
 

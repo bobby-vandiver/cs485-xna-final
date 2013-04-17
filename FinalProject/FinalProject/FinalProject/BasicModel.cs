@@ -66,9 +66,7 @@ namespace FinalProject
         // Provides rudimentary collision detection with models
         public virtual bool Collides(BasicModel otherModel)
         {
-            bool intersects = boundingSphere.Intersects(otherModel.boundingSphere);
-            bool contains = boundingSphere.Contains(otherModel.boundingSphere) != ContainmentType.Disjoint;
-            return intersects || contains;
+            return boundingSphere.Contains(otherModel.boundingSphere) != ContainmentType.Disjoint;
         }
     }
 }
