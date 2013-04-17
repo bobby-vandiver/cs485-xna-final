@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FinalProject
 {
-    class BasicModel
+    public class BasicModel
     {
         public Model Model { get; protected set; }
 

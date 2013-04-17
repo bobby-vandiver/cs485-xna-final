@@ -41,7 +41,7 @@ namespace FinalProject
         const float DEFAULT_MAX_DISTANCE = 15.0f;
         const float DEFAULT_MOVEMENT_SPEED = 0.1f;
 
-        LaserBeamModel laserBeamModel;
+        public LaserBeamModel LaserBeamModel { get; private set; }
 
         public LaserBeam(Game game, Camera camera, float maxDistance = DEFAULT_MAX_DISTANCE,
             float movementSpeed = DEFAULT_MOVEMENT_SPEED)
@@ -56,7 +56,7 @@ namespace FinalProject
         protected override void LoadContent()
         {
             Model model = Game.Content.Load<Model>(@"Models\Weapons\ammo");
-            laserBeamModel = new LaserBeamModel(model, initialPosition);
+            LaserBeamModel = new LaserBeamModel(model, initialPosition);
             base.LoadContent();
         }
 
@@ -69,7 +69,7 @@ namespace FinalProject
         private void UpdatePosition()
         {
             Position += Direction * movementSpeed;
-            laserBeamModel.Position = Position;
+            LaserBeamModel.Position = Position;
 
             float distanceTraveled = Vector3.Distance(initialPosition, Position);
             if (distanceTraveled > maxDistance)
@@ -81,27 +81,8 @@ namespace FinalProject
         public override void Draw(GameTime gameTime)
         {
             Camera camera = (Camera)Game.Services.GetService(typeof(Camera));
-            laserBeamModel.Draw(camera);
+            LaserBeamModel.Draw(camera);
             base.Draw(gameTime);
-        }
-    }
-
-    class LaserBeamModel : BasicModel
-    {
-        public Vector3 Position;
-
-        public LaserBeamModel(Model model, Vector3 position)
-            : base(model)
-        {
-            this.Position = position;
-        }
-
-        protected override Matrix GetWorld(Matrix meshTransform, Camera camera)
-        {
-            Matrix scale = Matrix.CreateScale(0.01f);
-            Matrix translation = Matrix.CreateTranslation(Position + new Vector3(0, -.05f, 0));
-            return meshTransform * scale * translation;
-
         }
     }
 }

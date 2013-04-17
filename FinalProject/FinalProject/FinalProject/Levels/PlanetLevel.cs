@@ -188,6 +188,23 @@ namespace FinalProject
             }
         }
 
+        private void CheckCollisions()
+        {
+            // See if laser beam collides with an enemy
+            LaserBeamModel laserBeamModel = laserBeam.LaserBeamModel;
+
+            for(int i = 0; i < aliens.Count && laserBeam != null; i++)
+            {
+                Alien alien = aliens[i];
+                if (laserBeamModel.Collides(alien.Model))
+                {
+                    aliens.RemoveAt(i);
+                    Game.Components.Remove(laserBeam);
+                    laserBeam = null;
+                }
+            }
+        }
+
         public override void Draw(GameTime gameTime)
         {
             PrepareGraphicsDeviceForDrawing3D();
