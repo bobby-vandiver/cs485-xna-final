@@ -23,7 +23,7 @@ namespace FinalProject
         LaserBeam laserBeam;
 
         // Randomly generate the number of aliens
-        const int MIN_ALIEN_COUNT = 6;
+        const int MIN_ALIEN_COUNT = 10;
         const int MAX_ALIEN_COUNT = 15;
 
         // DEBUG:
@@ -95,9 +95,6 @@ namespace FinalProject
 
         private void LoadContentForBombardment()
         {
-            Model laserGunModel = Game.Content.Load<Model>(@"Models\Weapons\lasergun");
-            laserGun = new LaserGun(laserGunModel);
-
             Texture2D bombTexture = Game.Content.Load<Texture2D>(@"Textures\ParticleColors");
             explosionEffect = Game.Content.Load<Effect>(@"effects\shader");
             Texture2D smokeTexture = Game.Content.Load<Texture2D>(@"Textures\smoke");
@@ -286,11 +283,24 @@ namespace FinalProject
         {
             PrepareGraphicsDeviceForDrawing3D();
             laserGun.Draw(camera);
-            bombard.Draw();
-            collisionBillboard.Draw(camera.View,camera.Projection,camera.Up,camera.Side);
-            fauxAstroid.Draw(camera.View, camera.Projection, camera.Up, camera.Side);
+
+            DrawBombard();
+            DrawAliens();
 
             base.Draw(gameTime);
+        }
+
+        private void DrawBombard()
+        {
+            bombard.Draw();
+            collisionBillboard.Draw(camera.View, camera.Projection, camera.Up, camera.Side);
+            fauxAstroid.Draw(camera.View, camera.Projection, camera.Up, camera.Side);
+        }
+
+        private void DrawAliens()
+        {
+            foreach (Alien alien in aliens)
+                alien.Draw(camera);
         }
         protected override bool LevelOver()
         {

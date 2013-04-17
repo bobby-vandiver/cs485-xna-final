@@ -46,8 +46,6 @@ namespace FinalProject
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = 1200;
-            graphics.PreferredBackBufferHeight = 800;
             Content.RootDirectory = "Content";
             currentGameState = GameState.Start;
         }

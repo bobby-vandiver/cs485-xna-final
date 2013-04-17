@@ -58,7 +58,7 @@ namespace FinalProject
 
         protected override void LoadContent()
         {
-            Model model = Game.Content.Load<Model>(@"Models\Weapons\ammo");
+            Model model = Game.Content.Load<Model>(@"Models\ammo");
             LaserBeamModel = new LaserBeamModel(model, initialPosition);
             base.LoadContent();
         }

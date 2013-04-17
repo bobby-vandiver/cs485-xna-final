@@ -104,7 +104,7 @@ namespace FinalProject
         const float DEFAULT_FIELD_OF_VIEW = MathHelper.PiOver4;
         float fieldOfView;
 
-        float movementSpeed = 5.5f;
+        float movementSpeed = 0.5f;
 
         const float DEFAULT_ROTATION_RATE = MathHelper.PiOver4 / 125;
 
