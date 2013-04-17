@@ -16,6 +16,11 @@ namespace FinalProject
             this.Position = position;
         }
 
+        protected override BoundingSphere GetBoundingSphere()
+        {
+            return new BoundingSphere(Position, 10.0f);
+        }
+
         protected override Matrix GetWorld(Matrix meshTransform, Camera camera)
         {
             Matrix scale = Matrix.CreateScale(0.01f);

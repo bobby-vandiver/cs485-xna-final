@@ -24,8 +24,8 @@ namespace FinalProject
 
         // Randomly generate the number of aliens
         const int MIN_ALIEN_COUNT = 1;
-        //const int MAX_ALIEN_COUNT = 6;
-        const int MAX_ALIEN_COUNT = 1;
+        const int MAX_ALIEN_COUNT = 6;
+        //const int MAX_ALIEN_COUNT = 1;
 
         List<Alien> aliens;
 
@@ -99,9 +99,9 @@ namespace FinalProject
             for (int i = 0; i < alienCount; i++)
             {
                 // Place each alien at a random point on the terrain
-                //Vector3 position = GetUniqueRandomPointInWorld(randomNumberGenerator);
+                Vector3 position = GetUniqueRandomPointInWorld(randomNumberGenerator);
 
-                Vector3 position = camera.Position - new Vector3(0, 0, 30.0f);
+                //Vector3 position = camera.Position - new Vector3(0, 0, 50.0f);
                 position.Y = terrain.GetHeight(position.X, position.Z);
 
                 Alien alien = new Alien(alienModel, position, Vector3.UnitZ);
@@ -216,7 +216,7 @@ namespace FinalProject
                 LaserBeamModel laserBeamModel = laserBeam.LaserBeamModel;
                 Alien alien = aliens[i];
 
-                if (laserBeamModel.Collides(alien.Model))
+                if (laserBeamModel.Collides(alien))
                 {
                     aliens.RemoveAt(i);
                     Game.Components.Remove(laserBeam);
