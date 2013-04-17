@@ -6,13 +6,23 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FinalProject
 {
-    class BasicModel
+    public class BasicModel
     {
         public Model Model { get; protected set; }
+
+        private BoundingSphere boundingSphere
+        {
+            get { return GetBoundingSphere(); }
+        }
 
         public BasicModel(Model model)
         {
             this.Model = model;
+        }
+
+        protected virtual BoundingSphere GetBoundingSphere()
+        {
+            return new BoundingSphere(Vector3.Zero, 0);
         }
 
         public virtual void Update(GameTime gameTime)
@@ -21,8 +31,6 @@ namespace FinalProject
 
         public virtual void Draw(Camera camera)
         {
-
-
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
 
@@ -41,36 +49,7 @@ namespace FinalProject
                 }
                 mesh.Draw();
             }
-
-          }
-
-
-        //public virtual void Draw(Camera camera)
-        //{
-        //    //    Matrix[] transforms = new Matrix[Model.Bones.Count];
-        //    //    Model.CopyAbsoluteBoneTransformsTo(transforms);
-
-        //    //draw model 
-        //    foreach (ModelMesh mm in model.Meshes)
-        //    {
-        //        foreach (ModelMeshPart mp in mm.MeshParts)
-        //        {
-
-        //            Matrix[] transforms = new Matrix[model.Bones.Count];
-        //            Model.CopyAbsoluteBoneTransformsTo(transforms);
-
-        //            Matrix world = GetWorld(transforms[mm.ParentBone.Index], camera);
-
-        //            // set global variables in the shader 
-        //            effect.Parameters["WorldViewProjection"].SetValue(world);
-
-        //            mp.Effect = effect; // apply your shader code
-        //            mm.Draw();
-        //        }
-        //    }
-
-        //}
-
+        }
 
         // Provide a way for subclasses to alter the world transformation of the model
         protected virtual Matrix GetWorld(Matrix meshTransform, Camera camera)
@@ -78,8 +57,16 @@ namespace FinalProject
             return Matrix.Identity * meshTransform;
         }
 
+        // Provides rudimentary collision detection with points
+        public virtual bool Collides(Vector3 point)
+        {
+            return boundingSphere.Contains(point) != ContainmentType.Disjoint;
+        }
 
-
-
+        // Provides rudimentary collision detection with models
+        public virtual bool Collides(BasicModel otherModel)
+        {
+            return boundingSphere.Contains(otherModel.boundingSphere) != ContainmentType.Disjoint;
+        }
     }
 }
