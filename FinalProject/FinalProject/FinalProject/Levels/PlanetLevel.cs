@@ -193,6 +193,9 @@ namespace FinalProject
         public override void Update(GameTime gameTime)
         {
             UpdateBombard(gameTime);
+            UpdateAliens();
+            UpdateLaserBeam();
+            CheckCollisions();
             base.Update(gameTime);
         }
 

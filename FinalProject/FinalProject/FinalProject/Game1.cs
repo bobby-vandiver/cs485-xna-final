@@ -25,9 +25,11 @@ namespace FinalProject
         // Each level will use this to communicate its state so the Game object can manage transitions
         public enum LevelState { Start, Play, End }
         public LevelState CurrentLevelState;
+        
         Effect myeff;
         Texture2D picture; 
         public float milliseconds;
+
         const int LEVEL_COUNT = 2;
 
         int currentLevel = 0;
