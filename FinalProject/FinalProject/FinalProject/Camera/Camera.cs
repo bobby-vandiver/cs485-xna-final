@@ -72,7 +72,7 @@ namespace FinalProject
             {
                 return position;
             }
-            protected set
+            set
             {
                 position = value;
             }
