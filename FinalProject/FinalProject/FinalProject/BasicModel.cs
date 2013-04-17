@@ -10,24 +10,19 @@ namespace FinalProject
     {
         public Model Model { get; protected set; }
 
-        BoundingSphere boundingSphere;
+        private BoundingSphere boundingSphere
+        {
+            get { return GetBoundingSphere(); }
+        }
 
         public BasicModel(Model model)
         {
             this.Model = model;
-            this.boundingSphere = GenerateBoundingSphere();
         }
 
-        protected BoundingSphere GenerateBoundingSphere()
+        protected virtual BoundingSphere GetBoundingSphere()
         {
-            // Generate a bounding sphere that will encapsulate the entire model
-            BoundingSphere boundingSphere = new BoundingSphere(Vector3.Zero, 0);
-
-            // Merge all mesh bounding spheres into one
-            foreach (ModelMesh mesh in Model.Meshes)
-                boundingSphere = BoundingSphere.CreateMerged(boundingSphere, mesh.BoundingSphere);
-
-            return boundingSphere;
+            return new BoundingSphere(Vector3.Zero, 0);
         }
 
         public virtual void Update(GameTime gameTime)

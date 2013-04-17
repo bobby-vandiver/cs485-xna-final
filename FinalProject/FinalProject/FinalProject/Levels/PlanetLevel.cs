@@ -51,7 +51,7 @@ namespace FinalProject
             float midZ = (float)(terrain.MinZ + terrain.MaxZ) / 2.0f;
             Vector3 position = new Vector3(midX, 0, midZ);
 
-            camera = new PlanetCamera(Game, -Vector3.Forward, Vector3.Up, position, terrain);
+            camera = new PlanetCamera(Game, Vector3.Forward, Vector3.Up, position, terrain);
             camera.DrawOrder = 2;
             
             Game.Components.Add(camera);
@@ -101,7 +101,7 @@ namespace FinalProject
                 // Place each alien at a random point on the terrain
                 //Vector3 position = GetUniqueRandomPointInWorld(randomNumberGenerator);
 
-                Vector3 position = camera.Position + new Vector3(0, 0, 175.0f);
+                Vector3 position = camera.Position - new Vector3(0, 0, 30.0f);
                 position.Y = terrain.GetHeight(position.X, position.Z);
 
                 Alien alien = new Alien(alienModel, position, Vector3.UnitZ);
@@ -154,6 +154,7 @@ namespace FinalProject
         {
             UpdateAliens();
             UpdateLaserBeam();
+            CheckCollisions();
             base.Update(gameTime);
         }
 
@@ -190,12 +191,31 @@ namespace FinalProject
 
         private void CheckCollisions()
         {
-            // See if laser beam collides with an enemy
-            LaserBeamModel laserBeamModel = laserBeam.LaserBeamModel;
+            CheckCameraCollisions();
+            CheckLaserBeamCollisions();
+        }
 
-            for(int i = 0; i < aliens.Count && laserBeam != null; i++)
+        private void CheckCameraCollisions()
+        {
+            for (int i = 0; i < aliens.Count; i++)
             {
                 Alien alien = aliens[i];
+                if (alien.Collides(camera.Position))
+                {
+                    // Push the camera back some if it hits an alien
+                    camera.Position = camera.Position - 5.0f * camera.Direction;
+                }
+            }
+        }
+
+        private void CheckLaserBeamCollisions()
+        {
+            // See if laser beam collides with an enemy
+            for (int i = 0; i < aliens.Count && laserBeam != null; i++)
+            {
+                LaserBeamModel laserBeamModel = laserBeam.LaserBeamModel;
+                Alien alien = aliens[i];
+
                 if (laserBeamModel.Collides(alien.Model))
                 {
                     aliens.RemoveAt(i);
@@ -210,14 +230,14 @@ namespace FinalProject
             PrepareGraphicsDeviceForDrawing3D();
             laserGun.Draw(camera);
 
-            foreach (Alien a in aliens)
-                a.Draw(camera);
+            foreach (Alien alien in aliens)
+                alien.Draw(camera);
 
             base.Draw(gameTime);
         }
         protected override bool LevelOver()
         {
-            return false;
+            return aliens.Count == 0;
         }
 
     }

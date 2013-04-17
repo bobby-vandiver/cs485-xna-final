@@ -58,6 +58,11 @@ namespace FinalProject
             this.Direction = direction;
         }
 
+        protected override BoundingSphere GetBoundingSphere()
+        {
+            return new BoundingSphere(Position, 15.0f); 
+        }
+
         public void Update(Camera camera, Terrain terrain)
         {
             UpdateRollAngle();
