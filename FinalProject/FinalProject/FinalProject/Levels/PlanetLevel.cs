@@ -14,23 +14,20 @@ namespace FinalProject
 {
     public class PlanetLevel : Level
     {
-        Camera camera;
-
+        public Camera camera;
         Terrain terrain;
-        Skybox skybox;
-
         LaserGun laserGun;
-        LaserBeam laserBeam;
+        Effect explosionEffect;
 
-        // Randomly generate the number of aliens
-        const int MIN_ALIEN_COUNT = 6;
-        const int MAX_ALIEN_COUNT = 15;
+        CollisionBillboard collisionBillboard;
+        PlayerHealth playerHealth = new PlayerHealth();
+        FauxAstroid fauxAstroid;
+        public Vector3[] fauxPosition = new Vector3[30];
+        Random randomNumber = new Random();
 
-        //const int MIN_ALIEN_COUNT = 1;
-        //const int MAX_ALIEN_COUNT = 1;
-
-        List<Alien> aliens;
-
+        Skybox skybox;
+        public float milliseconds;
+        Bombard bombard;
         public PlanetLevel(Game game)
             : base(game)
         {
@@ -39,9 +36,11 @@ namespace FinalProject
         public override void Initialize()
         {
             InitializeCamera();
-            // The gun model needs to be rendered after everything so it appears 'on top'
+            spreadFaux();
+            // The gun model needs to be render after everything so it appears 'on top'
             this.DrawOrder = 3;
             base.Initialize();
+
         }
 
         private void InitializeCamera()
@@ -65,83 +64,34 @@ namespace FinalProject
             terrain = new Terrain(Game, 1.0f, 100.0f);
             terrain.DrawOrder = 1;
             Game.Components.Add(terrain);
-            Game.Services.AddService(typeof(Terrain), terrain);
+            playerHealth.setMaxHealth();
             return terrain;
         }
 
         protected override void LoadContent()
         {
-            LoadLaserGun();
-            LoadSkybox();
-            LoadAliens();
-            base.LoadContent();
-        }
-
-        private void LoadLaserGun()
-        {
             Model laserGunModel = Game.Content.Load<Model>(@"Models\Weapons\lasergun");
             laserGun = new LaserGun(laserGunModel);
-        }
+                    
+            Texture2D bombTexture = Game.Content.Load<Texture2D>(@"Textures\ParticleColors");
+            explosionEffect = Game.Content.Load<Effect>(@"effects\shader");
+            Texture2D smokeTexture = Game.Content.Load<Texture2D>(@"Textures\smoke");
 
-        private void LoadSkybox()
-        {
+            Model BombardmentModel = Game.Content.Load<Model>(@"Models\ammo");
+            bombard = new Bombard(BombardmentModel, terrain, bombTexture, camera, milliseconds, explosionEffect,smokeTexture);
+
+            collisionBillboard = new CollisionBillboard(GraphicsDevice, Game.Content,
+                       Game.Content.Load<Texture2D>(@"Textures\smoke"), new Vector2(50), bombard.collisionPosition);
+
+            fauxAstroid = new FauxAstroid(GraphicsDevice, Game.Content,
+                      Game.Content.Load<Texture2D>(@"Textures\fauxAstroid"), new Vector2(10), fauxPosition);
+
+
+
             skybox = new Skybox(Game, @"Backgrounds\Sunset", 500f);
             skybox.DrawOrder = 0;
             Game.Components.Add(skybox);
-        }
-
-        private void LoadAliens()
-        {
-            Model alienModel = Game.Content.Load<Model>(@"Models\alien");
-
-            Random randomNumberGenerator = (Random)Game.Services.GetService(typeof(Random));
-            int alienCount = randomNumberGenerator.Next(MIN_ALIEN_COUNT, MAX_ALIEN_COUNT);
-
-            aliens = new List<Alien>();
-
-            for (int i = 0; i < alienCount; i++)
-            {
-                // Place each alien at a random point on the terrain
-                Vector3 position = GetUniqueRandomPointInWorld(randomNumberGenerator);
-
-                //Vector3 position = camera.Position - new Vector3(0, 0, 50.0f);
-                position.Y = terrain.GetHeight(position.X, position.Z);
-
-                Alien alien = new Alien(alienModel, position, Vector3.UnitZ);
-                aliens.Add(alien);
-
-                Console.WriteLine("Alien[" + i + "]: " + alien.Position);
-            }
-        }
-
-        private Vector3 GetUniqueRandomPointInWorld(Random randomNumberGenerator)
-        {
-            // Be optimistic that a unique position will be found after one try
-            bool unique = true;
-
-            // Arbitrary distance between objects in the world to avoid multiple objects overlapping
-            float minimumDistanceAllowed = 5.0f;
-
-            Vector3 randomPosition;
-            
-            do
-            {
-                // Generate a random point and see if anything else is there
-                randomPosition = terrain.GetRandomPoint();
-
-                // Check for overlap with camera
-                if (Vector3.Distance(randomPosition, camera.Position) < minimumDistanceAllowed)
-                    unique = false;
-
-                // Check for overlap with existent aliens
-                foreach (Alien a in aliens)
-                {
-                    if (Vector3.Distance(randomPosition, a.Position) < minimumDistanceAllowed)
-                        unique = false;
-                }
-            } while(!unique);
-
-            return randomPosition;
+            base.LoadContent();
         }
 
         protected override void UnloadResources()
@@ -150,107 +100,42 @@ namespace FinalProject
             Game.Components.Remove(terrain);
             Game.Components.Remove(skybox);
             Game.Services.RemoveService(typeof(Camera));
-            Game.Services.RemoveService(typeof(Terrain));
             base.UnloadContent();
         }
 
         public override void Update(GameTime gameTime)
         {
-            UpdateAliens();
-            UpdateLaserBeam();
-            CheckCollisions();
+            bombard.Update(gameTime);
+            collisionBillboard.pos = bombard.collisionPosition[0];
+            collisionBillboard = new CollisionBillboard(GraphicsDevice, Game.Content,
+                      Game.Content.Load<Texture2D>(@"Textures\smoke"), new Vector2(50), bombard.collisionPosition);
+
             base.Update(gameTime);
-        }
-
-        private void UpdateLaserBeam()
-        {
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-            {
-                bool isLaserBeamNull = laserBeam == null;
-
-                if (!isLaserBeamNull && !laserBeam.IsAlive)
-                    RemoveLaserBeam();
-                
-                // Allow only one beam in the world at a time
-                if (isLaserBeamNull || (!isLaserBeamNull && !laserBeam.IsAlive))
-                {
-                    CreateLaserBeam();
-                }
-            }
-        }
-
-        private void CreateLaserBeam()
-        {
-            laserBeam = new LaserBeam(Game, camera);
-            laserBeam.DrawOrder = 4;
-            Game.Components.Add(laserBeam);
-        }
-
-        private void UpdateAliens()
-        {
-            for (int i = 0; i < aliens.Count; i++)
-            {
-                Alien alien = aliens[i];
-                alien.Update(camera, terrain);
-            }
-        }
-
-        private void CheckCollisions()
-        {
-            CheckCameraCollisions();
-            CheckLaserBeamCollisions();
-        }
-
-        private void CheckCameraCollisions()
-        {
-            for (int i = 0; i < aliens.Count; i++)
-            {
-                Alien alien = aliens[i];
-                if (alien.Collides(camera.Position))
-                {
-                    // Push the camera back some if it hits an alien
-                    camera.Position = camera.Position - 5.0f * camera.Direction;
-                }
-            }
-        }
-
-        private void CheckLaserBeamCollisions()
-        {
-            // See if laser beam collides with an enemy
-            for (int i = 0; i < aliens.Count && laserBeam != null; i++)
-            {
-                LaserBeamModel laserBeamModel = laserBeam.LaserBeamModel;
-                Alien alien = aliens[i];
-
-                if (laserBeamModel.Collides(alien))
-                {
-                    aliens.RemoveAt(i);
-                    RemoveLaserBeam();
-                }
-            }
-        }
-
-        private void RemoveLaserBeam()
-        {
-            Console.WriteLine("Removing laser beam...");
-            laserBeam.IsAlive = false;
-            Game.Components.Remove(laserBeam);
         }
 
         public override void Draw(GameTime gameTime)
         {
             PrepareGraphicsDeviceForDrawing3D();
             laserGun.Draw(camera);
-
-            foreach (Alien alien in aliens)
-                alien.Draw(camera);
+            bombard.Draw();
+            collisionBillboard.Draw(camera.View,camera.Projection,camera.Up,camera.Side);
+            fauxAstroid.Draw(camera.View, camera.Projection, camera.Up, camera.Side);
 
             base.Draw(gameTime);
         }
         protected override bool LevelOver()
         {
-            return aliens.Count == 0;
+            return false;
         }
 
+        private void spreadFaux()
+        {
+            for (int i = 0; i < fauxPosition.Length; i++)
+                fauxPosition[i] = new Vector3(
+                    50 + (float)randomNumber.NextDouble() * 1000,
+                    (float)randomNumber.NextDouble() * 300 + 100,
+                   50 +(float)randomNumber.NextDouble()* 1000
+                );
+        }
     }
 }

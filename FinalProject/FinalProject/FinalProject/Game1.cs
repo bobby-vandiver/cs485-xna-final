@@ -25,15 +25,26 @@ namespace FinalProject
         // Each level will use this to communicate its state so the Game object can manage transitions
         public enum LevelState { Start, Play, End }
         public LevelState CurrentLevelState;
-
+        Effect myeff;
+        Texture2D picture; 
+        public float milliseconds;
         //const int LEVEL_COUNT = 3;
-        const int LEVEL_COUNT = 2;
+        const int LEVEL_COUNT = 1;
         int currentLevel = 0;
         Level level;
+        Camera c;
+        Model model;
+
+        PlayerHealth playerHealth = new PlayerHealth();
+
+
+        public Texture2D powerBar;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1200;
+            graphics.PreferredBackBufferHeight = 800;
             Content.RootDirectory = "Content";
             currentGameState = GameState.Start;
         }
@@ -50,10 +61,19 @@ namespace FinalProject
             
             font = Content.Load<SpriteFont>(@"Fonts\GameFont");
             randomNumberGenerator = new Random();
+            
+            myeff = Content.Load<Effect>(@"Effects\shader"); // load your shader code
+            picture = Content.Load<Texture2D>(@"Textures\ParticleColors");
+            model = Content.Load<Model>(@"Models\ammo");
 
             // The font and the random number generator need to be accessible from every where
             Services.AddService(typeof(SpriteFont), font);
             Services.AddService(typeof(Random), randomNumberGenerator);
+
+            powerBar = Content.Load<Texture2D>(@"Textures\pBar");
+
+
+
         }
 
         protected override void UnloadContent()
@@ -67,12 +87,12 @@ namespace FinalProject
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-
+            milliseconds = gameTime.ElapsedGameTime.Milliseconds;
             UpdateGameState();
 
             base.Update(gameTime);
         }
-
+        
         private void UpdateGameState()
         {
             switch (currentGameState)
@@ -138,9 +158,6 @@ namespace FinalProject
             switch (currentLevel)
             {
                 case 0:
-                    level = new SpaceLevel(this);
-                    break;
-                case 1:
                     level = new PlanetLevel(this);
                     break;
                 default:
@@ -149,6 +166,8 @@ namespace FinalProject
 
             Components.Add(level);
         }
+
+  
 
         protected override void Draw(GameTime gameTime)
         {
@@ -175,6 +194,10 @@ namespace FinalProject
                     break;
             }
 
+            spriteBatch.Begin();
+            DrawRectangle(new Rectangle((Window.ClientBounds.Width - 300), 30, playerHealth.playerHealth-150, 15), Color.White);
+
+            spriteBatch.End();
             base.Draw(gameTime);
         }
 
@@ -198,6 +221,17 @@ namespace FinalProject
                 (windowHeight / 2) - (textDimensions.Y / 2));
 
             return position;
+        }
+
+      
+
+        public void DrawRectangle(Rectangle coords, Color color)
+        {
+         
+           
+            var rect = new Texture2D(graphics.GraphicsDevice, 1, 1);
+            rect.SetData(new[] { color });
+            this.spriteBatch.Draw(powerBar, coords, color);
         }
     }
 }

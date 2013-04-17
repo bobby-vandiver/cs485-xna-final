@@ -37,10 +37,7 @@ namespace FinalProject
         }
 
         // Override this to provide logic necessary to determine end of level
-        protected virtual bool LevelOver()
-        {
-            return false;
-        }
+        protected abstract bool LevelOver();
 
         protected void PrepareGraphicsDeviceForDrawing3D()
         {

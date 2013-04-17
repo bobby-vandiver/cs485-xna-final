@@ -16,14 +16,30 @@ namespace FinalProject
         SpriteBatch spriteBatch;
         
         // Access these via their respective properties to ensure normalization
-        Vector3 direction;
-        Vector3 up;
-        Vector3 position;
+       public Vector3 direction;
+        public Vector3 up;
+        public Vector3 position;
 
         #region Camera Axes and Matrices Properties
         public Matrix View { get; private set; }
         public Matrix Projection { get; private set; }
+        
+        //Mouse direction variables
+        MouseState mouse = Mouse.GetState();
+        int centerX = 0, centerY = 0;
+        Vector3 angle = new Vector3();
 
+        float turnSpeed = 60;
+        // store previous mouse state
+
+        PlayerHealth playerHealth = new PlayerHealth();
+        Texture2D powerBar;
+        SpriteFont healthFont;
+        //Shake variables
+        public bool shakeUp;
+        public float intensity = 0; 
+
+        //Camera Get/Set
         public Vector3 Direction
         {
             get
@@ -56,7 +72,7 @@ namespace FinalProject
             {
                 return position;
             }
-            set
+            protected set
             {
                 position = value;
             }
@@ -79,6 +95,7 @@ namespace FinalProject
                 return side;
             }
         }
+        //end region
         #endregion
 
         float nearPlane = 0.001f;
@@ -87,7 +104,7 @@ namespace FinalProject
         const float DEFAULT_FIELD_OF_VIEW = MathHelper.PiOver4;
         float fieldOfView;
 
-        float movementSpeed = 0.5f;
+        float movementSpeed = 5.5f;
 
         const float DEFAULT_ROTATION_RATE = MathHelper.PiOver4 / 125;
 
@@ -98,9 +115,9 @@ namespace FinalProject
         protected float RollRotationRate;
         #endregion
 
-        public float currentPitch = 0;
-        public float currentYaw = 0;
-        public float currentRoll = 0;
+        float currentPitch = 0;
+        float currentYaw = 0;
+        float currentRoll = 0;
 
         // Subclasses can access the current yaw/pitch/roll via properties
         #region Current Pitch/Yaw/Roll properties
@@ -123,7 +140,7 @@ namespace FinalProject
         }
         #endregion
 
-        public Camera(Game game, Vector3 direction, Vector3 up, Vector3 position, float fieldOfView = DEFAULT_FIELD_OF_VIEW)
+        public Camera(Game game, Vector3 direction, Vector3 up, Vector3 position, float fieldOfView = DEFAULT_FIELD_OF_VIEW )
             : base(game)
         {
             // Use the property setters to ensure vectors are unit length
@@ -137,18 +154,27 @@ namespace FinalProject
             this.YawRotationRate = DEFAULT_ROTATION_RATE;
             this.PitchRotationRate = DEFAULT_ROTATION_RATE;
             this.RollRotationRate = DEFAULT_ROTATION_RATE;
+
+
         }
 
         public override void Initialize()
         {
             UpdateView();
             CreateProjection(fieldOfView);
+            centerX = Game.Window.ClientBounds.Width / 2;
+            centerY = Game.Window.ClientBounds.Height / 2;
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
+            playerHealth.setMaxHealth();
+            powerBar = Game.Content.Load<Texture2D>(@"Textures\pBar");
+            healthFont = Game.Content.Load<SpriteFont>(@"Fonts\healthFont");
+
+
             // Need this for displaying debug messages
             spriteBatch = new SpriteBatch(GraphicsDevice);
             base.LoadContent();
@@ -156,6 +182,7 @@ namespace FinalProject
 
         public override void Update(GameTime gameTime)
         {
+            mouse = Mouse.GetState();
             UpdatePositionFromKeyboard();
             UpdateDirectionFromKeyboard();
             UpdateView();
@@ -163,7 +190,7 @@ namespace FinalProject
             base.Update(gameTime);
         }
 
-        protected virtual void UpdatePositionFromKeyboard()
+        private void UpdatePositionFromKeyboard()
         {
             KeyboardState keyboardState = Keyboard.GetState();
 
@@ -202,11 +229,16 @@ namespace FinalProject
             
             float yawAngle = CalculateYawRotationAngleFromKeyboard();
             ApplyYawRotation(yawAngle);
-
+            yawAngle = UpdateYawDirectionFromMouse();
+            ApplyYawRotation(yawAngle);
+            if (shakeUp)
+            {
+                yawAngle = CameraShake(yawAngle);
+            }
             RestrictYawRotation(previousDirection, previousYawAngle);
         }
 
-        protected virtual void UpdatePitch()
+        protected virtual void UpdatePitch() 
         {
             float previousPitchAngle = currentPitch;
 
@@ -215,7 +247,12 @@ namespace FinalProject
 
             float pitchAngle = CalculatePitchRotationAngleFromKeyboard();
             ApplyPitchRotation(pitchAngle);
-            
+            pitchAngle = UpdatePitchDirectionFromMouse();
+            ApplyPitchRotation(pitchAngle);
+            if (shakeUp)
+            {
+                pitchAngle = CameraShake(pitchAngle);
+            }
             RestrictPitchRotation(previousDirection, previousUp, previousPitchAngle);
         }
 
@@ -230,10 +267,10 @@ namespace FinalProject
             float yawAngle = 0f;
 
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                yawAngle = YawRotationRate;
+                yawAngle = YawRotationRate*8;
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                yawAngle = -YawRotationRate;
-
+                yawAngle = -YawRotationRate*8;
+        
             return yawAngle;
         }
 
@@ -246,10 +283,50 @@ namespace FinalProject
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
                 pitchAngle = PitchRotationRate;
 
+            
+
+
             return pitchAngle;
         }
 
-        private void ApplyYawRotation(float yawAngle)
+        private float UpdateYawDirectionFromMouse()
+        {
+
+            angle.Y = 0;
+            // Set mouse position and do initial get state
+            
+            // update yaw
+            angle.Y = MathHelper.ToRadians((mouse.X - centerX) * turnSpeed * 0.01f); // yaw
+                   
+            Mouse.SetPosition(centerX, centerY);
+            return -angle.Y;     
+        }
+
+        private float UpdatePitchDirectionFromMouse()
+        {
+
+            angle.X = 0;
+            // Set mouse position and do initial get state
+
+            // update pitch angles
+            angle.X = MathHelper.ToRadians((mouse.Y - centerY) * turnSpeed * 0.01f); // pitch
+
+            Mouse.SetPosition(centerX, centerY);
+            return -angle.X;
+        }
+
+        public float CameraShake(float angle) 
+        {
+            shakeUp = false;
+            float shake;
+            shake = .1f;
+            shake += this.intensity;
+            UpdateYaw();
+            UpdatePitch();
+            return shake + angle;
+        }
+
+        public void ApplyYawRotation(float yawAngle)
         {
             Matrix yawMatrix = Matrix.CreateFromAxisAngle(Up, yawAngle);
             Direction = Vector3.Transform(Direction, yawMatrix);
@@ -262,7 +339,7 @@ namespace FinalProject
             return;
         }
 
-        private void ApplyPitchRotation(float pitchAngle)
+        public void ApplyPitchRotation(float pitchAngle)
         {
             Matrix pitchMatrix = Matrix.CreateFromAxisAngle(Side, pitchAngle);
             Direction = Vector3.Transform(Direction, pitchMatrix);
@@ -276,7 +353,7 @@ namespace FinalProject
             return;
         }
 
-        protected virtual void ApplyRollRotation(float rollAngle)
+        public void ApplyRollRotation(float rollAngle)
         {
             Matrix rollMatrix = Matrix.CreateFromAxisAngle(Direction, rollAngle);
             Up = Vector3.Transform(Up, rollMatrix);
@@ -297,12 +374,22 @@ namespace FinalProject
 
             var message = GenerateDebugMessage();
             spriteBatch.DrawString(font, message, new Vector2(10, 10), Color.White);
+            DrawRectangle(new Rectangle((Game.Window.ClientBounds.Width - 300), 30, playerHealth.playerHealth, 40), playerHealth.GetColor());
+            spriteBatch.DrawString(healthFont, "Health: " + playerHealth.playerHealth, new Vector2(Game.Window.ClientBounds.Width - 500, 30), Color.Black);
+
 
             spriteBatch.End();
 
+
+           
             base.Draw(gameTime);
         }
-
+        public void DrawRectangle(Rectangle coords, Color color)
+        {
+            var rect = new Texture2D(GraphicsDevice, 1, 1);
+            rect.SetData(new[] { color });
+            this.spriteBatch.Draw(powerBar, coords, color);
+        }
         private string GenerateDebugMessage()
         {
             string positionMessage = "Position: " + Position;
@@ -324,5 +411,11 @@ namespace FinalProject
         {
             View = Matrix.CreateLookAt(Position, Target, Up);
         }
+        public void RedHealth()
+        {
+            playerHealth.decrementPlayerHealth((int)(intensity*10));
+        }
+    
+    
     }
 }
