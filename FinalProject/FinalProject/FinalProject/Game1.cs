@@ -183,7 +183,7 @@ namespace FinalProject
             switch (currentGameState)
             {
                 case GameState.Start:
-                    message = "Press enter to start.";
+                    message = "Press enter to start.\nMove through the asteroids and kill the aliens!";
                     position = CalculateTextCenterPosition(message);
                     DrawString(message, position);
                     break;
