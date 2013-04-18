@@ -58,7 +58,7 @@ namespace FinalProject
 
         protected override void LoadContent()
         {
-            Model model = Game.Content.Load<Model>(@"Models\ammo");
+            Model model = Game.Content.Load<Model>(@"Models\Weapons\laserbeam");
             LaserBeamModel = new LaserBeamModel(model, initialPosition);
             base.LoadContent();
         }
@@ -78,7 +78,9 @@ namespace FinalProject
             LaserBeamModel.Position = Position;
 
             CheckDistanceTraveled();
-            CheckTerrainCollision();
+            
+            // TODO:
+            //CheckTerrainCollision();
         }
 
         private void CheckDistanceTraveled()
