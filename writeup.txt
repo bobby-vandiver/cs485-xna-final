@@ -4,17 +4,17 @@ This project was a lot of fun to work on, especially all of us as a group. Every
 to the project through individual efforts on the project, we all spent a day meshing everything together.
 Bobby contributed with strong object oriented programming in the initial footwork, AI for the enemies, basic 
 models for the guns and also generated the terrain. Frank generated planet bombardment with effects like fog, 
-dynamically generated model construction, and generated a shader for the asteroid models. I constructed the
-asteroid field generation, the space level, space camera, and asteroid field generation and movement along with
+dynamically generated model construction, and generated a shader for the asteroid models. I (Anthony) constructed
+the asteroid field generation, the space level, space camera, and asteroid field generation and movement along with
 score construction. 
 
 Current functionality:
 	each level of the game is "done" in the sense of its generation and overall mechanics. Some minor things
 	yet to be worked out are collision detection (ran into a minor hiccup with implementation but almost there)
 	and level objective completion. The space level and planet level do not have a "real" game ending objective
-	but both will be easy to implement (space level is asteroids collided, planet level is position find.
+	but both will be easy to implement (space level is asteroids collided, planet level is find the position of the ship.
 	
-	The game is ended on most levels by a position reaching a certain point (x> some val) which will be changed.
+	The game is ended on most levels by the camera reaching a certain point (x> some val) which will be changed.
 
 To be implemented:
 	cursor highlight when target is in reticle (change color)
@@ -25,7 +25,8 @@ To be implemented:
 	Overall effects of bombardment
 	HUD (above what is given now)
 	Asteroids division (as per the algorithm shown in class with trees)
-	
+	Resolve small issue related to initial direction of ship and direction of asteroid field
+	Resolve issue where aliens can push the player completely off the map, causing them to become stuck
 
 
 Levels:
