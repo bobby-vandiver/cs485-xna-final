@@ -116,7 +116,7 @@ namespace FinalProject
                     tempUp = camera.Up;
                     test = true;
                 }
-                if (intensity < 200)
+                if (intensity > .6f)
                 {
                     camera.RedHealth();
                     ShakeCamera(camera);

@@ -32,7 +32,7 @@ namespace FinalProject
 
         const int LEVEL_COUNT = 2;
 
-        int currentLevel = 0;
+        public int currentLevel = 0;
         Level level;
         
         Camera c;
@@ -46,12 +46,16 @@ namespace FinalProject
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1200;
+            graphics.PreferredBackBufferHeight = 800;
             Content.RootDirectory = "Content";
             currentGameState = GameState.Start;
         }
 
         protected override void Initialize()
         {
+            Mouse.SetPosition(Window.ClientBounds.Width/2, Window.ClientBounds.Height/2);
+     
             base.Initialize();
         }
 

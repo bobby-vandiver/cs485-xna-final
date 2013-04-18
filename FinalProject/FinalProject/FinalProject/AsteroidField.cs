@@ -80,7 +80,7 @@ namespace FinalProject
             }
 
             KeyboardState keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyDown(Keys.Space))
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) || Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 bullets[0] = new Bullet(a2, cam.Position, cam);
                 firstDraw = true;
