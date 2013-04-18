@@ -49,7 +49,8 @@ namespace FinalProject
         {
             
             Vector3 position = new Vector3(0, 40, 5);
-            camera = new SpaceCamera(Game, Vector3.Forward, Vector3.Up, position);
+            Vector3 direction = new Vector3(0, 0, 1);
+            camera = new SpaceCamera(Game, direction, Vector3.Up, position);
             camera.DrawOrder = 2;
 
             Game.Components.Add(camera);

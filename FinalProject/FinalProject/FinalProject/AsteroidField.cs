@@ -130,9 +130,9 @@ namespace FinalProject
 
             spriteBatch.Begin();
             string scoreText = "Score: " + score;
+            spriteBatch.Draw(backgroundTexture, destination, Color.White);
             spriteBatch.DrawString(font, scoreText,
                 new Vector2(10, 10), Color.Red);
-            spriteBatch.Draw(backgroundTexture, destination, Color.White);
             spriteBatch.End();
         }
         private void DrawAsteroidField()

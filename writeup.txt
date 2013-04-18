@@ -1,0 +1,206 @@
+Group 3 Final Project Prototype: Lost in Space
+
+This project was a lot of fun to work on, especially all of us as a group. Everyone contributed strongly
+to the project through individual efforts on the project, we all spent a day meshing everything together.
+Bobby contributed with strong object oriented programming in the initial footwork, AI for the enemies, basic 
+models for the guns and also generated the terrain. Frank generated planet bombardment with effects like fog, 
+dynamically generated model construction, and generated a shader for the asteroid models. I constructed the
+asteroid field generation, the space level, space camera, and asteroid field generation and movement along with
+score construction. 
+
+Current functionality:
+	each level of the game is "done" in the sense of its generation and overall mechanics. Some minor things
+	yet to be worked out are collision detection (ran into a minor hiccup with implementation but almost there)
+	and level objective completion. The space level and planet level do not have a "real" game ending objective
+	but both will be easy to implement (space level is asteroids collided, planet level is position find.
+	
+	The game is ended on most levels by a position reaching a certain point (x> some val) which will be changed.
+
+To be implemented:
+	cursor highlight when target is in reticle (change color)
+	exploding particles (on asteroids and likely ship possibly enemies and laser gun)
+	sound (to all of game)
+	extended ship controls (more accurate rolls)
+	Polished collision detection
+	Overall effects of bombardment
+	HUD (above what is given now)
+	Asteroids division (as per the algorithm shown in class with trees)
+	
+
+
+Levels:
+
+
+Planet Level.cs
+	PlanetLevel()
+		empty
+	Initialize()
+		call initializecamera() and set the draw order for gun
+	InitializeTerrain()
+		instantiate a terrain class and set draw order to first
+		add the component and return it to the initialize function
+	LoadContent()
+		LoadAliends() called, Load LaserGun() call, LoadSkyBox() call
+		all of which instantiate models (and a background for skybox)
+	LoadAliens()
+		places the aliens at a unique x and z and calculates that positions y value
+		adds the model to the list of aliens usinga  for loop
+	GetUniqueRandomPointInWorld(randomnumbergen)
+		generates a random point within the world
+	UnloadResources()
+		removes all game components added
+	Update()
+		calls update functions
+	UpdateLaserBeam()
+		generates a laser beam if there isnt one already on key press
+	CreateLaserBeam()
+		creates laser beam model at position and adds component, draw order 4
+	UpdateAliens()
+		aliens update is called based on cam and terrain
+	checkCameraCollisions()
+		Checks for collision with aliens
+	CheckLaserBeamCollisions()
+		beam hits enemy remove alien and remove laser
+	RemoveLaserBeam()
+		removes laser
+	Draw()
+		draws aliens and laser gun
+	LevelOver()
+		when aliens count = 0 level is over
+SpaceLevel.cs
+	SpaceLevel()
+		empty
+	Initialize()
+		call initializecamera() and set the draw order for gun
+	InitializeField()
+		instantiate a new AsteroidField()
+		set draw order for 1 and add the component
+	LoadContent()
+		hat positions y value
+		adds the model to the list of aliens usinga  for loop
+	UnloadResources()
+		removes all game components added
+	Update()
+		calls update functions
+	Draw()
+		draws cross hair, spaceships
+	LevelOver()
+		currently when cam.x>10 (should be when ship.damage_counter = damage_thresh
+Level.cs (parent class)
+	parent class with constructor, initialize, initiliaze camera, load content, unload resources, etc.
+
+
+
+
+Cameras:
+
+
+camera.cs (parent class)
+	establishes a base pitch, yaw, and roll which all have methods to modify
+	there is a base pitch restriction funciton and position restriction function
+spacecamera.cs
+	the cameras position is restricted to within the asteroid field to make sure the user has to manipulate
+	inside of the given area to survive
+PlanetCamera.cs
+	the cameras position is restricted based on Y position of terrain, just like program 3
+
+
+
+Models:
+
+
+LaserGun.cs
+	instatiates a model to the position of the camera, this model is updated with the camera position
+Spaceship.cs
+	instantiates a model to the position of the camera, the model rolls when the camera rolls (to create a greater effect)
+	currently has a bounding sphere, this is subject to change for collision based on its position
+Alien.cs
+	instantiates a model based on random position, has a minor animation for the alien that suits the model type
+	currently moves to terrains end in a straight line, likely will get a trigger within range of player
+Asteroid.cs
+	instantiates a model based random position within the field, generated in a list so constantly renewing new
+	asteroids. Has a bounding sphere for current location(subject to change based on collision changes). Rotates
+	randomly and is meant to collide with bullets and spaceship
+Bullet.cs
+	Instatiates a model based on camera position and direction. moves in a direct line, currently has a bounding sphere
+	that is meant to interact with asteroids.
+FauxAsteroid.cs
+	fake asteroids as sprites to generate the effect that the sky is falling
+BasicModel.cs
+	basic model class for the above models
+
+
+
+Level Dynamics:
+
+
+AsteroidField.cs
+	LoadContent()
+		instantiates current models for asteroids, space background, generates bullets and field
+	Update()
+		updates all asteroids and bullets
+		when space pressed fires bullets
+	GenBullet()
+		generates a bullet in the list of bullets
+	DrawBullet()
+		draws bullet
+	Draw()
+		calls drawBullet, drawBackground,drawAsteroidField, and prepares graphics for drawing 3d prior
+	DrawBackground()
+		draws stars and score for the game
+	DrawAsteroidField()
+		draws asteroids in a for loop
+	GenAsteroidField()
+		generates a list of asteroids with a for loop
+	GenAsteroid()
+		generates a new asteroid (for when asteroids are destroyed)
+	prepareBasiceffectForDrawing3d
+		sets the basicEffect for modeling
+	GetRandomPoint(randomnumber)
+		Generates a random point using random generator and returns a vector
+CollisionBuildboard.cs
+	This is a generated billboard to determine where the asteroid hits the terrain. Draws the billboard behind
+	the terrain. Once the asteroids collide with the terrain from bombard it generates new asteroids.
+Terrain.cs
+	terrain()
+		Generates a terrain based on cellsize and Maxheight
+	Initialize()
+		empty
+	LoadContent()
+		load height map, ground texture, and background stars (which arent used)
+	Draw()
+		draws the primitives of triangles
+	PrepareGraphicsDeviceForDrawings()
+		sets proper values for graphics device
+	PrepareBasicEffectForDrawing3D()
+		basicEffect prepared for drawing 3D objects
+	GetRandomPoint(randomnumber)
+		Generates a random point using random generator and returns a vector
+	GetHeight()
+		gets the height of the given x and z based on the maxs for each
+	Clamp()
+		clamps values to be within the maxs and mins for the terrain
+Bombard.cs
+	Bombard()
+		instantiates all variables, terrain, camera, effect, andsmoke effect
+	RandomPosition()
+		gets a random position and moves the object based on milliseconds
+	ShakeCamera()
+		Shakes the camera based on how close the asteroid intersection collision is to the camera
+	NewAsteroid()
+		generates new asteroid once the asteroid drawn intersects the billboard surface
+	Update()
+		calls shake camera, new asteroid, updates time, and changes intensity (based on asteroid position)
+	spreadCollision()
+		spreads the billboards out when the asteroid collides with the terrain
+	Draw()
+		sets the effect and matrices for the bombard effects
+		sets the matrices for the camera 
+		draws the model in the mesh using the effect files
+PlayerHealth.cs
+	adds a rectangle to indicate player health, this is drawn in the camera class
+	
+
+
+*We used code from the book for plug in parts to generate things like the models (which were very nice to use
+	for this project) and also some small parts of code. 
