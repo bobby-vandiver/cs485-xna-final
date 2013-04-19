@@ -13,8 +13,21 @@ namespace FinalProject
 {
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+
+        #region Declarations
+
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        Video video;
+        VideoPlayer videoPlayer;
+        VideoPlayer videoPlayer2;
+        Texture2D videoTexture2;
+        Video video2;
+        bool startGame;
+        Texture2D videoTexture;
+        Rectangle videoRectangle;
 
         SpriteFont font;
         Random randomNumberGenerator;
@@ -34,7 +47,8 @@ namespace FinalProject
 
         public int currentLevel = 0;
         Level level;
-        
+        bool startingMessage;
+
         Camera c;
         Model model;
 
@@ -42,12 +56,13 @@ namespace FinalProject
 
 
         public Texture2D powerBar;
+#endregion
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = 1200;
-            graphics.PreferredBackBufferHeight = 800;
+            graphics.PreferredBackBufferWidth = 1600;
+            graphics.PreferredBackBufferHeight = 900;
             Content.RootDirectory = "Content";
             currentGameState = GameState.Start;
         }
@@ -55,12 +70,21 @@ namespace FinalProject
         protected override void Initialize()
         {
             Mouse.SetPosition(Window.ClientBounds.Width/2, Window.ClientBounds.Height/2);
-     
+
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
+            videoPlayer = new VideoPlayer();
+            videoPlayer2 = new VideoPlayer();
+
+            video = Content.Load<Video>(@"Videos\Intro");
+            video2 = Content.Load<Video>(@"Videos\Intro");
+
+            videoRectangle = new Rectangle(GraphicsDevice.Viewport.X,GraphicsDevice.Viewport.Y,GraphicsDevice.Viewport.Width,GraphicsDevice.Viewport.Height);
+
+
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             
@@ -95,6 +119,9 @@ namespace FinalProject
             milliseconds = gameTime.ElapsedGameTime.Milliseconds;
             UpdateGameState();
 
+
+                     
+
             base.Update(gameTime);
         }
         
@@ -106,14 +133,26 @@ namespace FinalProject
                     // Wait until the player presses "Enter" to start the first level
                     if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                     {
-                        currentGameState = GameState.Play;
-                        currentLevel = 0;
-                        CurrentLevelState = LevelState.Start;
+                   
+                        videoPlayer.Play(video);
+
+                        if (videoPlayer.State != MediaState.Stopped)
+                        { startGame = true; } startGame = true;
+                    }
+
+                    if(startGame)
+                    {
+                        if (videoPlayer.State == MediaState.Stopped)
+                        {
+                            currentGameState = GameState.Play;
+                            currentLevel = 0;
+                            CurrentLevelState = LevelState.Start;
+                        }
                     }
                     break;
 
                 case GameState.Play:
-                    UpdateLevelState();
+                        UpdateLevelState();
                     break;
                 
                 case GameState.End:
@@ -164,6 +203,7 @@ namespace FinalProject
             {
                 case 0:
                     level = new SpaceLevel(this);
+                   
                     break;
                 case 1:
                     level = new PlanetLevel(this);
@@ -174,8 +214,6 @@ namespace FinalProject
 
             Components.Add(level);
         }
-
-  
 
         protected override void Draw(GameTime gameTime)
         {
@@ -202,11 +240,46 @@ namespace FinalProject
                     break;
             }
 
+
+
+
+
             spriteBatch.Begin();
             DrawRectangle(new Rectangle((Window.ClientBounds.Width - 300), 30, playerHealth.playerHealth-150, 15), Color.White);
-
+          
+            IntroVideo();
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        private void StartingMessage()
+        {
+           
+                string text = "Mission Starting...";
+                Vector2 position = CalculateTextCenterPosition(text);
+                spriteBatch.Begin();
+                spriteBatch.DrawString(font, text, new Vector2(position.X, position.Y + 50), Color.White);
+                spriteBatch.End();
+            
+        }
+
+        private void IntroVideo()
+        {
+            videoPlayer.Volume = 0;
+            if (videoPlayer.State != MediaState.Stopped)
+            {
+
+                videoTexture = videoPlayer.GetTexture();
+                if (videoTexture != null)
+                {
+                    spriteBatch.Draw(videoTexture, videoRectangle, Color.White);
+                }
+
+            }
+            
+            if (videoPlayer.PlayPosition.Seconds == 25)
+                videoPlayer.Stop();
+        
         }
 
         private void DrawString(string text, Vector2 position)
@@ -231,15 +304,18 @@ namespace FinalProject
             return position;
         }
 
-      
-
         public void DrawRectangle(Rectangle coords, Color color)
         {
          
-           
             var rect = new Texture2D(graphics.GraphicsDevice, 1, 1);
             rect.SetData(new[] { color });
             this.spriteBatch.Draw(powerBar, coords, color);
         }
+
+     
+        
+
+
+
     }
 }

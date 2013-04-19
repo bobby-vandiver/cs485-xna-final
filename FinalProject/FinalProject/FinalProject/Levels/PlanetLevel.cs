@@ -312,9 +312,9 @@ namespace FinalProject
         {
             for (int i = 0; i < fauxPosition.Length; i++)
                 fauxPosition[i] = new Vector3(
-                    50 + (float)randomNumber.NextDouble() * 1000,
+                    20 + (float)randomNumber.NextDouble() * 1000,
                     (float)randomNumber.NextDouble() * 300 + 100,
-                   50 +(float)randomNumber.NextDouble()* 1000
+                   20 +(float)randomNumber.NextDouble()* 1000
                 );
         }
     }

@@ -24,6 +24,8 @@ namespace FinalProject
         Texture2D crosshair;
         SpriteFont font;
         int score;
+        public bool levelOverForVideo;
+
 
         public SpaceLevel(Game game)
             : base(game)
@@ -106,7 +108,10 @@ namespace FinalProject
 
         protected override bool LevelOver()
         {
+
+            
             return camera.Position.X > 10;
+
         }
 
     }
