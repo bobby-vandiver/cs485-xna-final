@@ -253,6 +253,8 @@ namespace FinalProject
                 {
                     // Push the camera back some if it hits an alien
                     camera.Position = camera.Position - 5.0f * camera.Direction;
+
+                    
                 }
             }
         }
@@ -305,7 +307,23 @@ namespace FinalProject
         }
         protected override bool LevelOver()
         {
-            return aliens.Count == 0;
+            bool allAliensGone = aliens.Count == 0;
+            return allAliensGone || IsPlayerOffWorld();
+        }
+
+        private bool IsPlayerOffWorld()
+        {
+            // Get the range of coordinates allowed in the world
+            float maxX = terrain.MaxX;
+            float minX = terrain.MinX;
+
+            float maxZ = terrain.MaxZ;
+            float minZ = terrain.MinZ;
+
+            // Make sure the move won't place the camera outside the world
+            bool beyondX = (camera.Position.X < minX || camera.Position.X > maxX);
+            bool beyondZ = (camera.Position.Z < minZ || camera.Position.Z > maxZ);
+            return beyondX || beyondZ;
         }
 
         private void spreadFaux()

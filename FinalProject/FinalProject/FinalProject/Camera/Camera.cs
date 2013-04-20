@@ -408,12 +408,14 @@ namespace FinalProject
 
             }
         }
+
         public void DrawRectangle(Rectangle coords, Color color, Texture2D text)
         {
             var rect = new Texture2D(GraphicsDevice, 1, 1);
             rect.SetData(new[] { color });
             this.spriteBatch.Draw(text, coords, color);
         }
+
         private string GenerateDebugMessage()
         {
             string positionMessage = "Position: " + Position;
