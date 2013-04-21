@@ -14,7 +14,7 @@ namespace FinalProject
 {
     public class PlanetLevel : Level
     {
-        public Camera camera;
+        Camera camera;
 
         Terrain terrain;
         Skybox skybox;
