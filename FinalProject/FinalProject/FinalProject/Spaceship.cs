@@ -66,7 +66,7 @@ namespace FinalProject
         {
             Matrix scale = Matrix.CreateScale(0.02f);
             Matrix rotation = Matrix.CreateRotationY(MathHelper.Pi);
-            Matrix roll = Matrix.CreateRotationZ(cam.currentRoll);
+            Matrix roll = Matrix.CreateRotationZ(cam.Roll);
             Matrix translation = Matrix.CreateTranslation(new Vector3(0f, -0.25f, -1.0f));
             worldHolder = meshTransform * scale * rotation * roll * translation * Matrix.Invert(camera.View);
             return worldHolder;

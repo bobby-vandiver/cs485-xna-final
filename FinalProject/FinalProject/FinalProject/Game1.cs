@@ -134,20 +134,20 @@ namespace FinalProject
                     if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                     {
                    
-                        videoPlayer.Play(video);
+                    //    videoPlayer.Play(video);
 
-                        if (videoPlayer.State != MediaState.Stopped)
-                        { startGame = true; } startGame = true;
-                    }
+                    //    if (videoPlayer.State != MediaState.Stopped)
+                    //    { startGame = true; } startGame = true;
+                    //}
 
-                    if(startGame)
-                    {
-                        if (videoPlayer.State == MediaState.Stopped)
-                        {
+                    //if(startGame)
+                    //{
+                    //    if (videoPlayer.State == MediaState.Stopped)
+                    //    {
                             currentGameState = GameState.Play;
                             currentLevel = 0;
                             CurrentLevelState = LevelState.Start;
-                        }
+                        //}
                     }
                     break;
 

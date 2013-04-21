@@ -27,10 +27,6 @@ namespace FinalProject
         public Vector3[] alienPosition = new Vector3[20];
         public int alienRadarCount;
 
-        #region Camera Axes and Matrices Properties
-        public Matrix View { get; private set; }
-        public Matrix Projection { get; private set; }
-        
         //Mouse direction variables
         MouseState mouse = Mouse.GetState();
         int centerX = 0, centerY = 0;
@@ -44,7 +40,12 @@ namespace FinalProject
         SpriteFont healthFont;
         //Shake variables
         public bool shakeUp;
-        public float intensity = 0; 
+        public float intensity = 0;
+        
+        
+        #region Camera Axes and Matrices Properties
+        public Matrix View { get; private set; }
+        public Matrix Projection { get; private set; }
 
         //Camera Get/Set
         public Vector3 Direction
@@ -122,25 +123,25 @@ namespace FinalProject
         protected float RollRotationRate;
         #endregion
 
-        public float currentPitch = 0;
-        public float currentYaw = 0;
-        public float currentRoll = 0;
+        float currentPitch = 0;
+        float currentYaw = 0;
+        float currentRoll = 0;
 
         // Subclasses can access the current yaw/pitch/roll via properties
         #region Current Pitch/Yaw/Roll properties
-        protected float Pitch
+        public float Pitch
         {
             get { return currentPitch; }
             set { currentPitch = value; }
         }
 
-        protected float Yaw
+        public float Yaw
         {
             get { return currentYaw; }
             set { currentYaw = value; }
         }
 
-        protected float Roll
+        public float Roll
         {
             get { return currentRoll; }
             set { currentRoll = value; }
