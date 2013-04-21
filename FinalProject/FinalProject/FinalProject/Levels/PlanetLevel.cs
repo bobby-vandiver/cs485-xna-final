@@ -39,10 +39,10 @@ namespace FinalProject
         PlayerHealth playerHealth = new PlayerHealth();
         FauxAstroid fauxAstroid;
         public Vector3[] fauxPosition = new Vector3[30];
-        Random randomNumber = new Random();
 
         public float milliseconds;
         Bombard bombard;
+        
         public PlanetLevel(Game game)
             : base(game)
         {
@@ -328,11 +328,13 @@ namespace FinalProject
 
         private void spreadFaux()
         {
+            Random random = (Random)Game.Services.GetService(typeof(Random));
+
             for (int i = 0; i < fauxPosition.Length; i++)
                 fauxPosition[i] = new Vector3(
-                    20 + (float)randomNumber.NextDouble() * 1000,
-                    (float)randomNumber.NextDouble() * 300 + 100,
-                   20 +(float)randomNumber.NextDouble()* 1000
+                    20 + (float)random.NextDouble() * 1000,
+                    (float)random.NextDouble() * 300 + 100,
+                   20 +(float)random.NextDouble()* 1000
                 );
         }
     }
