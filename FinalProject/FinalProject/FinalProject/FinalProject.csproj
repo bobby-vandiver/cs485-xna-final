@@ -110,29 +110,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Alien.cs" />
-    <Compile Include="Asteroid.cs" />
-    <Compile Include="AsteroidField.cs" />
+    <Compile Include="Levels\Planet\Models\Alien.cs" />
+    <Compile Include="Levels\Space\Models\Asteroid.cs" />
+    <Compile Include="Levels\Space\Components\AsteroidField.cs" />
     <Compile Include="BasicModel.cs" />
-    <Compile Include="Bullet.cs" />
+    <Compile Include="Levels\Space\Models\Bullet.cs" />
     <Compile Include="Camera\SpaceCamera.cs" />
-    <Compile Include="CollisionBillboard.cs" />
-    <Compile Include="Bombard.cs" />
+    <Compile Include="Levels\Planet\Bombard\CollisionBillboard.cs" />
+    <Compile Include="Levels\Planet\Bombard\Bombard.cs" />
     <Compile Include="Camera\Camera.cs" />
-    <Compile Include="FauxAstroid.cs" />
-    <Compile Include="LaserBeam.cs" />
-    <Compile Include="LaserGun.cs" />
+    <Compile Include="Levels\Planet\Bombard\FauxAstroid.cs" />
+    <Compile Include="Weapons\LaserBeam.cs" />
+    <Compile Include="Weapons\LaserGun.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="Camera\PlanetCamera.cs" />
-    <Compile Include="Levels\PlanetLevel.cs" />
-    <Compile Include="Levels\SpaceLevel.cs" />
-    <Compile Include="PlayerHealth.cs" />
+    <Compile Include="Levels\Planet\PlanetLevel.cs" />
+    <Compile Include="Levels\Space\SpaceLevel.cs" />
+    <Compile Include="HUD\PlayerHealth.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Effects\Skybox.cs" />
-    <Compile Include="Spaceship.cs" />
-    <Compile Include="Terrain.cs" />
+    <Compile Include="Levels\Space\Models\Spaceship.cs" />
+    <Compile Include="Levels\Planet\Components\Terrain.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
