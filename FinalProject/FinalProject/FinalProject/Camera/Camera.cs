@@ -23,10 +23,7 @@ namespace FinalProject
         //Mouse direction variables
         MouseState mouse = Mouse.GetState();
         int centerX = 0, centerY = 0;
-        Vector3 angle = new Vector3();
-
         float turnSpeed = 60;
-        // store previous mouse state
 
         public bool shakeUp;
         public float intensity = 0;
@@ -177,6 +174,8 @@ namespace FinalProject
             UpdateDirectionFromKeyboard();
             UpdateView();
 
+            Mouse.SetPosition(centerX, centerY);
+
             base.Update(gameTime);
         }
 
@@ -219,12 +218,15 @@ namespace FinalProject
             
             float yawAngle = CalculateYawRotationAngleFromKeyboard();
             ApplyYawRotation(yawAngle);
-            yawAngle = UpdateYawDirectionFromMouse();
+
+            yawAngle = CalculateYawRotationFromMouse();
             ApplyYawRotation(yawAngle);
+
             if (shakeUp)
             {
                 yawAngle = CameraShake(yawAngle);
             }
+            
             RestrictYawRotation(previousDirection, previousYawAngle);
         }
 
@@ -237,12 +239,15 @@ namespace FinalProject
 
             float pitchAngle = CalculatePitchRotationAngleFromKeyboard();
             ApplyPitchRotation(pitchAngle);
-            pitchAngle = UpdatePitchDirectionFromMouse();
+
+            pitchAngle = CalculatePitchRotationFromMouse();
             ApplyPitchRotation(pitchAngle);
+
             if (shakeUp)
             {
                 pitchAngle = CameraShake(pitchAngle);
             }
+            
             RestrictPitchRotation(previousDirection, previousUp, previousPitchAngle);
         }
 
@@ -276,30 +281,14 @@ namespace FinalProject
             return pitchAngle;
         }
 
-        private float UpdateYawDirectionFromMouse()
+        private float CalculateYawRotationFromMouse()
         {
-
-            angle.Y = 0;
-            // Set mouse position and do initial get state
-            
-            // update yaw
-            angle.Y = MathHelper.ToRadians((mouse.X - centerX) * turnSpeed * 0.01f); // yaw
-                   
-            Mouse.SetPosition(centerX, centerY);
-            return -angle.Y;     
+            return -MathHelper.ToRadians((mouse.X - centerX) * turnSpeed * 0.01f);
         }
 
-        private float UpdatePitchDirectionFromMouse()
+        private float CalculatePitchRotationFromMouse()
         {
-
-            angle.X = 0;
-            // Set mouse position and do initial get state
-
-            // update pitch angles
-            angle.X = MathHelper.ToRadians((mouse.Y - centerY) * turnSpeed * 0.01f); // pitch
-
-            Mouse.SetPosition(centerX, centerY);
-            return -angle.X;
+            return -MathHelper.ToRadians((mouse.Y - centerY) * turnSpeed * 0.01f);
         }
 
         public float CameraShake(float angle) 
