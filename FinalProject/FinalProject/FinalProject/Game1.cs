@@ -21,9 +21,6 @@ namespace FinalProject
         // Video
         Video video;
         VideoPlayer videoPlayer;
-        VideoPlayer videoPlayer2;
-        Texture2D videoTexture2;
-        Video video2;
         bool startGame;
         Texture2D videoTexture;
         Rectangle videoRectangle;
@@ -81,11 +78,7 @@ namespace FinalProject
         private void LoadVideoResources()
         {
             videoPlayer = new VideoPlayer();
-            videoPlayer2 = new VideoPlayer();
-
             video = Content.Load<Video>(@"Videos\Intro");
-            video2 = Content.Load<Video>(@"Videos\Intro");
-
             videoRectangle = new Rectangle(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
         }
 
@@ -115,20 +108,20 @@ namespace FinalProject
                     if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                     {
                    
-                    //    videoPlayer.Play(video);
+                        videoPlayer.Play(video);
 
-                    //    if (videoPlayer.State != MediaState.Stopped)
-                    //    { startGame = true; } startGame = true;
-                    //}
+                        if (videoPlayer.State != MediaState.Stopped)
+                        { startGame = true; } startGame = true;
+                    }
 
-                    //if(startGame)
-                    //{
-                    //    if (videoPlayer.State == MediaState.Stopped)
-                    //    {
+                    if(startGame)
+                    {
+                        if (videoPlayer.State == MediaState.Stopped)
+                        {
                             currentGameState = GameState.Play;
                             currentLevel = 0;
                             CurrentLevelState = LevelState.Start;
-                        //}
+                        }
                     }
                     break;
 
