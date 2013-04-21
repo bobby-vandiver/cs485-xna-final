@@ -21,7 +21,7 @@ namespace FinalProject
         // Video
         Video video;
         VideoPlayer videoPlayer;
-        bool startGame;
+        bool isVideoPlaying;
 
         SpriteFont font;
         Random randomNumberGenerator;
@@ -104,21 +104,16 @@ namespace FinalProject
                     // Wait until the player presses "Enter" to start the first level
                     if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                     {
-                   
                         videoPlayer.Play(video);
-
-                        if (videoPlayer.State != MediaState.Stopped)
-                        { startGame = true; } startGame = true;
+                        isVideoPlaying = true;
                     }
 
-                    if(startGame)
+                    bool isVideoOver = videoPlayer.State == MediaState.Stopped;
+                    if(isVideoPlaying && isVideoOver)
                     {
-                        if (videoPlayer.State == MediaState.Stopped)
-                        {
-                            currentGameState = GameState.Play;
-                            currentLevel = 0;
-                            CurrentLevelState = LevelState.Start;
-                        }
+                        currentGameState = GameState.Play;
+                        currentLevel = 0;
+                        CurrentLevelState = LevelState.Start;
                     }
                     break;
 
