@@ -223,7 +223,7 @@ namespace FinalProject
                     break;
             }
 
-            PlayIntroVideo();
+            DrawVideoFrame();
 
             base.Draw(gameTime);
         }
@@ -237,7 +237,7 @@ namespace FinalProject
                 spriteBatch.End();
         }
 
-        private void PlayIntroVideo()
+        private void DrawVideoFrame()
         {
             spriteBatch.Begin();
 
