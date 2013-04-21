@@ -111,8 +111,8 @@ namespace FinalProject
                 shake[1] = true;
                 if (!test)
                 {
-                    tempPosition = camera.position;
-                    tempDirection = camera.direction;
+                    tempPosition = camera.Position;
+                    tempDirection = camera.Direction;
                     tempUp = camera.Up;
                     test = true;
                 }
@@ -180,9 +180,9 @@ namespace FinalProject
                 }
                 if ((milliseconds > (previousMilliseconds + 200) && test))
                 {
-                    camera.direction = tempDirection;
-                    camera.position = tempPosition;
-                    camera.up = tempUp;
+                    camera.Direction = tempDirection;
+                    camera.Position = tempPosition;
+                    camera.Up = tempUp;
                     test = false;
                     shake[0] = false;
                     shake[1] = false;
@@ -198,7 +198,7 @@ namespace FinalProject
             this.milliseconds += gameTime.ElapsedGameTime.Milliseconds;
             NewAsteroid(this.camera);
             ShakeCamera(this.camera);
-            intensity = (float)(1 - (Math.Sqrt(Math.Pow(((double)camera.position.X - (double)collisionPosition[0].X), 2) + Math.Pow(((double)camera.position.Z - (double)collisionPosition[0].Z), 2)))/600);
+            intensity = (float)(1 - (Math.Sqrt(Math.Pow(((double)camera.Position.X - (double)collisionPosition[0].X), 2) + Math.Pow(((double)camera.Position.Z - (double)collisionPosition[0].Z), 2)))/600);
             Console.WriteLine(camera.intensity);
             camera.intensity = intensity;
             

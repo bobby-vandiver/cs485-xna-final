@@ -16,9 +16,9 @@ namespace FinalProject
         SpriteBatch spriteBatch;
         
         // Access these via their respective properties to ensure normalization
-        public Vector3 direction;
-        public Vector3 up;
-        public Vector3 position;
+        Vector3 direction;
+        Vector3 up;
+        Vector3 position;
 
         public bool showRadar;
         Texture2D RadarText;
@@ -54,7 +54,7 @@ namespace FinalProject
             {
                 return direction;
             }
-            protected set
+            set
             {
                 direction = value;
                 direction.Normalize();
@@ -67,7 +67,7 @@ namespace FinalProject
             {
                 return up;
             }
-            protected set
+            set
             {
                 up = value;
                 up.Normalize();
