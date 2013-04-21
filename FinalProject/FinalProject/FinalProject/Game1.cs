@@ -13,37 +13,40 @@ namespace FinalProject
 {
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-
-        #region Declarations
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        // Video
+        #region Video Variables
         Video video;
         VideoPlayer videoPlayer;
+        
         bool isVideoPlaying;
+        const int VIDEO_LENGTH_SECS = 25;
+        #endregion
 
+        #region Services
         SpriteFont font;
         Random randomNumberGenerator;
+        #endregion
 
+        #region Game State Variables
         public enum GameState { Start, Play, End }
         GameState currentGameState;
+        #endregion
 
+        #region Level State Variables
         // Each level will use this to communicate its state so the Game object can manage transitions
         public enum LevelState { Start, Play, End }
         public LevelState CurrentLevelState;
         
         const int LEVEL_COUNT = 2;
-
-        public int currentLevel = 0;
+        int currentLevel = 0;
         Level level;
-        bool startingMessage;
-
         #endregion
 
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
+            //graphics = new GraphicsDeviceManager(this);
             //graphics.PreferredBackBufferWidth = 1600;
             //graphics.PreferredBackBufferHeight = 900;
             Content.RootDirectory = "Content";
@@ -76,6 +79,7 @@ namespace FinalProject
         private void LoadVideoResources()
         {
             videoPlayer = new VideoPlayer();
+            videoPlayer.Volume = 0;
             video = Content.Load<Video>(@"Videos\Intro");
         }
 
@@ -108,13 +112,8 @@ namespace FinalProject
                         isVideoPlaying = true;
                     }
 
-                    bool isVideoOver = videoPlayer.State == MediaState.Stopped;
-                    if(isVideoPlaying && isVideoOver)
-                    {
-                        currentGameState = GameState.Play;
-                        currentLevel = 0;
-                        CurrentLevelState = LevelState.Start;
-                    }
+                    UpdateIntroVideo();
+
                     break;
 
                 case GameState.Play:
@@ -126,6 +125,22 @@ namespace FinalProject
                 
                 default:
                     throw new NotImplementedException("Invalid game state!");
+            }
+        }
+
+        private void UpdateIntroVideo()
+        {
+            if (isVideoPlaying)
+            {
+                if (videoPlayer.PlayPosition.Seconds == VIDEO_LENGTH_SECS)
+                {
+                    videoPlayer.Stop();
+
+                    // Start the game when the video is over
+                    currentGameState = GameState.Play;
+                    currentLevel = 0;
+                    CurrentLevelState = LevelState.Start;
+                }
             }
         }
 
@@ -169,7 +184,6 @@ namespace FinalProject
             {
                 case 0:
                     level = new SpaceLevel(this);
-                   
                     break;
                 case 1:
                     level = new PlanetLevel(this);
@@ -213,34 +227,33 @@ namespace FinalProject
 
         private void StartingMessage()
         {
-           
                 string text = "Mission Starting...";
                 Vector2 position = CalculateTextCenterPosition(text);
                 spriteBatch.Begin();
                 spriteBatch.DrawString(font, text, new Vector2(position.X, position.Y + 50), Color.White);
                 spriteBatch.End();
-            
         }
 
         private void PlayIntroVideo()
         {
             spriteBatch.Begin();
 
-            videoPlayer.Volume = 0;
             if (videoPlayer.State != MediaState.Stopped)
             {
                 Texture2D videoTexture = videoPlayer.GetTexture();
-                Rectangle videoRectangle = new Rectangle(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+                Rectangle videoRectangle = GetScreenDimensionsForVideo();
                 if (videoTexture != null)
                 {
                     spriteBatch.Draw(videoTexture, videoRectangle, Color.White);
                 }
             }
             
-            if (videoPlayer.PlayPosition.Seconds == 25)
-                videoPlayer.Stop();
-
             spriteBatch.End();
+        }
+
+        private Rectangle GetScreenDimensionsForVideo()
+        {
+            return new Rectangle(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
         }
 
         private void DrawString(string text, Vector2 position)
