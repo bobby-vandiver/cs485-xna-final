@@ -15,11 +15,10 @@ namespace FinalProject
     {
 
         #region Declarations
-
-
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        // Video
         Video video;
         VideoPlayer videoPlayer;
         VideoPlayer videoPlayer2;
@@ -39,24 +38,13 @@ namespace FinalProject
         public enum LevelState { Start, Play, End }
         public LevelState CurrentLevelState;
         
-        Effect myeff;
-        Texture2D picture; 
-        public float milliseconds;
-
         const int LEVEL_COUNT = 2;
 
         public int currentLevel = 0;
         Level level;
         bool startingMessage;
 
-        Camera c;
-        Model model;
-
-        PlayerHealth playerHealth = new PlayerHealth();
-
-
-        public Texture2D powerBar;
-#endregion
+        #endregion
 
         public Game1()
         {
@@ -76,14 +64,8 @@ namespace FinalProject
 
         protected override void LoadContent()
         {
-            videoPlayer = new VideoPlayer();
-            videoPlayer2 = new VideoPlayer();
-
-            video = Content.Load<Video>(@"Videos\Intro");
-            video2 = Content.Load<Video>(@"Videos\Intro");
-
-            videoRectangle = new Rectangle(GraphicsDevice.Viewport.X,GraphicsDevice.Viewport.Y,GraphicsDevice.Viewport.Width,GraphicsDevice.Viewport.Height);
-
+            // Load resources to play the intro video
+            LoadVideoResources();
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -91,18 +73,20 @@ namespace FinalProject
             font = Content.Load<SpriteFont>(@"Fonts\GameFont");
             randomNumberGenerator = new Random();
             
-            myeff = Content.Load<Effect>(@"Effects\shader"); // load your shader code
-            picture = Content.Load<Texture2D>(@"Textures\ParticleColors");
-            model = Content.Load<Model>(@"Models\ammo");
-
             // The font and the random number generator need to be accessible from every where
             Services.AddService(typeof(SpriteFont), font);
             Services.AddService(typeof(Random), randomNumberGenerator);
+        }
 
-            powerBar = Content.Load<Texture2D>(@"Textures\pBar");
+        private void LoadVideoResources()
+        {
+            videoPlayer = new VideoPlayer();
+            videoPlayer2 = new VideoPlayer();
 
+            video = Content.Load<Video>(@"Videos\Intro");
+            video2 = Content.Load<Video>(@"Videos\Intro");
 
-
+            videoRectangle = new Rectangle(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
         }
 
         protected override void UnloadContent()
@@ -116,12 +100,9 @@ namespace FinalProject
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-            milliseconds = gameTime.ElapsedGameTime.Milliseconds;
+            
             UpdateGameState();
-
-
-                     
-
+            
             base.Update(gameTime);
         }
         
@@ -240,15 +221,10 @@ namespace FinalProject
                     break;
             }
 
-
-
-
-
             spriteBatch.Begin();
-            DrawRectangle(new Rectangle((Window.ClientBounds.Width - 300), 30, playerHealth.playerHealth-150, 15), Color.White);
-          
             IntroVideo();
             spriteBatch.End();
+
             base.Draw(gameTime);
         }
 
@@ -303,19 +279,5 @@ namespace FinalProject
 
             return position;
         }
-
-        public void DrawRectangle(Rectangle coords, Color color)
-        {
-         
-            var rect = new Texture2D(graphics.GraphicsDevice, 1, 1);
-            rect.SetData(new[] { color });
-            this.spriteBatch.Draw(powerBar, coords, color);
-        }
-
-     
-        
-
-
-
     }
 }
