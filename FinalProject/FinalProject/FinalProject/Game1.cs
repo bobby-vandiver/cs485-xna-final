@@ -22,8 +22,6 @@ namespace FinalProject
         Video video;
         VideoPlayer videoPlayer;
         bool startGame;
-        Texture2D videoTexture;
-        Rectangle videoRectangle;
 
         SpriteFont font;
         Random randomNumberGenerator;
@@ -79,7 +77,6 @@ namespace FinalProject
         {
             videoPlayer = new VideoPlayer();
             video = Content.Load<Video>(@"Videos\Intro");
-            videoRectangle = new Rectangle(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
         }
 
         protected override void UnloadContent()
@@ -214,9 +211,7 @@ namespace FinalProject
                     break;
             }
 
-            spriteBatch.Begin();
-            IntroVideo();
-            spriteBatch.End();
+            PlayIntroVideo();
 
             base.Draw(gameTime);
         }
@@ -232,23 +227,25 @@ namespace FinalProject
             
         }
 
-        private void IntroVideo()
+        private void PlayIntroVideo()
         {
+            spriteBatch.Begin();
+
             videoPlayer.Volume = 0;
             if (videoPlayer.State != MediaState.Stopped)
             {
-
-                videoTexture = videoPlayer.GetTexture();
+                Texture2D videoTexture = videoPlayer.GetTexture();
+                Rectangle videoRectangle = new Rectangle(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
                 if (videoTexture != null)
                 {
                     spriteBatch.Draw(videoTexture, videoRectangle, Color.White);
                 }
-
             }
             
             if (videoPlayer.PlayPosition.Seconds == 25)
                 videoPlayer.Stop();
-        
+
+            spriteBatch.End();
         }
 
         private void DrawString(string text, Vector2 position)
