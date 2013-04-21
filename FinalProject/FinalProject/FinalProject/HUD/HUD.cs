@@ -16,7 +16,6 @@ namespace FinalProject
     {
         SpriteBatch spriteBatch;
 
-        public bool showRadar;
         Texture2D RadarText;
         Texture2D playerRadar;
         Texture2D alienRadar;
@@ -79,11 +78,9 @@ namespace FinalProject
         {
             Camera camera = (Camera)Game.Services.GetService(typeof(Camera));
 
-            if (showRadar)
-            {
-                DrawRectangle(new Rectangle(-40, -45, 300, 300), Color.White, RadarText);
-                DrawRectangle(new Rectangle((int)(camera.Position.X / 5 + 60), (int)(camera.Position.Z / 5 + 60), 20, 20), Color.Green, playerRadar);
-            }
+            DrawRectangle(new Rectangle(-40, -45, 300, 300), Color.White, RadarText);
+            DrawRectangle(new Rectangle((int)(camera.Position.X / 5 + 60), (int)(camera.Position.Z / 5 + 60), 20, 20), Color.Green, playerRadar);
+
             for (int i = 0; i < alienRadarCount; i++)
             {
                 DrawRectangle(new Rectangle((int)(alienPosition[i].X / 5 + 60), (int)(alienPosition[i].Z / 5 + 60), 20, 20), Color.Red, powerBar);

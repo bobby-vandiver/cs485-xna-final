@@ -99,7 +99,6 @@ namespace FinalProject
             LoadLaserGun();
             LoadSkybox();
             LoadAliens();
-            //camera.showRadar = true;
             base.LoadContent();
         }
 
@@ -110,7 +109,7 @@ namespace FinalProject
             Texture2D smokeTexture = Game.Content.Load<Texture2D>(@"Textures\smoke");
 
             Model BombardmentModel = Game.Content.Load<Model>(@"Models\ammo");
-            bombard = new Bombard(BombardmentModel, terrain, bombTexture, camera, milliseconds, explosionEffect, smokeTexture);
+            bombard = new Bombard(BombardmentModel, terrain, bombTexture, camera, hud, milliseconds, explosionEffect, smokeTexture);
 
             collisionBillboard = new CollisionBillboard(GraphicsDevice, Game.Content,
                        Game.Content.Load<Texture2D>(@"Textures\smoke"), new Vector2(50), bombard.collisionPosition);
@@ -141,13 +140,12 @@ namespace FinalProject
             int alienCount = randomNumberGenerator.Next(MIN_ALIEN_COUNT, MAX_ALIEN_COUNT);
 
             aliens = new List<Alien>();
+            hud.alienRadarCount = alienCount;
 
             for (int i = 0; i < alienCount; i++)
             {
                 // Place each alien at a random point on the terrain
                 Vector3 position = GetUniqueRandomPointInWorld(randomNumberGenerator);
-                //camera.alienRadarCount = alienCount;
-                //Vector3 position = camera.Position - new Vector3(0, 0, 50.0f);
                 position.Y = terrain.GetHeight(position.X, position.Z);
 
                 Alien alien = new Alien(alienModel, position, Vector3.UnitZ);
@@ -192,6 +190,7 @@ namespace FinalProject
             Game.Components.Remove(camera);
             Game.Components.Remove(terrain);
             Game.Components.Remove(skybox);
+            Game.Components.Remove(hud);
             Game.Services.RemoveService(typeof(Camera));
             Game.Services.RemoveService(typeof(Terrain));
             base.UnloadContent();
@@ -248,7 +247,7 @@ namespace FinalProject
             {
                 Alien alien = aliens[i];
                 alien.Update(camera, terrain);
-                //camera.alienPosition[i] = alien.Position;
+                hud.alienPosition[i] = alien.Position;
             }
         }
 

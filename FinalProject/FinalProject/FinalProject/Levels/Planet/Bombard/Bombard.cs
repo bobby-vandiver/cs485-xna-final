@@ -59,13 +59,16 @@ namespace FinalProject
         bool test = false;
 
         Camera camera;
+        HUD hud;
         #endregion
+
         public Bombard(Model model, Terrain terrain, 
-            Texture2D tex, Camera camera, float milliseconds, Effect effect, Texture2D smokeTexture)
+            Texture2D tex, Camera camera, HUD hud, float milliseconds, Effect effect, Texture2D smokeTexture)
         {
             this.texture = tex;
             this.model = model;
             this.camera = camera;
+            this.hud = hud;
             this.terrain = terrain;
             this.milliseconds = milliseconds;
             this.effect = effect;
@@ -118,7 +121,7 @@ namespace FinalProject
                 }
                 if (intensity > .6f)
                 {
-                    //camera.RedHealth();
+                    hud.RedHealth();
                     ShakeCamera(camera);
                 }
              
@@ -201,6 +204,7 @@ namespace FinalProject
             intensity = (float)(1 - (Math.Sqrt(Math.Pow(((double)camera.Position.X - (double)collisionPosition[0].X), 2) + Math.Pow(((double)camera.Position.Z - (double)collisionPosition[0].Z), 2)))/600);
             //Console.WriteLine(camera.intensity);
             camera.intensity = intensity;
+            hud.intensity = intensity;
             
         }
 
