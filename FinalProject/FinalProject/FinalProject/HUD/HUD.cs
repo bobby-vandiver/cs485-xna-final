@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 
-namespace FinalProject.HUD
+namespace FinalProject
 {
     public class HUD : Microsoft.Xna.Framework.DrawableGameComponent
     {

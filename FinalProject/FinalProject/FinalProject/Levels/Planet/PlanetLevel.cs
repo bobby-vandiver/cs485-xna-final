@@ -15,6 +15,7 @@ namespace FinalProject
     public class PlanetLevel : Level
     {
         Camera camera;
+        HUD hud;
 
         Terrain terrain;
         Skybox skybox;
@@ -51,11 +52,20 @@ namespace FinalProject
         public override void Initialize()
         {
             InitializeCamera();
+            InitializeHud();
+
             spreadFaux();
             // The gun model needs to be render after everything so it appears 'on top'
             this.DrawOrder = 3;
             base.Initialize();
 
+        }
+
+        private void InitializeHud()
+        {
+            hud = new HUD(Game);
+            hud.DrawOrder = 5;
+            Game.Components.Add(hud);
         }
 
         private void InitializeCamera()

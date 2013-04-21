@@ -13,25 +13,12 @@ namespace FinalProject
     {
         public int playerHealth = 0;
         int maxHealth = 200;
-        int lowHelath = 20;
-        SpriteBatch spriteBatch;
-        Texture2D rectangle;
-        GraphicsDeviceManager graphics;
-        Game game;
-        
+        int lowHealth = 20;
 
         public PlayerHealth()
         {
         }
 
-        public void Initialize()
-        {
-        }
-
-        protected void LoadContent()
-        {
-
-        }
         public Color GetColor()
         {
             if (playerHealth > 60)
@@ -55,17 +42,6 @@ namespace FinalProject
         public void incrementPlayerHealth(int amount)
         {
             playerHealth += amount;
-
-        }
-     
-        public void Draw()
-        {
-            spriteBatch.Begin();
-            
-
-            spriteBatch.End();
-
-
         }
     }
 }
