@@ -20,12 +20,12 @@ namespace FinalProject
         Vector3 up;
         Vector3 position;
 
-        public bool showRadar;
-        Texture2D RadarText;
-        Texture2D playerRadar;
-        Texture2D alienRadar;
-        public Vector3[] alienPosition = new Vector3[20];
-        public int alienRadarCount;
+        //public bool showRadar;
+        //Texture2D RadarText;
+        //Texture2D playerRadar;
+        //Texture2D alienRadar;
+        //public Vector3[] alienPosition = new Vector3[20];
+        //public int alienRadarCount;
 
         //Mouse direction variables
         MouseState mouse = Mouse.GetState();
@@ -35,9 +35,9 @@ namespace FinalProject
         float turnSpeed = 60;
         // store previous mouse state
 
-        PlayerHealth playerHealth = new PlayerHealth();
-        Texture2D powerBar;
-        SpriteFont healthFont;
+        //PlayerHealth playerHealth = new PlayerHealth();
+        //Texture2D powerBar;
+        //SpriteFont healthFont;
         //Shake variables
         public bool shakeUp;
         public float intensity = 0;
@@ -177,12 +177,12 @@ namespace FinalProject
 
         protected override void LoadContent()
         {
-            playerHealth.setMaxHealth();
-            powerBar = Game.Content.Load<Texture2D>(@"Textures\pBar");
-            healthFont = Game.Content.Load<SpriteFont>(@"Fonts\healthFont");
-            RadarText = Game.Content.Load<Texture2D>(@"Textures\Radar");
-            playerRadar = Game.Content.Load<Texture2D>(@"Textures\circle");
-            alienRadar = Game.Content.Load<Texture2D>(@"Textures\acircle");
+            //playerHealth.setMaxHealth();
+            //powerBar = Game.Content.Load<Texture2D>(@"Textures\pBar");
+            //healthFont = Game.Content.Load<SpriteFont>(@"Fonts\healthFont");
+            //RadarText = Game.Content.Load<Texture2D>(@"Textures\Radar");
+            //playerRadar = Game.Content.Load<Texture2D>(@"Textures\circle");
+            //alienRadar = Game.Content.Load<Texture2D>(@"Textures\acircle");
 
 
             // Need this for displaying debug messages
@@ -378,43 +378,43 @@ namespace FinalProject
 
         public override void Draw(GameTime gameTime)
         {
-            SpriteFont font = (SpriteFont)Game.Services.GetService(typeof(SpriteFont));
+            //SpriteFont font = (SpriteFont)Game.Services.GetService(typeof(SpriteFont));
 
-            spriteBatch.Begin();
+            //spriteBatch.Begin();
 
-            //var message = GenerateDebugMessage();
-            // spriteBatch.DrawString(font, message, new Vector2(10, 10), Color.White);
-            DrawRectangle(new Rectangle((Game.Window.ClientBounds.Width - 300), 30, playerHealth.playerHealth, 40), playerHealth.GetColor(), powerBar);
-            spriteBatch.DrawString(healthFont, "Health: " + playerHealth.playerHealth, new Vector2(Game.Window.ClientBounds.Width - 500, 30), Color.Black);
-            ///
-            DisplayRadar();
-            spriteBatch.End();
+            ////var message = GenerateDebugMessage();
+            //// spriteBatch.DrawString(font, message, new Vector2(10, 10), Color.White);
+            //DrawRectangle(new Rectangle((Game.Window.ClientBounds.Width - 300), 30, playerHealth.playerHealth, 40), playerHealth.GetColor(), powerBar);
+            //spriteBatch.DrawString(healthFont, "Health: " + playerHealth.playerHealth, new Vector2(Game.Window.ClientBounds.Width - 500, 30), Color.Black);
+            /////
+            //DisplayRadar();
+            //spriteBatch.End();
 
 
            
             base.Draw(gameTime);
         }
 
-        private void DisplayRadar()
-        {
-            if (showRadar)
-            {
-                DrawRectangle(new Rectangle(-40, -45, 300, 300), Color.White, RadarText);
-                DrawRectangle(new Rectangle((int)(position.X / 5 + 60), (int)(position.Z / 5 + 60), 20, 20), Color.Green, playerRadar);
-            }
-            for (int i = 0; i < alienRadarCount; i++) 
-            {
-                DrawRectangle(new Rectangle((int)(alienPosition[i].X / 5 + 60), (int)(alienPosition[i].Z / 5 + 60), 20, 20), Color.Red, powerBar);
+        //private void DisplayRadar()
+        //{
+        //    if (showRadar)
+        //    {
+        //        DrawRectangle(new Rectangle(-40, -45, 300, 300), Color.White, RadarText);
+        //        DrawRectangle(new Rectangle((int)(position.X / 5 + 60), (int)(position.Z / 5 + 60), 20, 20), Color.Green, playerRadar);
+        //    }
+        //    for (int i = 0; i < alienRadarCount; i++) 
+        //    {
+        //        DrawRectangle(new Rectangle((int)(alienPosition[i].X / 5 + 60), (int)(alienPosition[i].Z / 5 + 60), 20, 20), Color.Red, powerBar);
 
-            }
-        }
+        //    }
+        //}
 
-        public void DrawRectangle(Rectangle coords, Color color, Texture2D text)
-        {
-            var rect = new Texture2D(GraphicsDevice, 1, 1);
-            rect.SetData(new[] { color });
-            this.spriteBatch.Draw(text, coords, color);
-        }
+        //public void DrawRectangle(Rectangle coords, Color color, Texture2D text)
+        //{
+        //    var rect = new Texture2D(GraphicsDevice, 1, 1);
+        //    rect.SetData(new[] { color });
+        //    this.spriteBatch.Draw(text, coords, color);
+        //}
 
         private string GenerateDebugMessage()
         {
@@ -437,10 +437,10 @@ namespace FinalProject
         {
             View = Matrix.CreateLookAt(Position, Target, Up);
         }
-        public void RedHealth()
-        {
-            playerHealth.decrementPlayerHealth((int)(intensity*10));
-        }
+        //public void RedHealth()
+        //{
+        //    playerHealth.decrementPlayerHealth((int)(intensity*10));
+        //}
     
     
     }

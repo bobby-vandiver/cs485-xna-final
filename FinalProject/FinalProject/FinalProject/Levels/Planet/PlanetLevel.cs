@@ -89,7 +89,7 @@ namespace FinalProject
             LoadLaserGun();
             LoadSkybox();
             LoadAliens();
-            camera.showRadar = true;
+            //camera.showRadar = true;
             base.LoadContent();
         }
 
@@ -136,7 +136,7 @@ namespace FinalProject
             {
                 // Place each alien at a random point on the terrain
                 Vector3 position = GetUniqueRandomPointInWorld(randomNumberGenerator);
-                camera.alienRadarCount = alienCount;
+                //camera.alienRadarCount = alienCount;
                 //Vector3 position = camera.Position - new Vector3(0, 0, 50.0f);
                 position.Y = terrain.GetHeight(position.X, position.Z);
 
@@ -238,7 +238,7 @@ namespace FinalProject
             {
                 Alien alien = aliens[i];
                 alien.Update(camera, terrain);
-                camera.alienPosition[i] = alien.Position;
+                //camera.alienPosition[i] = alien.Position;
             }
         }
 

@@ -118,7 +118,7 @@ namespace FinalProject
                 }
                 if (intensity > .6f)
                 {
-                    camera.RedHealth();
+                    //camera.RedHealth();
                     ShakeCamera(camera);
                 }
              
