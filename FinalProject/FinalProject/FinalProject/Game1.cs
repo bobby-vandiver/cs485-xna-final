@@ -20,7 +20,7 @@ namespace FinalProject
         Video video;
         VideoPlayer videoPlayer;
         
-        bool isVideoPlaying;
+        bool videoPlaying;
         const int VIDEO_LENGTH_SECS = 25;
         #endregion
 
@@ -46,7 +46,7 @@ namespace FinalProject
 
         public Game1()
         {
-            //graphics = new GraphicsDeviceManager(this);
+            graphics = new GraphicsDeviceManager(this);
             //graphics.PreferredBackBufferWidth = 1600;
             //graphics.PreferredBackBufferHeight = 900;
             Content.RootDirectory = "Content";
@@ -55,7 +55,6 @@ namespace FinalProject
 
         protected override void Initialize()
         {
-            Mouse.SetPosition(Window.ClientBounds.Width/2, Window.ClientBounds.Height/2);
 
             base.Initialize();
         }
@@ -109,15 +108,14 @@ namespace FinalProject
                     if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                     {
                         videoPlayer.Play(video);
-                        isVideoPlaying = true;
+                        videoPlaying = true;
                     }
 
-                    UpdateIntroVideo();
-
+                    UpdateVideo();
                     break;
 
                 case GameState.Play:
-                        UpdateLevelState();
+                    UpdateLevelState();
                     break;
                 
                 case GameState.End:
@@ -128,20 +126,25 @@ namespace FinalProject
             }
         }
 
-        private void UpdateIntroVideo()
+        private void UpdateVideo()
         {
-            if (isVideoPlaying)
-            {
-                if (videoPlayer.PlayPosition.Seconds == VIDEO_LENGTH_SECS)
-                {
-                    videoPlayer.Stop();
+            // Pressing space bar will skip the movie
+            bool spaceBarDown = Keyboard.GetState().IsKeyDown(Keys.Space);
+            bool endOfVideoReached = videoPlayer.PlayPosition.Seconds == VIDEO_LENGTH_SECS;
 
-                    // Start the game when the video is over
-                    currentGameState = GameState.Play;
-                    currentLevel = 0;
-                    CurrentLevelState = LevelState.Start;
-                }
-            }
+            if ((videoPlaying && spaceBarDown) || (videoPlaying && endOfVideoReached))
+                StopVideo();
+        }
+
+        private void StopVideo()
+        {
+            videoPlayer.Stop();
+            videoPlaying = false;
+
+            // Start the game when the video is over
+            currentGameState = GameState.Play;
+            currentLevel = 0;
+            CurrentLevelState = LevelState.Start;
         }
 
         private void UpdateLevelState()

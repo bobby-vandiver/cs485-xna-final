@@ -47,7 +47,6 @@ namespace FinalProject
         public Matrix View { get; private set; }
         public Matrix Projection { get; private set; }
 
-        //Camera Get/Set
         public Vector3 Direction
         {
             get
@@ -162,16 +161,16 @@ namespace FinalProject
             this.YawRotationRate = DEFAULT_ROTATION_RATE;
             this.PitchRotationRate = DEFAULT_ROTATION_RATE;
             this.RollRotationRate = DEFAULT_ROTATION_RATE;
-
-
         }
 
         public override void Initialize()
         {
             UpdateView();
             CreateProjection(fieldOfView);
+
             centerX = Game.Window.ClientBounds.Width / 2;
             centerY = Game.Window.ClientBounds.Height / 2;
+            Mouse.SetPosition(centerX, centerY);
 
             base.Initialize();
         }
