@@ -121,7 +121,6 @@
     <Compile Include="Camera\Camera.cs" />
     <Compile Include="FauxAstroid.cs" />
     <Compile Include="LaserBeam.cs" />
-    <Compile Include="LaserBeamModel.cs" />
     <Compile Include="LaserGun.cs" />
     <Compile Include="Levels\Level.cs" />
     <Compile Include="Camera\PlanetCamera.cs" />

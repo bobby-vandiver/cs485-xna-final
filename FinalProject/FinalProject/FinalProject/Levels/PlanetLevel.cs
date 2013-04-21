@@ -191,7 +191,7 @@ namespace FinalProject
         {
             UpdateBombard(gameTime);
             UpdateAliens();
-            UpdateLaserBeam();
+            UpdateLaserBeam(gameTime);
             CheckCollisions();
             base.Update(gameTime);
         }
@@ -204,7 +204,7 @@ namespace FinalProject
                       Game.Content.Load<Texture2D>(@"Textures\smoke"), new Vector2(50), bombard.collisionPosition);
         }
 
-        private void UpdateLaserBeam()
+        private void UpdateLaserBeam(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Space) || Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
@@ -219,13 +219,17 @@ namespace FinalProject
                     CreateLaserBeam();
                 }
             }
+            else
+            {
+                if (laserBeam != null)
+                    laserBeam.Update(gameTime);
+            }
         }
 
         private void CreateLaserBeam()
         {
-            laserBeam = new LaserBeam(Game, camera);
-            laserBeam.DrawOrder = 4;
-            Game.Components.Add(laserBeam);
+            Model laserBeamModel = Game.Content.Load<Model>(@"Models\Weapons\laserbeam");
+            laserBeam = new LaserBeam(laserBeamModel, camera);
         }
 
         private void UpdateAliens()
@@ -253,21 +257,21 @@ namespace FinalProject
                 {
                     // Push the camera back some if it hits an alien
                     camera.Position = camera.Position - 5.0f * camera.Direction;
-
-                    
                 }
             }
         }
 
         private void CheckLaserBeamCollisions()
         {
+            if (laserBeam == null)
+                return;
+
             // See if laser beam collides with an enemy
-            for (int i = 0; i < aliens.Count && laserBeam != null; i++)
+            for (int i = 0; i < aliens.Count && laserBeam.IsAlive; i++)
             {
-                LaserBeamModel laserBeamModel = laserBeam.LaserBeamModel;
                 Alien alien = aliens[i];
 
-                if (laserBeamModel.Collides(alien))
+                if (laserBeam.Collides(alien))
                 {
                     aliens.RemoveAt(i);
                     RemoveLaserBeam();
@@ -279,7 +283,6 @@ namespace FinalProject
         {
             Console.WriteLine("Removing laser beam...");
             laserBeam.IsAlive = false;
-            Game.Components.Remove(laserBeam);
         }
 
         public override void Draw(GameTime gameTime)
@@ -289,6 +292,9 @@ namespace FinalProject
 
             DrawBombard();
             DrawAliens();
+
+            if (laserBeam != null)
+                laserBeam.Draw(camera);
 
             base.Draw(gameTime);
         }

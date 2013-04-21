@@ -199,7 +199,7 @@ namespace FinalProject
             NewAsteroid(this.camera);
             ShakeCamera(this.camera);
             intensity = (float)(1 - (Math.Sqrt(Math.Pow(((double)camera.Position.X - (double)collisionPosition[0].X), 2) + Math.Pow(((double)camera.Position.Z - (double)collisionPosition[0].Z), 2)))/600);
-            Console.WriteLine(camera.intensity);
+            //Console.WriteLine(camera.intensity);
             camera.intensity = intensity;
             
         }
