@@ -9,7 +9,7 @@ namespace FinalProject
     public class LaserBeam : BasicModel
     {
         // Position will refer to the "head" of the beam
-        public Vector3 Position;
+        Vector3 Position;
         Vector3 initialPosition;
 
         // Direction of motion
@@ -43,7 +43,7 @@ namespace FinalProject
             : base(model)
         {
             this.Direction = camera.Direction;
-            this.Position = this.initialPosition = camera.Position + 0.42f * Direction;
+            this.Position = this.initialPosition = camera.Position + new Vector3(0, -.05f, 0) + 0.42f * Direction;
             this.maxDistance = maxDistance;
             this.movementSpeed = movementSpeed;
             this.IsAlive = true;
@@ -103,9 +103,8 @@ namespace FinalProject
         protected override Matrix GetWorld(Matrix meshTransform, Camera camera)
         {
             Matrix scale = Matrix.CreateScale(0.01f);
-            Matrix translation = Matrix.CreateTranslation(Position + new Vector3(0, -.05f, 0));
-            return meshTransform * scale * translation;
-
+            Matrix translation = Matrix.CreateTranslation(Position);
+            return scale * translation;
         }
     }
 }

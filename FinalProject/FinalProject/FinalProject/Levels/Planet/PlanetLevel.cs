@@ -228,20 +228,19 @@ namespace FinalProject
             if (Keyboard.GetState().IsKeyDown(Keys.Space) || Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 bool isLaserBeamNull = laserBeam == null;
-
-                if (!isLaserBeamNull && !laserBeam.IsAlive)
-                    RemoveLaserBeam();
+                bool isLaserBeamAlive = isLaserBeamNull ? false : laserBeam.IsAlive;
 
                 // Allow only one beam in the world at a time
-                if (isLaserBeamNull || (!isLaserBeamNull && !laserBeam.IsAlive))
-                {
+                if (isLaserBeamNull && !isLaserBeamAlive)
                     CreateLaserBeam();
-                }
             }
-            else
+        
+            if (laserBeam != null)
             {
-                if (laserBeam != null)
+                if (laserBeam.IsAlive)
                     laserBeam.Update(gameTime);
+                else
+                    RemoveLaserBeam();
             }
         }
 
@@ -302,6 +301,7 @@ namespace FinalProject
         {
             Console.WriteLine("Removing laser beam...");
             laserBeam.IsAlive = false;
+            laserBeam = null;
         }
 
         public override void Draw(GameTime gameTime)
