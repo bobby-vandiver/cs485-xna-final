@@ -27,6 +27,7 @@ namespace FinalProject
         #region Services
         SpriteFont font;
         Random randomNumberGenerator;
+        Audio audio;
         #endregion
 
         #region Game State Variables
@@ -69,10 +70,12 @@ namespace FinalProject
             
             font = Content.Load<SpriteFont>(@"Fonts\GameFont");
             randomNumberGenerator = new Random();
+            audio = new Audio(this);
             
-            // The font and the random number generator need to be accessible from every where
+            // The font, the random number generator and audio need to be accessible from every where
             Services.AddService(typeof(SpriteFont), font);
             Services.AddService(typeof(Random), randomNumberGenerator);
+            Services.AddService(typeof(Audio), audio);
         }
 
         private void LoadVideoResources()
@@ -145,6 +148,8 @@ namespace FinalProject
             currentGameState = GameState.Play;
             currentLevel = 0;
             CurrentLevelState = LevelState.Start;
+
+            audio.PlayCue("stateTransition");
         }
 
         private void UpdateLevelState()

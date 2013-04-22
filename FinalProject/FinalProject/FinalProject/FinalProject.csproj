@@ -110,6 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio.cs" />
     <Compile Include="HUD\HUD.cs" />
     <Compile Include="Levels\Planet\Models\Alien.cs" />
     <Compile Include="Levels\Space\Models\Asteroid.cs" />

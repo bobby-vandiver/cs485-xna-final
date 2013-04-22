@@ -26,6 +26,10 @@ namespace FinalProject
             {
                 ((Game1)Game).CurrentLevelState = Game1.LevelState.End;
                 UnloadResources();
+
+                // Stop any background music that might have been playing
+                Audio audio = (Audio)Game.Services.GetService(typeof(Audio));
+                audio.StopBackgroundMusic();
             }
 
             base.Update(gameTime);

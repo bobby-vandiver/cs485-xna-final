@@ -17,6 +17,8 @@ namespace FinalProject
         Camera camera;
         HUD hud;
 
+        Audio audio;
+
         Terrain terrain;
         Skybox skybox;
         
@@ -54,11 +56,19 @@ namespace FinalProject
             InitializeCamera();
             InitializeHud();
 
+            StartBackgroundMusic();
+
             spreadFaux();
             // The gun model needs to be render after everything so it appears 'on top'
             this.DrawOrder = 3;
             base.Initialize();
 
+        }
+
+        private void StartBackgroundMusic()
+        {
+            audio = (Audio)Game.Services.GetService(typeof(Audio));
+            audio.PlayBackgroundMusic("background");
         }
 
         private void InitializeHud()
