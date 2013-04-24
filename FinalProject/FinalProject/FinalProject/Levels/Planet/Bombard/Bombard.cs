@@ -51,8 +51,12 @@ namespace FinalProject
         float size = 0;
 
         //For shake function to shake camera and return it back to original position
-        bool[] shake = new bool[7];
-        int shakeIndex = 1;
+        const int SHAKE_COUNT = 6;
+
+        bool isShaking = false;
+        bool[] shake = new bool[SHAKE_COUNT];
+        int shakeIndex = 0;
+
         Vector3 tempDirection;
         Vector3 tempPosition;
         Vector3 tempUp;
@@ -110,8 +114,8 @@ namespace FinalProject
                 location = RandomPosition();
                 i = 195;
              
+                isShaking = true;
                 shake[0] = true;
-                shake[1] = true;
                 if (!test)
                 {
                     tempPosition = camera.Position;
@@ -131,68 +135,50 @@ namespace FinalProject
         //Shake Camera 
         private void ShakeCamera(Camera camera)
         {
-            if (shake[0])
-            {
-                if ((milliseconds > (previousMilliseconds + 50)) && shake[shakeIndex])
-                {
-                    camera.shakeUp = true;
-                    camera.CameraShake(.5f);
-                    shake[shakeIndex] = false;
-                    shakeIndex = 2;
-                    shake[shakeIndex] = true;
-                }
-                if ((milliseconds > (previousMilliseconds + 75)) && shake[shakeIndex])
-                {
-                    camera.shakeUp = true;
-                    camera.CameraShake(-.5f); 
-                    shake[shakeIndex] = false;
-                    shakeIndex = 3;
-                    shake[shakeIndex] = true;
-                }
-                if ((milliseconds > (previousMilliseconds + 100)) && shake[shakeIndex])
-                {
-                    camera.shakeUp = true;
-                    camera.CameraShake(-.15f); 
-                    shake[shakeIndex] = false;
-                    shakeIndex = 4;
-                    shake[shakeIndex] = true;
-                }
-                if ((milliseconds > (previousMilliseconds + 125)) && shake[shakeIndex])
-                {
-                    camera.shakeUp = true;
-                    camera.CameraShake(.15f); 
-                    shake[shakeIndex] = false;
-                    shakeIndex = 5;
-                    shake[shakeIndex] = true;
-                }
-                if ((milliseconds > (previousMilliseconds + 150)) && shake[shakeIndex])
-                {
-                    camera.shakeUp = true;
-                    camera.CameraShake(.2f); 
-                    shake[shakeIndex] = false;
-                    shakeIndex = 6;
-                    shake[shakeIndex] = true;
-                }
-                if ((milliseconds > (previousMilliseconds + 175)) && shake[shakeIndex])
-                {
-                    camera.shakeUp = true;
-                    camera.CameraShake(-.2f); 
-                    shake[shakeIndex] = false;
-                    shakeIndex = 1;
-                    test = true;
-                }
-                if ((milliseconds > (previousMilliseconds + 200) && test))
-                {
-                    camera.Direction = tempDirection;
-                    camera.Position = tempPosition;
-                    camera.Up = tempUp;
-                    test = false;
-                    shake[0] = false;
-                    shake[1] = false;
-                }
+            int[] millsecondOffsets = { 50, 75, 100, 125, 150, 175 };
 
+            for (int i = 0; i < SHAKE_COUNT; i++)
+            {
+                int millisecondOffset = millsecondOffsets[i];
+                UpdateShake(millisecondOffset);
             }
 
+            if ((milliseconds > (previousMilliseconds + 200) && test))
+            {
+                camera.Direction = tempDirection;
+                camera.Position = tempPosition;
+                camera.Up = tempUp;
+                test = false;
+                isShaking = false;
+                shake[0] = false;
+            }
+        }
+
+        private void UpdateShake(int millisecondsOffset)
+        {
+            float[] shakeAngles = { 0.5f, -0.5f, 0.15f, -0.15f, 0.2f, -02f };
+
+            if(!isShaking)
+                return;
+
+            if (milliseconds > (previousMilliseconds + millisecondsOffset) && shake[shakeIndex])
+            {
+                camera.shakeUp = true;
+
+                float shakeAngle = shakeAngles[shakeIndex];
+                camera.CameraShake(shakeAngle);
+
+                shake[shakeIndex++] = false;
+                if (shakeIndex >= SHAKE_COUNT)
+                {
+                    shakeIndex = 0;
+                    test = true;
+                }
+                else
+                {
+                    shake[shakeIndex] = true;
+                }
+            }
         }
 
         public void Update(GameTime gameTime)
