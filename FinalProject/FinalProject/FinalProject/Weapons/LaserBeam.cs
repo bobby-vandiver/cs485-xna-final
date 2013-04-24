@@ -66,7 +66,7 @@ namespace FinalProject
         {
             Position += Direction * movementSpeed;
             CheckDistanceTraveled();
-            CheckTerrainCollision(terrain);
+            //CheckTerrainCollision(terrain);
         }
         private void CheckDistanceTraveled()
         {
