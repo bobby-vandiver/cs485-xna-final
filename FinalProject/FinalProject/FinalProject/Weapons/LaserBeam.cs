@@ -45,7 +45,7 @@ namespace FinalProject
             Matrix directionRotation = Matrix.CreateFromYawPitchRoll(camera.Yaw, camera.Pitch, camera.Roll);
             this.Direction = Vector3.Transform(-Vector3.UnitZ, directionRotation);
 
-            this.initialPosition = camera.Position + new Vector3(0, -.05f, 0) + Direction;
+            this.initialPosition = camera.Position + new Vector3(0, -.05f, 0) + 0.45f * Direction;
             this.Position = this.initialPosition;
 
             this.maxDistance = maxDistance;
@@ -54,21 +54,19 @@ namespace FinalProject
             this.IsAlive = true;
         }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Terrain terrain)
         {
             if (IsAlive)
-                UpdatePosition();
+                UpdatePosition(terrain);
 
             base.Update(gameTime);
         }
 
-        private void UpdatePosition()
+        private void UpdatePosition(Terrain terrain)
         {
             Position += Direction * movementSpeed;
             CheckDistanceTraveled();
-
-            // TODO:
-            //CheckTerrainCollision();
+            CheckTerrainCollision(terrain);
         }
         private void CheckDistanceTraveled()
         {
@@ -80,17 +78,15 @@ namespace FinalProject
             }
         }
 
-        // TODO: Improve!!!
-        //private void CheckTerrainCollision()
-        //{
-        //    Terrain terrain = (Terrain)Game.Services.GetService(typeof(Terrain));
-        //    float minHeightAllowed = terrain.GetHeight(Position.X, Position.Z);
-        //    if (Position.Y <= minHeightAllowed)
-        //    {
-        //        Console.WriteLine("Collided with the ground...");
-        //        IsAlive = false;
-        //    }
-        //}
+        private void CheckTerrainCollision(Terrain terrain)
+        {
+            float minHeightAllowed = terrain.GetHeight(Position.X, Position.Z);
+            if (Position.Y <= minHeightAllowed)
+            {
+                Console.WriteLine("Collided with the ground...");
+                IsAlive = false;
+            }
+        }
 
         public override void Draw(Camera camera)
         {

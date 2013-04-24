@@ -208,7 +208,7 @@ namespace FinalProject
 
         public override void Update(GameTime gameTime)
         {
-            //UpdateBombard(gameTime);
+            UpdateBombard(gameTime);
             UpdateAliens();
             UpdateLaserBeam(gameTime);
             CheckCollisions();
@@ -238,7 +238,7 @@ namespace FinalProject
             if (laserBeam != null)
             {
                 if (laserBeam.IsAlive)
-                    laserBeam.Update(gameTime);
+                    laserBeam.Update(gameTime, terrain);
                 else
                     RemoveLaserBeam();
             }
@@ -306,7 +306,7 @@ namespace FinalProject
             PrepareGraphicsDeviceForDrawing3D();
             laserGun.Draw(camera);
 
-            //DrawBombard();
+            DrawBombard();
             DrawAliens();
 
             if (laserBeam != null)
