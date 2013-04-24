@@ -6,44 +6,50 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FinalProject
 {
-    class Bullet : BasicModel
+    public class Explosions : BasicModel
     {
-        Vector3 position;
+        public Vector3 position;
         Vector3 dir;
         Camera cam;
         float rot;
         Vector3 firstPosition;
         public BoundingSphere bs;
         float time = 0.0f;
-        float asteroidSpeed = .01f;
+        float asteroidSpeed = .03f;
         public Boolean alive;
+        Model model;
         public Matrix worldHolder = Matrix.Identity;
         Matrix rotation = Matrix.Identity;
-        Matrix world = Matrix.Identity;
+        public Matrix world = Matrix.Identity;
         Random r;
-        Model model;
-        public Bullet(Model model, Vector3 currentPoint, Camera camera)
+        public Explosions(Model model, Vector3 randomPoint, Camera camera)
             : base(model)
         {
             alive = true;
+
             this.model = model;
-            position = currentPoint;
+            position = randomPoint;
             this.cam = camera;
-            // Direction will always be (0, 0, Z)
-            Vector3 direction = cam.Direction;
+            Random r = new Random();
+            Vector3 direction = new Vector3(position.Y * asteroidSpeed * (float)r.NextDouble(), 
+                position.Y * asteroidSpeed * (float)r.NextDouble(),
+                position.Y*asteroidSpeed*(float)r.NextDouble());
+
+            rot = (float)(position.Y*.001);
             dir = direction;
             firstPosition = position;
             world = Matrix.CreateTranslation(position);
-            bs = new BoundingSphere(firstPosition, 1f);
+            bs = new BoundingSphere(firstPosition, 6f);
         }
         public override void Update(GameTime gameTime)
         {
             // TODO: Add your update code here
-            position += dir;
-            rotation *= Matrix.CreateFromYawPitchRoll(0,
-                            0, rot);
-            bs.Center = position;
+            time += 5;
+            position+= dir;
+            rotation *= Matrix.CreateFromYawPitchRoll(rot,
+                            rot, rot);
             // Move model
+            bs.Center = position;
             world *= Matrix.CreateTranslation(dir);
             base.Update(gameTime);
         }
@@ -60,7 +66,7 @@ namespace FinalProject
                     foreach (BasicEffect basicEffect in mesh.Effects)
                     {
                         basicEffect.EnableDefaultLighting();
-                        basicEffect.EmissiveColor = new Vector3(-1, -.5f, -1);
+                        basicEffect.EmissiveColor = new Vector3(-.8f,-.8f,-.8f);
                         basicEffect.Projection = camera.Projection;
                         basicEffect.View = camera.View;
 
@@ -74,9 +80,8 @@ namespace FinalProject
         // Returns a matrix for the asteroids current position
         protected override Matrix GetWorld(Matrix meshTransform, Camera camera)
         {
-            Matrix scale = Matrix.CreateScale(.05f);
-            Matrix translation = Matrix.CreateTranslation(new Vector3(0f, -0.25f, -1.0f));
-            worldHolder = meshTransform * scale * rotation * world * translation;
+            Matrix scale = Matrix.CreateScale(.5f);
+            worldHolder = meshTransform * scale * rotation * world;
             return worldHolder;
         }
         public bool CollidesWith(BoundingSphere bs)

@@ -17,13 +17,14 @@ namespace FinalProject
     public class SpaceLevel : Level
     {
         Camera camera;
-
+        int time;
         Spaceship Spaceship;
         SpriteBatch spriteBatch;
         AsteroidField field;
         Texture2D crosshair;
         SpriteFont font;
         int score;
+        HUD hud;
         public bool levelOverForVideo;
 
 
@@ -31,18 +32,23 @@ namespace FinalProject
             : base(game)
         {
         }
-
+        private void InitializeHud()
+        {
+            hud = new HUD(Game);
+            hud.DrawOrder = 5;
+            Game.Components.Add(hud);
+        }
         public override void Initialize()
         {
+            InitializeHud();
             InitializeCamera();
             score = 0;
-            // The gun model needs to be render after everything so it appears 'on top'
             this.DrawOrder = 3;
             base.Initialize();
         }
         private AsteroidField InitializeField()
         {
-            field = new AsteroidField(Game, camera, 100.0f);
+            field = new AsteroidField(Game, camera, 100.0f,hud);
             field.DrawOrder = 1;
             Game.Components.Add(field);
             return field;
@@ -62,8 +68,7 @@ namespace FinalProject
 
         protected override void LoadContent()
         {
-            Model spaceshipmodel = Game.Content.Load<Model>(@"Models\spaceship");
-            Spaceship = new Spaceship(spaceshipmodel,camera);
+        
             spriteBatch = new SpriteBatch(GraphicsDevice);
             crosshair = Game.Content.Load<Texture2D>(@"Textures\Crosshair");
             font = Game.Content.Load<SpriteFont>(@"Fonts\GameFont");
@@ -74,25 +79,20 @@ namespace FinalProject
         {
             Game.Components.Remove(field);
             Game.Components.Remove(camera);
+            Game.Services.RemoveService(typeof(HUD));
             Game.Services.RemoveService(typeof(Camera));
             base.UnloadContent();
         }
 
         public override void Update(GameTime gameTime)
         {
-            // TODO: Add your update code here
-            KeyboardState keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyDown(Keys.Space))
-            { 
-                //CollidesWith
-            }
-            base.Update(gameTime);
+                hud = field.GetHud(); 
+                base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
             PrepareGraphicsDeviceForDrawing3D();
-            Spaceship.Draw(camera);
             base.Draw(gameTime);
             spriteBatch.Begin();
 
@@ -110,7 +110,7 @@ namespace FinalProject
         {
 
             
-            return camera.Position.X > 10;
+            return field.game_over;
 
         }
 

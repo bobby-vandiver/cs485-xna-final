@@ -121,6 +121,7 @@
     <Compile Include="Levels\Planet\Bombard\Bombard.cs" />
     <Compile Include="Camera\Camera.cs" />
     <Compile Include="Levels\Planet\Bombard\FauxAstroid.cs" />
+    <Compile Include="Levels\Space\Models\Explosions.cs" />
     <Compile Include="Weapons\LaserBeam.cs" />
     <Compile Include="Weapons\LaserGun.cs" />
     <Compile Include="Levels\Level.cs" />
