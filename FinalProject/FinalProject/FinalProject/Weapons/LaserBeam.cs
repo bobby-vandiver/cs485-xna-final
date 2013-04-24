@@ -33,8 +33,8 @@ namespace FinalProject
         float movementSpeed;
 
         // Default settings
-        const float DEFAULT_MAX_DISTANCE = 15.0f;
-        const float DEFAULT_MOVEMENT_SPEED = 0.1f;
+        const float DEFAULT_MAX_DISTANCE = 45.0f;
+        const float DEFAULT_MOVEMENT_SPEED = 1.0f;
 
         const float BOUNDING_SPHERE_RADIUS = 20.0f;
 
@@ -42,10 +42,15 @@ namespace FinalProject
             float movementSpeed = DEFAULT_MOVEMENT_SPEED)
             : base(model)
         {
-            this.Direction = camera.Direction;
-            this.Position = this.initialPosition = camera.Position + new Vector3(0, -.05f, 0) + 0.42f * Direction;
+            Matrix directionRotation = Matrix.CreateFromYawPitchRoll(camera.Yaw, camera.Pitch, camera.Roll);
+            this.Direction = Vector3.Transform(-Vector3.UnitZ, directionRotation);
+
+            this.initialPosition = camera.Position + new Vector3(0, -.05f, 0) + Direction;
+            this.Position = this.initialPosition;
+
             this.maxDistance = maxDistance;
             this.movementSpeed = movementSpeed;
+            
             this.IsAlive = true;
         }
 
@@ -102,7 +107,7 @@ namespace FinalProject
 
         protected override Matrix GetWorld(Matrix meshTransform, Camera camera)
         {
-            Matrix scale = Matrix.CreateScale(0.01f);
+            Matrix scale = Matrix.CreateScale(0.05f);
             Matrix translation = Matrix.CreateTranslation(Position);
             return scale * translation;
         }
