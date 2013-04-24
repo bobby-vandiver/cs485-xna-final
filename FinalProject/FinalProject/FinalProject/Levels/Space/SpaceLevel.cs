@@ -79,6 +79,7 @@ namespace FinalProject
         {
             Game.Components.Remove(field);
             Game.Components.Remove(camera);
+            Game.Components.Remove(hud);
             Game.Services.RemoveService(typeof(HUD));
             Game.Services.RemoveService(typeof(Camera));
             base.UnloadContent();
