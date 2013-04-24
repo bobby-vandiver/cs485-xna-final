@@ -73,7 +73,7 @@ namespace FinalProject
 
         private void InitializeHud()
         {
-            hud = new HUD(Game);
+            hud = new HUD(Game, true);
             hud.DrawOrder = 5;
             Game.Components.Add(hud);
         }

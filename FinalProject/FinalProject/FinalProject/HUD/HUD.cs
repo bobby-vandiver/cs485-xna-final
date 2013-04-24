@@ -27,10 +27,12 @@ namespace FinalProject
         SpriteFont healthFont;
         public float intensity = 0;
 
-        public HUD(Game game)
+        bool displayHealthBar;
+
+        public HUD(Game game, bool displayHealthBar)
             : base(game)
         {
-            // TODO: Construct any child components here
+            this.displayHealthBar = displayHealthBar;
         }
 
         public override void Initialize()
@@ -66,12 +68,21 @@ namespace FinalProject
 
             spriteBatch.Begin();
 
-            DrawRectangle(new Rectangle((Game.Window.ClientBounds.Width - 300), 30, playerHealth.playerHealth, 40), playerHealth.GetColor(), powerBar);
-            spriteBatch.DrawString(healthFont, "Health: " + playerHealth.playerHealth, new Vector2(Game.Window.ClientBounds.Width - 500, 30), Color.Black);
+            DisplayHealthBar();
             DisplayRadar();
 
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+
+        private void DisplayHealthBar()
+        {
+            if (displayHealthBar == true)
+            {
+                DrawRectangle(new Rectangle((Game.Window.ClientBounds.Width - 300), 30, playerHealth.playerHealth, 40), playerHealth.GetColor(), powerBar);
+                spriteBatch.DrawString(healthFont, "Health: " + playerHealth.playerHealth, new Vector2(Game.Window.ClientBounds.Width - 500, 30), Color.Black);
+            }
         }
 
         private void DisplayRadar()

@@ -34,8 +34,8 @@ namespace FinalProject
         }
         private void InitializeHud()
         {
-            hud = new HUD(Game);
-            hud.DrawOrder = 5;
+            hud = new HUD(Game, false);
+            hud.DrawOrder = 4;
             Game.Components.Add(hud);
         }
         public override void Initialize()
