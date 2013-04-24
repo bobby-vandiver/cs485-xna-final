@@ -14,8 +14,7 @@ namespace FinalProject
 {
     public class AsteroidField : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        Asteroid bigAsteroid;
-        Asteroid Asteroid;
+        Audio audio;
         SpriteFont font;
         int asteroids_killed = 0;
         int times_hit = 0;
@@ -32,11 +31,7 @@ namespace FinalProject
         Bullet[] bullets;
         Model a1;
         Model a2;
-
-        // Background
         Texture2D backgroundTexture;
-
-        // Height of each (x, z) point in the world
         float maxHeight;
         
         Camera cam;
@@ -53,6 +48,8 @@ namespace FinalProject
         }
         public override void Initialize()
         {
+            audio = (Audio)Game.Services.GetService(typeof(Audio));
+            audio.PlayBackgroundMusic("background");
             base.Initialize();
         }
 
@@ -78,6 +75,11 @@ namespace FinalProject
         public override void Update(GameTime gameTime)
         {
             loop_timer++;
+            if (Explode == true)
+            {
+                for (int i = 0; i < A_COUNT; i++)
+                    explosions[i].Update(gameTime);
+            }
             for (int i = 0; i < A_COUNT; i++)
             {
                 asteroids[i].Update(gameTime);
@@ -102,6 +104,9 @@ namespace FinalProject
                     if(asteroids[i].CollidesWith(bullets[0].bs))
                     {
                         asteroids_killed++;
+                        GenExplosionField(asteroids[i].position);
+                        Explode = true;
+                        GenAsteroid(i);
                         asteroids[i].alive = false;
                         bullets[0].alive = false;
                     }
@@ -117,6 +122,7 @@ namespace FinalProject
                             asteroids[i].alive = false;
                             GenExplosionField(asteroids[i].position);
                             Explode = true;
+                            GenAsteroid(i);
                             ship.col = new Vector3(1, 0, 0);
                             ship.damage_count++;
                             bullets[0].alive = false;
@@ -161,7 +167,6 @@ namespace FinalProject
         {
             GraphicsDevice.Clear(Color.Black);
             DrawBackground();
-            
             PrepareGraphicsDeviceForDrawing3D();
             PrepareBasicEffectForDrawing3D();
             DrawBullet();
@@ -171,7 +176,6 @@ namespace FinalProject
                 DrawExplosionField();
             }
             ship.Draw(cam);
-
             base.Draw(gameTime);
         }
 
@@ -180,7 +184,6 @@ namespace FinalProject
             int windowWidth = Game.Window.ClientBounds.Width;
             int windowHeight = Game.Window.ClientBounds.Height;
             var destination = new Rectangle(0, 0, windowWidth, windowHeight);
-
             spriteBatch.Begin();
             string scoreText = "Score: " + score;
             spriteBatch.Draw(backgroundTexture, destination, Color.White);
@@ -199,7 +202,6 @@ namespace FinalProject
         }
         private void DrawExplosionField()
         {
-           
             for (int i = 0; i < A_COUNT; i++)
             {
                 explosions[i].Draw(cam);
@@ -270,7 +272,7 @@ namespace FinalProject
             Random randomNumberGenerator = (Random)Game.Services.GetService(typeof(Random));
             // Find a random point in the world
             float x = (float)randomNumberGenerator.Next(-50,50)*(float)randomNumberGenerator.NextDouble();
-            float z = (float)randomNumberGenerator.NextDouble()*-200;
+            float z = (float)randomNumberGenerator.NextDouble()*-200 + (-15);
             float y = (float)randomNumberGenerator.Next(-30, 30)*(float)randomNumberGenerator.NextDouble();
             return new Vector3(x, 40+y, -20+z);
         }

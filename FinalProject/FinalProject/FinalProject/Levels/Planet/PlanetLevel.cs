@@ -73,7 +73,7 @@ namespace FinalProject
 
         private void InitializeHud()
         {
-            hud = new HUD(Game, true);
+            hud = new HUD(Game, true,5f,60);
             hud.DrawOrder = 5;
             Game.Components.Add(hud);
         }
@@ -81,12 +81,9 @@ namespace FinalProject
         private void InitializeCamera()
         {
             Terrain terrain = InitializeTerrain();
-
-            // Start in the center of the world
             float midX = (float)(terrain.MinX + terrain.MaxX) / 2.0f;
             float midZ = (float)(terrain.MinZ + terrain.MaxZ) / 2.0f;
             Vector3 position = new Vector3(midX, 0, midZ);
-
             camera = new PlanetCamera(Game, Vector3.Forward, Vector3.Up, position, terrain);
             camera.DrawOrder = 2;
             

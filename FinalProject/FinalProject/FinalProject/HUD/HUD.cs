@@ -26,12 +26,15 @@ namespace FinalProject
         Texture2D powerBar;
         SpriteFont healthFont;
         public float intensity = 0;
-
+        float scale = 1f;
+        int scale_base = 1;
         bool displayHealthBar;
 
-        public HUD(Game game, bool displayHealthBar)
+        public HUD(Game game, bool displayHealthBar,float scale, int scale_base)
             : base(game)
         {
+            this.scale = scale;
+            this.scale_base = scale_base;
             this.displayHealthBar = displayHealthBar;
         }
 
@@ -92,11 +95,11 @@ namespace FinalProject
             DrawRectangle(new Rectangle(-40, -45, 300, 300), Color.White, RadarText);
             if (camera != null&&playerRadar!=null)
             {
-                DrawRectangle(new Rectangle((int)(camera.Position.X / 5 + 60), (int)(camera.Position.Z / 5 + 60), 20, 20), Color.Green, playerRadar);
+                DrawRectangle(new Rectangle((int)(camera.Position.X /scale + scale_base), (int)(camera.Position.Z /scale + scale_base), 20, 20), Color.Green, playerRadar);
             }
             for (int i = 0; i < alienRadarCount; i++)
             {
-                DrawRectangle(new Rectangle((int)(alienPosition[i].X / 5 + 60), (int)(alienPosition[i].Z / 5 + 60), 20, 20), Color.Red, powerBar);
+                DrawRectangle(new Rectangle((int)(alienPosition[i].X /scale + scale_base), (int)(alienPosition[i].Z /scale + scale_base), 20, 20), Color.Red, powerBar);
 
             }
         }

@@ -15,26 +15,25 @@ namespace FinalProject
         Vector3 firstPosition;
         public BoundingSphere bs;
         float time = 0.0f;
-        float asteroidSpeed = .03f;
+        float asteroidSpeed = .003f;
         public Boolean alive;
         Model model;
         public Matrix worldHolder = Matrix.Identity;
         Matrix rotation = Matrix.Identity;
         public Matrix world = Matrix.Identity;
         Random r;
-        public Explosions(Model model, Vector3 randomPoint, Camera camera)
+        public Explosions(Model model, Vector3 starting, Camera camera)
             : base(model)
         {
             alive = true;
 
             this.model = model;
-            position = randomPoint;
+            position = starting;
             this.cam = camera;
             Random r = new Random();
             Vector3 direction = new Vector3(position.Y * asteroidSpeed * (float)r.NextDouble(), 
                 position.Y * asteroidSpeed * (float)r.NextDouble(),
                 position.Y*asteroidSpeed*(float)r.NextDouble());
-
             rot = (float)(position.Y*.001);
             dir = direction;
             firstPosition = position;
@@ -46,8 +45,7 @@ namespace FinalProject
             // TODO: Add your update code here
             time += 5;
             position+= dir;
-            rotation *= Matrix.CreateFromYawPitchRoll(rot,
-                            rot, rot);
+            rotation *= Matrix.CreateFromYawPitchRoll(rot, rot, rot);
             // Move model
             bs.Center = position;
             world *= Matrix.CreateTranslation(dir);
@@ -69,7 +67,6 @@ namespace FinalProject
                         basicEffect.EmissiveColor = new Vector3(-.8f,-.8f,-.8f);
                         basicEffect.Projection = camera.Projection;
                         basicEffect.View = camera.View;
-
                         Matrix world = GetWorld(transforms[mesh.ParentBone.Index], camera);
                         basicEffect.World = world;
                     }

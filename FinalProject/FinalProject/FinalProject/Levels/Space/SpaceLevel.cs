@@ -17,24 +17,19 @@ namespace FinalProject
     public class SpaceLevel : Level
     {
         Camera camera;
-        int time;
-        Spaceship Spaceship;
         SpriteBatch spriteBatch;
         AsteroidField field;
         Texture2D crosshair;
         SpriteFont font;
-        int score;
         HUD hud;
         public bool levelOverForVideo;
-
-
         public SpaceLevel(Game game)
             : base(game)
         {
         }
         private void InitializeHud()
         {
-            hud = new HUD(Game, false);
+            hud = new HUD(Game, false,1.5f,100);
             hud.DrawOrder = 4;
             Game.Components.Add(hud);
         }
@@ -42,7 +37,6 @@ namespace FinalProject
         {
             InitializeHud();
             InitializeCamera();
-            score = 0;
             this.DrawOrder = 3;
             base.Initialize();
         }
@@ -109,10 +103,7 @@ namespace FinalProject
 
         protected override bool LevelOver()
         {
-
-            
             return field.game_over;
-
         }
 
     }

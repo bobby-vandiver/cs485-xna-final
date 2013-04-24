@@ -26,20 +26,17 @@ namespace FinalProject
             : base(model)
         {
             alive = true;
-
             this.model = model;
             position = randomPoint;
             this.cam = camera;
             Random r = new Random();
-            // Direction will always be (0, 0, Z)
             Vector3 direction = new Vector3(0, 0,
                 position.Y*asteroidSpeed*(float)r.NextDouble());
-
             rot = (float)(position.Y*.001);
             dir = direction;
             firstPosition = position;
             world = Matrix.CreateTranslation(position);
-            bs = new BoundingSphere(firstPosition, 6f);
+            bs = new BoundingSphere(firstPosition, 5f);
         }
         public override void Update(GameTime gameTime)
         {

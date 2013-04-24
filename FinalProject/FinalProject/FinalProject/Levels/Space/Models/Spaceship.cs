@@ -25,7 +25,7 @@ namespace FinalProject
             col = new Vector3(0, 0, 0);
             direction = cam.Direction;
             position = new Vector3(0,40,6);
-            bs = new BoundingSphere(position, .1f);
+            bs = new BoundingSphere(position, 1f);
         }
         public override void Update(GameTime gameTime)
         {
