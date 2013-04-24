@@ -281,11 +281,8 @@ namespace FinalProject
 
         private void CheckLaserBeamCollisions()
         {
-            if (laserBeam == null)
-                return;
-
             // See if laser beam collides with an enemy
-            for (int i = 0; i < aliens.Count && laserBeam.IsAlive; i++)
+            for (int i = 0; i < aliens.Count && laserBeam != null; i++)
             {
                 Alien alien = aliens[i];
 
