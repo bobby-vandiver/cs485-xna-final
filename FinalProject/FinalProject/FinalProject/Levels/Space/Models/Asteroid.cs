@@ -6,9 +6,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FinalProject
 {
-    class Asteroid : BasicModel
+    public class Asteroid : BasicModel
     {
-        Vector3 position;
+        public Vector3 position;
         Vector3 dir;
         Camera cam;
         float rot;
@@ -39,18 +39,15 @@ namespace FinalProject
             dir = direction;
             firstPosition = position;
             world = Matrix.CreateTranslation(position);
-            bs = new BoundingSphere(firstPosition, 3f);
+            bs = new BoundingSphere(firstPosition, 6f);
         }
         public override void Update(GameTime gameTime)
         {
             // TODO: Add your update code here
             time += 5;
-            Vector3 totalDistance= new Vector3(0,0,0);
-            totalDistance += dir;
-            position = firstPosition + totalDistance;
+            position+= dir;
             rotation *= Matrix.CreateFromYawPitchRoll(rot,
                             rot, rot);
-            
             // Move model
             bs.Center = position;
             world *= Matrix.CreateTranslation(dir);

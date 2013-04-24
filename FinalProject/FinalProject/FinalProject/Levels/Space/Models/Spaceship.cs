@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FinalProject
 {
-    class Spaceship : BasicModel
+    public class Spaceship : BasicModel
     {
         public BoundingSphere bs;
         Camera cam;
@@ -15,18 +15,23 @@ namespace FinalProject
         public int damage_count = 0;
         const int DAMAGE_THRESH = 10;
         Matrix worldHolder = Matrix.Identity;
+        Vector3 direction;
+        Vector3 position;
+        int loop_timer=0;
         public Spaceship(Model model,Camera camera)
             : base(model)
         {
             this.cam = camera;
             col = new Vector3(0, 0, 0);
-            Vector3 position = new Vector3(0,40,6);
+            direction = cam.Direction;
+            position = new Vector3(0,40,6);
             bs = new BoundingSphere(position, .1f);
         }
         public override void Update(GameTime gameTime)
         {
             // TODO: Add your update code here
-            if (col == new Vector3(1, 0, 0))
+            loop_timer++;
+            if (col == new Vector3(1, 0, 0)&&loop_timer ==10)
             {
                 alive = !(alive);
             }
@@ -34,6 +39,8 @@ namespace FinalProject
             {
                 alive = false;
             }
+            position = cam.Position;
+            bs.Center = position;
         }
         public override void Draw(Camera camera)
         {

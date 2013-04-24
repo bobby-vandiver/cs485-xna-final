@@ -17,11 +17,18 @@ namespace FinalProject
         Asteroid bigAsteroid;
         Asteroid Asteroid;
         SpriteFont font;
+        int asteroids_killed = 0;
+        int times_hit = 0;
+        int loop_timer = 0;
         int score = 0;
+        string status="";
+        public Boolean game_over = false;
         Boolean firstDraw = false;
         const int A_COUNT = 50;
         const int B_COUNT = 10;
-        Asteroid[] asteroids;
+        public Asteroid[] asteroids;
+        public Explosions[] explosions;
+        Boolean Explode = false;
         Bullet[] bullets;
         Model a1;
         Model a2;
@@ -35,17 +42,17 @@ namespace FinalProject
         Camera cam;
         BasicEffect basicEffect;
         SpriteBatch spriteBatch;
-
-        public AsteroidField(Game game,Camera camera, float maxHeight)
+        Spaceship ship;
+        HUD hud;
+        public AsteroidField(Game game,Camera camera, float maxHeight, HUD hud)
             : base(game)
         {
+            this.hud = hud;
             cam = camera;
             this.maxHeight = maxHeight;
         }
-
         public override void Initialize()
         {
-            
             base.Initialize();
         }
 
@@ -53,7 +60,8 @@ namespace FinalProject
         protected override void LoadContent()
         {
             font = Game.Content.Load<SpriteFont>(@"Fonts\GameFont");
-
+            Model spaceshipmodel = Game.Content.Load<Model>(@"Models\spaceship");
+            ship = new Spaceship(spaceshipmodel, cam);
             // Load textures
             backgroundTexture = Game.Content.Load<Texture2D>(@"Backgrounds\stars");
             //load asteroids one for large, one for small
@@ -69,6 +77,7 @@ namespace FinalProject
 
         public override void Update(GameTime gameTime)
         {
+            loop_timer++;
             for (int i = 0; i < A_COUNT; i++)
             {
                 asteroids[i].Update(gameTime);
@@ -86,19 +95,56 @@ namespace FinalProject
                 firstDraw = true;
             }
             bullets[0].Update(gameTime);
-            for (int i = 0; i < A_COUNT; i++)
+            if (loop_timer%30 == 0)
             {
-                if(asteroids[i].CollidesWith(bullets[0].bs))
+                for (int i = 0; i < A_COUNT; i++)
                 {
-                    score+= 10;
-                    asteroids[i].alive = false;
-                    bullets[0].alive = false;
+                    if(asteroids[i].CollidesWith(bullets[0].bs))
+                    {
+                        asteroids_killed++;
+                        asteroids[i].alive = false;
+                        bullets[0].alive = false;
+                    }
                 }
+            
+                for (int i = 0; i < A_COUNT; i++)
+                {
+                    if (asteroids[i].CollidesWith(ship.bs))
+                        {
+
+                            times_hit++;
+                            status = "HIT!";
+                            asteroids[i].alive = false;
+                            GenExplosionField(asteroids[i].position);
+                            Explode = true;
+                            ship.col = new Vector3(1, 0, 0);
+                            ship.damage_count++;
+                            bullets[0].alive = false;
+                        }     
+                }
+                score = (times_hit * -10) + (asteroids_killed * 30);
+                for (int i = 0; i < 10; i++)
+                    hud.alienPosition[i] = asteroids[i].position;
             }
+            if (loop_timer%60==0)
+            {
+                
+                status = "Warning! " + (10 - times_hit) + " hit before crash land";
+                ship.col = new Vector3(0, 0, 0);
+            }
+            if (loop_timer % 200 == 0)
+                Explode = false;
+            if (score > 10000||ship.damage_count>10)
+            { game_over = true; }
+            hud.alienRadarCount = 10;
+            
             base.Update(gameTime);
 
         }
-
+        public  HUD GetHud()
+        {
+            return hud;
+        }
         private void GenBullet()
         {
             bullets = new Bullet[B_COUNT+1];
@@ -115,10 +161,17 @@ namespace FinalProject
         {
             GraphicsDevice.Clear(Color.Black);
             DrawBackground();
+            
             PrepareGraphicsDeviceForDrawing3D();
             PrepareBasicEffectForDrawing3D();
             DrawBullet();
             DrawAsteroidField();
+            if (Explode == true)
+            {
+                DrawExplosionField();
+            }
+            ship.Draw(cam);
+
             base.Draw(gameTime);
         }
 
@@ -132,7 +185,9 @@ namespace FinalProject
             string scoreText = "Score: " + score;
             spriteBatch.Draw(backgroundTexture, destination, Color.White);
             spriteBatch.DrawString(font, scoreText,
-                new Vector2(10, 10), Color.Red);
+                new Vector2(200, 10), Color.White);
+            spriteBatch.DrawString(font, status,
+                new Vector2(400, 20), Color.Red);
             spriteBatch.End();
         }
         private void DrawAsteroidField()
@@ -140,6 +195,14 @@ namespace FinalProject
             for(int i = 0; i<A_COUNT;i++)
             {
                     asteroids[i].Draw(cam);
+            }
+        }
+        private void DrawExplosionField()
+        {
+           
+            for (int i = 0; i < A_COUNT; i++)
+            {
+                explosions[i].Draw(cam);
             }
         }
         private void GenAsteroidField()
@@ -150,6 +213,16 @@ namespace FinalProject
             {
                 placement = GetRandomPoint();
                 asteroids[i] = new Asteroid(a2, placement, cam);   
+            }
+        }
+        private void GenExplosionField(Vector3 startPos)
+        {
+            Vector3 placement;
+            explosions = new Explosions[A_COUNT + 1];
+            for (int i = 0; i < A_COUNT; i++)
+            {
+                placement = startPos;
+                explosions[i] = new Explosions(a2, placement, cam);
             }
         }
         private void GenAsteroid(int index)
