@@ -120,5 +120,10 @@ namespace FinalProject
         {
             return playerHealth.IsPlayerDead();
         }
+
+        public void DecrementPlayerHealth(int amount)
+        {
+            playerHealth.decrementPlayerHealth(amount);
+        }
     }
 }

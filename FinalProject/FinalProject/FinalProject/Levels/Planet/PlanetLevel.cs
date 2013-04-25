@@ -33,6 +33,8 @@ namespace FinalProject
         //const int MIN_ALIEN_COUNT = 1;
         //const int MAX_ALIEN_COUNT = 1;
 
+        const int ALIEN_DAMAGE = 5;
+
         List<Alien> aliens;
         
 
@@ -270,6 +272,9 @@ namespace FinalProject
                 Alien alien = aliens[i];
                 if (alien.Collides(camera.Position))
                 {
+                    // Player takes damage when the alien "attacks"
+                    hud.DecrementPlayerHealth(ALIEN_DAMAGE);
+
                     // Push the camera back some if it hits an alien
                     camera.Position = camera.Position - 5.0f * camera.Direction;
                 }
