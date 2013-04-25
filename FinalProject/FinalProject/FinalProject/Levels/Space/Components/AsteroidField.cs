@@ -49,7 +49,7 @@ namespace FinalProject
         public override void Initialize()
         {
             audio = (Audio)Game.Services.GetService(typeof(Audio));
-            audio.PlayBackgroundMusic("background");
+            audio.PlayBackgroundMusic("ObstacleCourse");
             base.Initialize();
         }
 

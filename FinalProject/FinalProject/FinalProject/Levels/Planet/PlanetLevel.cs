@@ -70,7 +70,7 @@ namespace FinalProject
         private void StartBackgroundMusic()
         {
             audio = (Audio)Game.Services.GetService(typeof(Audio));
-            audio.PlayBackgroundMusic("background");
+            audio.PlayBackgroundMusic("QuickSilver");
         }
 
         private void InitializeHud()

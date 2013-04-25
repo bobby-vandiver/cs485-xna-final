@@ -110,9 +110,14 @@ namespace FinalProject
                     // Wait until the player presses "Enter" to start the first level
                     if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                     {
-                        audio.PlayCue("stateTransition");
-                        videoPlayer.Play(video);
-                        videoPlaying = true;
+                        if (!videoPlaying)
+                        {
+                            audio.PlayCue("stateTransition");
+                            audio.PlayBackgroundMusic("DigitalStream");
+
+                            videoPlayer.Play(video);
+                            videoPlaying = true;
+                        }
                     }
 
                     UpdateVideo();
@@ -144,6 +149,8 @@ namespace FinalProject
         {
             videoPlayer.Stop();
             videoPlaying = false;
+
+            audio.StopBackgroundMusic();
 
             // Start the game when the video is over
             currentGameState = GameState.Play;
