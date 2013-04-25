@@ -25,7 +25,7 @@ namespace FinalProject
             : base(game)
         {
             // Load all the audio data
-            audioEngine = new AudioEngine(@"Content\Audio\SnakeAudio.xgs");
+            audioEngine = new AudioEngine(@"Content\Audio\FinalProject.xgs");
             waveBank = new WaveBank(audioEngine, @"Content\Audio\Wave Bank.xwb");
             soundBank = new SoundBank(audioEngine, @"Content\Audio\Sound Bank.xsb");
         }

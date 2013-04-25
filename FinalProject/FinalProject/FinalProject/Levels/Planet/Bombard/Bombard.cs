@@ -64,10 +64,11 @@ namespace FinalProject
 
         Camera camera;
         HUD hud;
+        Audio audio;
         #endregion
 
         public Bombard(Model model, Terrain terrain, 
-            Texture2D tex, Camera camera, HUD hud, float milliseconds, Effect effect, Texture2D smokeTexture)
+            Texture2D tex, Camera camera, HUD hud, float milliseconds, Effect effect, Texture2D smokeTexture, Audio audio)
         {
             this.texture = tex;
             this.model = model;
@@ -77,6 +78,7 @@ namespace FinalProject
             this.milliseconds = milliseconds;
             this.effect = effect;
             this.smokeTexture = smokeTexture;
+            this.audio = audio;
             Vector3 rand = RandomPosition();
         }
 
@@ -145,6 +147,7 @@ namespace FinalProject
 
             if ((milliseconds > (previousMilliseconds + 200) && test))
             {
+                audio.PlayCue("explosion");
                 camera.Direction = tempDirection;
                 camera.Position = tempPosition;
                 camera.Up = tempUp;

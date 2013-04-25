@@ -118,7 +118,7 @@ namespace FinalProject
             Texture2D smokeTexture = Game.Content.Load<Texture2D>(@"Textures\smoke");
 
             Model BombardmentModel = Game.Content.Load<Model>(@"Models\ammo");
-            bombard = new Bombard(BombardmentModel, terrain, bombTexture, camera, hud, milliseconds, explosionEffect, smokeTexture);
+            bombard = new Bombard(BombardmentModel, terrain, bombTexture, camera, hud, milliseconds, explosionEffect, smokeTexture, audio);
 
             collisionBillboard = new CollisionBillboard(GraphicsDevice, Game.Content,
                        Game.Content.Load<Texture2D>(@"Textures\smoke"), new Vector2(50), bombard.collisionPosition);
@@ -247,6 +247,7 @@ namespace FinalProject
         {
             Model laserBeamModel = Game.Content.Load<Model>(@"Models\Weapons\laserbeam");
             laserBeam = new LaserBeam(laserBeamModel, camera);
+            audio.PlayCue("laser");
         }
 
         private void UpdateAliens()
@@ -290,6 +291,7 @@ namespace FinalProject
 
                 if (laserBeam.Collides(alien))
                 {
+                    audio.PlayCue("alien");
                     aliens.RemoveAt(i);
                     RemoveLaserBeam();
                 }

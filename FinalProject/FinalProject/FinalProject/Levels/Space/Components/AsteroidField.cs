@@ -92,6 +92,7 @@ namespace FinalProject
             KeyboardState keyboardState = Keyboard.GetState();
             if (Keyboard.GetState().IsKeyDown(Keys.Space) || Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
+                audio.PlayCue("laser");
                 bullets[0] = new Bullet(a2, cam.Position, cam);
                 firstDraw = true;
             }
@@ -100,6 +101,7 @@ namespace FinalProject
             {
                 if (asteroids[i].CollidesWith(ship.bs))
                 {
+                    audio.PlayCue("flashbang");
                     ship.col = new Vector3(1, 0, 0);
                     status = "HIT!";
                 }

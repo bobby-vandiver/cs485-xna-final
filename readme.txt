@@ -24,3 +24,7 @@ The stateTransition.wav is listed as "match2.wav" on this site: http://inventwit
 I can't find any licensing information, but I assume that it is safe to use it for non-commercial/educational purposes.
 
 The alien and laser gun models are from TurboSquid.
+
+flashbang.wav: http://soundbible.com/1793-Flashbang.html
+
+meteor_impact.wav and laser.wav: http://soundjax.com/
