@@ -110,6 +110,7 @@ namespace FinalProject
                     // Wait until the player presses "Enter" to start the first level
                     if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                     {
+                        audio.PlayCue("stateTransition");
                         videoPlayer.Play(video);
                         videoPlaying = true;
                     }
@@ -148,8 +149,6 @@ namespace FinalProject
             currentGameState = GameState.Play;
             currentLevel = 0;
             CurrentLevelState = LevelState.Instructions;
-
-            audio.PlayCue("stateTransition");
         }
 
         private void UpdateLevelState()
@@ -162,9 +161,12 @@ namespace FinalProject
                     break;
 
                 case LevelState.Start:
+                    audio.PlayCue("stateTransition");
+
                     // Load the level component
                     LoadLevel();
                     CurrentLevelState = LevelState.Play;
+
                     break;
 
                 case LevelState.Play:
