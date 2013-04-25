@@ -327,7 +327,7 @@ namespace FinalProject
         protected override bool LevelOver()
         {
             bool allAliensGone = aliens.Count == 0;
-            return allAliensGone || IsPlayerOffWorld();
+            return allAliensGone || IsPlayerOffWorld() || hud.IsPlayerDead();
         }
 
         private bool IsPlayerOffWorld()

@@ -115,5 +115,10 @@ namespace FinalProject
         {
             playerHealth.decrementPlayerHealth((int)(intensity * 10));
         }
+
+        public bool IsPlayerDead()
+        {
+            return playerHealth.IsPlayerDead();
+        }
     }
 }
