@@ -68,7 +68,6 @@ namespace FinalProject
             GenBullet();
             basicEffect = new BasicEffect(GraphicsDevice);
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
             base.LoadContent();
         }
 
@@ -77,7 +76,7 @@ namespace FinalProject
             loop_timer++;
             if (Explode == true)
             {
-                for (int i = 0; i < A_COUNT; i++)
+                for (int i = 0; i < B_COUNT; i++)
                     explosions[i].Update(gameTime);
             }
             for (int i = 0; i < A_COUNT; i++)
@@ -97,8 +96,18 @@ namespace FinalProject
                 firstDraw = true;
             }
             bullets[0].Update(gameTime);
+            for (int i = 0; i < A_COUNT; i++)
+            {
+                if (asteroids[i].CollidesWith(ship.bs))
+                {
+                    ship.col = new Vector3(1, 0, 0);
+                    status = "HIT!";
+                }
+             }
             if (loop_timer%30 == 0)
             {
+                ship.col = new Vector3(0, 0, 0);
+                status = "Warning! " + (10 - times_hit) + " hit before crash land";
                 for (int i = 0; i < A_COUNT; i++)
                 {
                     if(asteroids[i].CollidesWith(bullets[0].bs))
@@ -116,14 +125,12 @@ namespace FinalProject
                 {
                     if (asteroids[i].CollidesWith(ship.bs))
                         {
-
                             times_hit++;
                             status = "HIT!";
                             asteroids[i].alive = false;
                             GenExplosionField(asteroids[i].position);
                             Explode = true;
                             GenAsteroid(i);
-                            ship.col = new Vector3(1, 0, 0);
                             ship.damage_count++;
                             bullets[0].alive = false;
                         }     
@@ -135,15 +142,12 @@ namespace FinalProject
             if (loop_timer%60==0)
             {
                 
-                status = "Warning! " + (10 - times_hit) + " hit before crash land";
-                ship.col = new Vector3(0, 0, 0);
             }
             if (loop_timer % 200 == 0)
                 Explode = false;
             if (score > 10000||ship.damage_count>10)
             { game_over = true; }
             hud.alienRadarCount = 10;
-            
             base.Update(gameTime);
 
         }
@@ -202,7 +206,7 @@ namespace FinalProject
         }
         private void DrawExplosionField()
         {
-            for (int i = 0; i < A_COUNT; i++)
+            for (int i = 0; i < B_COUNT; i++)
             {
                 explosions[i].Draw(cam);
             }
@@ -220,8 +224,8 @@ namespace FinalProject
         private void GenExplosionField(Vector3 startPos)
         {
             Vector3 placement;
-            explosions = new Explosions[A_COUNT + 1];
-            for (int i = 0; i < A_COUNT; i++)
+            explosions = new Explosions[B_COUNT + 1];
+            for (int i = 0; i < B_COUNT; i++)
             {
                 placement = startPos;
                 explosions[i] = new Explosions(a2, placement, cam);

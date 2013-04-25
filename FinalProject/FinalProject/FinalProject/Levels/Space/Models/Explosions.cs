@@ -15,7 +15,7 @@ namespace FinalProject
         Vector3 firstPosition;
         public BoundingSphere bs;
         float time = 0.0f;
-        float asteroidSpeed = .003f;
+        float asteroidSpeed = .03f;
         public Boolean alive;
         Model model;
         public Matrix worldHolder = Matrix.Identity;
@@ -31,9 +31,9 @@ namespace FinalProject
             position = starting;
             this.cam = camera;
             Random r = new Random();
-            Vector3 direction = new Vector3(position.Y * asteroidSpeed * (float)r.NextDouble(), 
-                position.Y * asteroidSpeed * (float)r.NextDouble(),
-                position.Y*asteroidSpeed*(float)r.NextDouble());
+            Vector3 direction = new Vector3(asteroidSpeed * (float)r.NextDouble(), 
+                asteroidSpeed * (float)r.NextDouble(),
+                asteroidSpeed*(float)r.NextDouble());
             rot = (float)(position.Y*.001);
             dir = direction;
             firstPosition = position;

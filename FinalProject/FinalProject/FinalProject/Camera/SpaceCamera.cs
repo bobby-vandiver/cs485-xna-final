@@ -55,13 +55,13 @@ namespace FinalProject
             if (keyboardState.IsKeyDown(Keys.E))
             {
                 
-                ApplyRollRotation(-(movementSpeed * (.1f)));
+                //ApplyRollRotation(-(movementSpeed * (.1f)));
                 Position -= (Side * movementSpeed);
                 rollingLeft = true;
             }
             if (keyboardState.IsKeyDown(Keys.Q))
             {
-                ApplyRollRotation((movementSpeed * (.1f)));
+              //  ApplyRollRotation((movementSpeed * (.1f)));
                 Position += (Side * movementSpeed);
                 rollingRight = true;
             }
@@ -98,6 +98,20 @@ namespace FinalProject
                 // Reset pitch and axes to previously known valid states
                 Direction = previousDirection;
                 Pitch = previousPitchAngle;
+            }
+
+            return;
+        }
+        protected override void RestrictYawRotation(Vector3 previousDirection, float previousYawAngle)
+        {
+            float totalYaw = MathHelper.PiOver4 / 2;
+
+            // Enforce min/max pitch rotation
+            if (Math.Abs(Yaw) >= totalYaw)
+            {
+                // Reset pitch and axes to previously known valid states
+                Direction = previousDirection;
+                Yaw = previousYawAngle;
             }
 
             return;
