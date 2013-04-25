@@ -37,7 +37,7 @@ namespace FinalProject
 
         #region Level State Variables
         // Each level will use this to communicate its state so the Game object can manage transitions
-        public enum LevelState { Start, Play, End }
+        public enum LevelState { Instructions, Start, Play, End }
         public LevelState CurrentLevelState;
         
         const int LEVEL_COUNT = 2;
@@ -147,7 +147,7 @@ namespace FinalProject
             // Start the game when the video is over
             currentGameState = GameState.Play;
             currentLevel = 0;
-            CurrentLevelState = LevelState.Start;
+            CurrentLevelState = LevelState.Instructions;
 
             audio.PlayCue("stateTransition");
         }
@@ -156,12 +156,17 @@ namespace FinalProject
         {
             switch (CurrentLevelState)
             {
+                case LevelState.Instructions:
+                    if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                        CurrentLevelState = LevelState.Start;
+                    break;
+
                 case LevelState.Start:
                     // Load the level component
                     LoadLevel();
                     CurrentLevelState = LevelState.Play;
                     break;
-                
+
                 case LevelState.Play:
                     //TODO: Add pause support -- maybe
                     break;
@@ -172,7 +177,7 @@ namespace FinalProject
 
                     // Progress to the next level
                     currentLevel++;
-                    CurrentLevelState = LevelState.Start;
+                    CurrentLevelState = LevelState.Instructions;
                     
                     // See if we've reached the end of the game
                     if (currentLevel >= LEVEL_COUNT)
@@ -213,12 +218,13 @@ namespace FinalProject
             switch (currentGameState)
             {
                 case GameState.Start:
-                    message = "Press enter to start.\nMove through the asteroids and kill the aliens!";
+                    message = "Press enter to start.";
                     position = CalculateTextCenterPosition(message);
                     DrawString(message, position);
                     break;
 
                 case GameState.Play:
+                    DrawLevelMessages();
                     break;
 
                 case GameState.End:
@@ -231,6 +237,22 @@ namespace FinalProject
             DrawVideoFrame();
 
             base.Draw(gameTime);
+        }
+
+        private void DrawLevelMessages()
+        {
+            string[] instructions =
+                {
+                    "Dodge or destroy the asteroids!",
+                    "Kill all the aliens and dodge the falling asteroids!"
+                };
+
+            if (CurrentLevelState == LevelState.Instructions)
+            {
+                string message = instructions[currentLevel];
+                Vector2 position = CalculateTextCenterPosition(message);
+                DrawString(message, position);
+            }
         }
 
         private void StartingMessage()
