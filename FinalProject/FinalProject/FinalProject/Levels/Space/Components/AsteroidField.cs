@@ -129,9 +129,9 @@ namespace FinalProject
             for (int i = 0; i < ASTEROID_COUNT; i++)
             {
                 asteroids[i].Update(gameTime);
-                if (asteroids[i].world.Translation.Z > (camera.Position.Z + 100))
+                if (asteroids[i].position.Z > (camera.Position.Z + 100))
                 {
-                    asteroids[i].alive = false;
+                    asteroids[i].IsAlive = false;
                     GenerateAsteroid(i);
                 }
             }
