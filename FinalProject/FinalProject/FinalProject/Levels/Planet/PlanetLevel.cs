@@ -293,6 +293,7 @@ namespace FinalProject
                 {
                     audio.PlayCue("alien");
                     aliens.RemoveAt(i);
+                    hud.RemoveAlienPosition(i);
                     RemoveLaserBeam();
                 }
             }

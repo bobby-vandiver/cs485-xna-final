@@ -19,7 +19,9 @@ namespace FinalProject
         Texture2D RadarText;
         Texture2D playerRadar;
         Texture2D alienRadar;
-        public Vector3[] alienPosition = new Vector3[20];
+
+        const int MAX_ALIEN_COUNT = 20;
+        public Vector3[] alienPosition = new Vector3[MAX_ALIEN_COUNT];
         public int alienRadarCount;
 
         PlayerHealth playerHealth = new PlayerHealth();
@@ -124,6 +126,24 @@ namespace FinalProject
         public void DecrementPlayerHealth(int amount)
         {
             playerHealth.decrementPlayerHealth(amount);
+        }
+
+        // A kludge to remove dead objects from the radar
+        public void RemoveAlienPosition(int position)
+        {
+            List<Vector3> list = new List<Vector3>();
+
+            // Copy the array over to a list so I can delete the object
+            for (int i = 0; i < alienPosition.Length; i++)
+            {
+                list.Add(alienPosition[i]);
+            }
+
+            list.RemoveAt(position);
+            alienRadarCount--;
+
+            // Recreate the array from the list
+            alienPosition = list.ToArray();
         }
     }
 }
