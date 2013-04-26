@@ -74,6 +74,8 @@ namespace FinalProject
         public override void Update(GameTime gameTime)
         {
             loop_timer++;
+            for (int i = 0; i < 10; i++)
+                hud.alienPosition[i] = asteroids[i].position;
             for (int i = 0; i < B_COUNT; i++)
             {
                 GenExplosionField(new Vector3(0,0,100));
@@ -119,23 +121,15 @@ namespace FinalProject
                             GenExplosionField(asteroids[i].position);
                             Explode = true;
                             status = "ASTEROID HIT!";
+                            asteroids[i].alive = false;
+                            GenAsteroid(i);
+                            bullets[0].alive = false;
                         }
             }
             if (loop_timer%30 == 0)
             {
                 ship.col = new Vector3(0, 0, 0);
                 status = "Warning! " + (20 - times_hit) + " hit before crash land";
-                for (int i = 0; i < A_COUNT; i++)
-                {
-                            if (asteroids[i].Collides(bullets[0]))
-                            {
-                                audio.PlayCue("flashbang");
-                                asteroids_killed++;
-                                GenAsteroid(i);
-                                asteroids[i].alive = false;
-                                bullets[0].alive = false;
-                            }
-                }
                 for (int i = 0; i < A_COUNT; i++)
                 {
                     if (asteroids[i].Collides(ship))
@@ -149,11 +143,6 @@ namespace FinalProject
                         }     
                 }
                 score = (times_hit * -10) + (asteroids_killed * 30);
-                for (int i = 0; i < 10; i++)
-                    hud.alienPosition[i] = asteroids[i].position;
-            }
-            if (loop_timer%60==0)
-            {
                 
             }
             if (loop_timer % 200 == 0)
