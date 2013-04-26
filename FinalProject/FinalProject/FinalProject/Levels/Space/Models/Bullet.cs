@@ -8,7 +8,6 @@ namespace FinalProject
 {
     class Bullet : BasicModel
     {
-<<<<<<< HEAD
         Vector3 position;
         Vector3 dir;
         Camera cam;
@@ -23,28 +22,6 @@ namespace FinalProject
         Matrix world = Matrix.Identity;
         Random r;
         Model model;
-=======
-        Vector3 Position;
-        Vector3 initialPosition;
-
-        // Direction of motion
-        Vector3 direction;
-        Vector3 Direction
-        {
-            get { return direction; }
-            set
-            {
-                direction = value;
-                direction.Normalize();
-            }
-        }
-
-        public bool IsAlive = false;
-
-        // Use this to determine when to have the beam remove itself
-        float maxDistance = 30.0f;
-
->>>>>>> a0846ff40cf271b7590256f726575fb9d8437523
         public Bullet(Model model, Vector3 currentPoint, Camera camera)
             : base(model)
         {
@@ -96,19 +73,5 @@ namespace FinalProject
             worldHolder = meshTransform * scale * rotation * world * translation;
             return worldHolder;
         }
-<<<<<<< HEAD
-        public bool CollidesWith(BoundingSphere bs)
-        {
-            if (this.bs.Intersects(bs))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-=======
->>>>>>> a0846ff40cf271b7590256f726575fb9d8437523
     }
 }

@@ -9,22 +9,12 @@ namespace FinalProject
     public class Asteroid : BasicModel
     {
         public Vector3 position;
-<<<<<<< HEAD
         Vector3 dir;
         Camera cam;
         float rot;
         Vector3 firstPosition;
         public BoundingSphere bs;
         float time = 0.0f;
-=======
-        Vector3 initialPosition;
-
-        Vector3 direction;
-
-        float rotationRate;
-        float rotationAngle;
-        
->>>>>>> a0846ff40cf271b7590256f726575fb9d8437523
         float asteroidSpeed = .03f;
         public Boolean alive;
         Model model;
@@ -40,7 +30,6 @@ namespace FinalProject
             position = randomPoint;
             this.cam = camera;
             Random r = new Random();
-<<<<<<< HEAD
             Vector3 direction = new Vector3(0, 0,
                 position.Y*asteroidSpeed*(float)r.NextDouble());
             rot = (float)(position.Y*.001);
@@ -48,17 +37,9 @@ namespace FinalProject
             firstPosition = position;
             world = Matrix.CreateTranslation(position);
             bs = new BoundingSphere(firstPosition, 5f);
-=======
-            float randomZ = position.Y * asteroidSpeed * (float)r.NextDouble();
-            this.direction = new Vector3(0, 0, randomZ);
-
-            this.rotationRate = (float)(position.Y * .001);
-            this.rotationAngle = 0.0f;
->>>>>>> a0846ff40cf271b7590256f726575fb9d8437523
         }
         public override void Update(GameTime gameTime)
         {
-<<<<<<< HEAD
             // TODO: Add your update code here
             time += 5;
             position+= dir;
@@ -67,11 +48,6 @@ namespace FinalProject
             // Move model
             bs.Center = position;
             world *= Matrix.CreateTranslation(dir);
-=======
-            position += direction;
-            rotationAngle += rotationRate;
-
->>>>>>> a0846ff40cf271b7590256f726575fb9d8437523
             base.Update(gameTime);
         }
         public override void Draw(Camera camera)
@@ -105,7 +81,6 @@ namespace FinalProject
             worldHolder = meshTransform * scale * rotation * world;
             return worldHolder;
         }
-<<<<<<< HEAD
         public bool CollidesWith(BoundingSphere bs)
         {
             // Loop through each ModelMesh in both objects and compare
@@ -118,12 +93,11 @@ namespace FinalProject
             {
                 return false;
             }
-=======
+        }
 
         protected override BoundingSphere GetBoundingSphere()
         {
             return new BoundingSphere(position, 3f);
->>>>>>> a0846ff40cf271b7590256f726575fb9d8437523
         }
     }
 }
