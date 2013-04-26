@@ -107,6 +107,7 @@ namespace FinalProject
         {
             if (loop_timer % 30 == 0)
             {
+                ship.col = Vector3.Zero;
                 status = "Warning! " + (20 - times_hit) + " hit before crash land";
                 score = (times_hit * -10) + (asteroids_killed * 30);
             }
