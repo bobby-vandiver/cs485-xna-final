@@ -24,22 +24,43 @@ namespace FinalProject
         }
 
         public bool IsAlive = false;
+
+        // Use this to determine when to have the beam remove itself
+        float maxDistance = 30.0f;
+
         public BoundingSphere bs;
 
         public Bullet(Model model, Vector3 currentPoint, Camera camera)
             : base(model)
         {
-            this.Direction = camera.Direction;
+            Matrix directionRotation = Matrix.CreateFromYawPitchRoll(camera.Yaw, camera.Pitch, camera.Roll);
+            this.Direction = Vector3.Transform(-Vector3.UnitZ, directionRotation);
+            
             this.initialPosition = currentPoint;
             this.Position = this.initialPosition + new Vector3(0f, -0.25f, -1.0f);
             this.IsAlive = true;
         }
+        
         public override void Update(GameTime gameTime)
         {
-            Position += Direction;
+            if (IsAlive)
+                UpdatePosition();
             base.Update(gameTime);
         }
-        
+
+        private void UpdatePosition()
+        {
+            Position += Direction;
+            CheckDistanceTraveled();
+        }
+
+        private void CheckDistanceTraveled()
+        {
+            float distanceTraveled = Vector3.Distance(initialPosition, Position);
+            if (distanceTraveled > maxDistance)
+                IsAlive = false;
+        }
+
         protected override BoundingSphere GetBoundingSphere()
         {
             return new BoundingSphere(Position, 1f);

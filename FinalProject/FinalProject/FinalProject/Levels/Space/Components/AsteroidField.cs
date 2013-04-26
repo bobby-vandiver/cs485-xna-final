@@ -16,29 +16,31 @@ namespace FinalProject
     {
         Audio audio;
         SpriteFont font;
+
         int asteroids_killed = 0;
         int times_hit = 0;
         int loop_timer = 0;
         int score = 0;
         string status="";
         public Boolean game_over = false;
-        Boolean firstDraw = false;
         const int A_COUNT = 50;
         const int B_COUNT = 10;
         public Asteroid[] asteroids;
         public Explosions[] explosions;
         Boolean Explode = false;
-        Bullet[] bullets;
+        Bullet bullet;
         Model a1;
         Model a2;
         Texture2D backgroundTexture;
         float maxHeight;
-        int bulletCounter = 0;
         Camera cam;
+
         BasicEffect basicEffect;
         SpriteBatch spriteBatch;
+
         Spaceship ship;
         HUD hud;
+
         public AsteroidField(Game game,Camera camera, float maxHeight, HUD hud)
             : base(game)
         {
@@ -56,16 +58,20 @@ namespace FinalProject
 
         protected override void LoadContent()
         {
-            font = Game.Content.Load<SpriteFont>(@"Fonts\GameFont");
+            font = (SpriteFont)Game.Services.GetService(typeof(SpriteFont));
+
             Model spaceshipmodel = Game.Content.Load<Model>(@"Models\spaceship");
             ship = new Spaceship(spaceshipmodel, cam);
+
             // Load textures
             backgroundTexture = Game.Content.Load<Texture2D>(@"Backgrounds\stars");
+            
             //load asteroids one for large, one for small
             a1 = Game.Content.Load<Model>(@"Models\asteroid1");
             a2 = Game.Content.Load<Model>(@"Models\asteroid");
+            
             GenAsteroidField();
-            GenBullet();
+            
             basicEffect = new BasicEffect(GraphicsDevice);
             spriteBatch = new SpriteBatch(GraphicsDevice);
             base.LoadContent();
@@ -96,10 +102,12 @@ namespace FinalProject
             if (Keyboard.GetState().IsKeyDown(Keys.Space) || Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 audio.PlayCue("laser");
-                bullets[0] = new Bullet(a2, cam.Position, cam);
-                firstDraw = true;
+                CreateBullet();
             }
-            bullets[0].Update(gameTime);
+            
+            if(bullet != null)
+                bullet.Update(gameTime);
+
             for (int i = 0; i < A_COUNT; i++)
             {
                 if (asteroids[i].Collides(ship))
@@ -112,9 +120,9 @@ namespace FinalProject
                     times_hit++;
                 }
              }
-            for (int i = 0; i < A_COUNT; i++)
+            for (int i = 0; i < A_COUNT && bullet != null; i++)
             {
-                        if (asteroids[i].Collides(bullets[0]))
+                        if (asteroids[i].Collides(bullet))
                         {
                             GenExplosionField(asteroids[i].position);
                             Explode = true;
@@ -125,15 +133,15 @@ namespace FinalProject
             {
                 ship.col = new Vector3(0, 0, 0);
                 status = "Warning! " + (20 - times_hit) + " hit before crash land";
-                for (int i = 0; i < A_COUNT; i++)
+                for (int i = 0; i < A_COUNT && bullet != null; i++)
                 {
-                            if (asteroids[i].Collides(bullets[0]))
+                            if (asteroids[i].Collides(bullet))
                             {
                                 audio.PlayCue("flashbang");
                                 asteroids_killed++;
                                 GenAsteroid(i);
                                 asteroids[i].alive = false;
-                                bullets[0].IsAlive = false;
+                                bullet.IsAlive = false;
                             }
                 }
                 for (int i = 0; i < A_COUNT; i++)
@@ -145,7 +153,7 @@ namespace FinalProject
                             asteroids[i].alive = false;
                             GenExplosionField(asteroids[i].position);
                             GenAsteroid(i);
-                            bullets[0].IsAlive = false;
+                            bullet.IsAlive = false;
                         }     
                 }
                 score = (times_hit * -10) + (asteroids_killed * 30);
@@ -158,40 +166,41 @@ namespace FinalProject
             }
             if (loop_timer % 200 == 0)
                 Explode = false;
-            if (score > 10000||ship.damage_count>20)
+            if (score > 10000 || ship.damage_count > 20)
             { game_over = true; }
             hud.alienRadarCount = 10;
             base.Update(gameTime);
 
         }
-        public  HUD GetHud()
+
+        private void CreateBullet()
         {
-            return hud;
+            if(bullet == null || !bullet.IsAlive)
+                bullet = new Bullet(a2, cam.Position, cam);
         }
-        private void GenBullet()
-        {
-            bullets = new Bullet[B_COUNT+1];
-            bullets[0] = new Bullet(a2, cam.Position, cam);
-        }
-        private void DrawBullet()
-        {
-            if (firstDraw)
-            {
-                bullets[0].Draw(cam);
-               
-            }
-        }
+
         public override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
             DrawBackground();
+            DrawScoreAndStatus();
+
             PrepareGraphicsDeviceForDrawing3D();
             PrepareBasicEffectForDrawing3D();
+
             DrawBullet();
             DrawAsteroidField();
             DrawExplosionField();
+            
             ship.Draw(cam);
+
             base.Draw(gameTime);
+        }
+
+        private void DrawBullet()
+        {
+            if (bullet != null)
+                bullet.Draw(cam);
         }
 
         private void DrawBackground()
@@ -200,14 +209,19 @@ namespace FinalProject
             int windowHeight = Game.Window.ClientBounds.Height;
             var destination = new Rectangle(0, 0, windowWidth, windowHeight);
             spriteBatch.Begin();
-            string scoreText = "Score: " + score;
             spriteBatch.Draw(backgroundTexture, destination, Color.White);
-            spriteBatch.DrawString(font, scoreText,
-                new Vector2(200, 10), Color.White);
-            spriteBatch.DrawString(font, status,
-                new Vector2(400, 20), Color.Red);
             spriteBatch.End();
         }
+
+        private void DrawScoreAndStatus()
+        {
+            string scoreText = "Score: " + score;
+            spriteBatch.Begin();
+            spriteBatch.DrawString(font, scoreText, new Vector2(200, 10), Color.White);
+            spriteBatch.DrawString(font, status, new Vector2(400, 20), Color.Red);
+            spriteBatch.End();
+        }
+        
         private void DrawAsteroidField()
         {
             for(int i = 0; i<A_COUNT;i++)
@@ -291,6 +305,7 @@ namespace FinalProject
             float y = (float)randomNumberGenerator.Next(-30, 30)*(float)randomNumberGenerator.NextDouble();
             return new Vector3(x, 40+y, -20+z);
         }
+
         public Vector3 GenerateRandomDirection()
         {
             Random randomNumberGenerator = (Random)Game.Services.GetService(typeof(Random));
@@ -300,7 +315,6 @@ namespace FinalProject
             float y = (float)randomNumberGenerator.NextDouble() * 100;
             return new Vector3(x, y, z);
         }
-
 
         // MathHelper doesn't provide an implementation for non-float
         private int Clamp(int value, int minValue, int maxValue)
@@ -312,6 +326,5 @@ namespace FinalProject
             else
                 return value;
         }
-
     }
 }
