@@ -71,7 +71,7 @@ namespace FinalProject
             a1 = Game.Content.Load<Model>(@"Models\asteroid1");
             a2 = Game.Content.Load<Model>(@"Models\asteroid");
             
-            GenAsteroidField();
+            GenerateAsteroidField();
             
             basicEffect = new BasicEffect(GraphicsDevice);
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -85,7 +85,7 @@ namespace FinalProject
 
             UpdateBullet(gameTime);
             UpdateAsteroids(gameTime);
-            //UpdateExplosions(gameTime);
+            UpdateExplosions(gameTime);
             UpdateHud();
 
             CheckCollisions();
@@ -180,7 +180,7 @@ namespace FinalProject
         {
             for (int i = 0; i < B_COUNT; i++)
             {
-                GenExplosionField(new Vector3(0, 0, 100));
+                GenerateExplosionField(new Vector3(0, 0, 100));
                 if (Explode == true && explosions[i] != null)
                 {
                     explosions[i].Update(gameTime);
@@ -257,6 +257,7 @@ namespace FinalProject
                     asteroids[i].Draw(cam);
             }
         }
+
         private void DrawExplosionField()
         {
             for (int i = 0; i < B_COUNT; i++)
@@ -264,33 +265,31 @@ namespace FinalProject
                 explosions[i].Draw(cam);
             }
         }
-        private void GenAsteroidField()
+
+        private void GenerateAsteroidField()
         {
-            Vector3 placement;
             asteroids = new Asteroid[A_COUNT+1];
             for (int i = 0; i < A_COUNT; i++)
             {
-                placement = GetRandomPoint();
+                Vector3 placement = GetRandomPoint();
                 asteroids[i] = new Asteroid(a2, placement, cam);   
             }
         }
-        private void GenExplosionField(Vector3 startPos)
+
+        private void GenerateExplosionField(Vector3 startPos)
         {
-            Vector3 placement;
             explosions = new Explosions[B_COUNT + 1];
             for (int i = 0; i < B_COUNT; i++)
             {
-                placement = startPos;
+                Vector3 placement = startPos;
                 explosions[i] = new Explosions(a2, placement, cam);
             }
         }
+
         private void GenerateAsteroid(int index)
         {
-            Vector3 placement;
-            
-                placement = GetRandomPoint();
-                asteroids[index] = new Asteroid(a2, placement, cam);
-            
+            Vector3 placement = GetRandomPoint();
+            asteroids[index] = new Asteroid(a2, placement, cam);
         }
 
 
