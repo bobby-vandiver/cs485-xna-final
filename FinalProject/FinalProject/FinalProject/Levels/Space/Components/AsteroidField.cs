@@ -22,6 +22,7 @@ namespace FinalProject
         int loop_timer = 0;
         int score = 0;
         string status="";
+
         public Boolean game_over = false;
         const int A_COUNT = 50;
         const int B_COUNT = 10;
@@ -77,37 +78,69 @@ namespace FinalProject
             base.LoadContent();
         }
 
+
         public override void Update(GameTime gameTime)
         {
             loop_timer++;
-            for (int i = 0; i < B_COUNT; i++)
+
+            UpdateBullet(gameTime);
+            UpdateAsteroids(gameTime);
+            //UpdateExplosions(gameTime);
+            UpdateHud();
+
+            CheckCollisions();
+
+            // Check for end of level condition
+            if (score > 10000 || ship.damage_count > 20)
+                game_over = true;
+
+            base.Update(gameTime);
+        }
+
+        private void UpdateHud()
+        {
+            UpdateRadar();
+            UpdateScoreAndStatus();
+        }
+
+        private void UpdateScoreAndStatus()
+        {
+            if (loop_timer % 30 == 0)
             {
-                GenExplosionField(new Vector3(0,0,100));
-                if (Explode == true && explosions[i] != null)
-                {
-                    explosions[i].Update(gameTime);
-                }
+                status = "Warning! " + (20 - times_hit) + " hit before crash land";
+                score = (times_hit * -10) + (asteroids_killed * 30);
             }
+        }
+
+        private void UpdateRadar()
+        {
+            for (int i = 0; i < 10; i++)
+                hud.alienPosition[i] = asteroids[i].position;
+            hud.alienRadarCount = 10;
+        }
+
+        private void UpdateAsteroids(GameTime gameTime)
+        {
             for (int i = 0; i < A_COUNT; i++)
             {
                 asteroids[i].Update(gameTime);
-                if (asteroids[i].world.Translation.Z >  (cam.Position.Z + 100))
+                if (asteroids[i].world.Translation.Z > (cam.Position.Z + 100))
                 {
                     asteroids[i].alive = false;
-                    GenAsteroid(i);
-                }        
+                    GenerateAsteroid(i);
+                }
             }
+        }
 
-            KeyboardState keyboardState = Keyboard.GetState();
-            if (Keyboard.GetState().IsKeyDown(Keys.Space) || Mouse.GetState().LeftButton == ButtonState.Pressed)
-            {
-                audio.PlayCue("laser");
-                CreateBullet();
-            }
-            
-            if(bullet != null)
-                bullet.Update(gameTime);
+        private void CheckCollisions()
+        {
+            CheckShipCollisions();
+            CheckBulletCollisions();
+        }
 
+        private void CheckShipCollisions()
+        {
+            // Check for collisions with the ship
             for (int i = 0; i < A_COUNT; i++)
             {
                 if (asteroids[i].Collides(ship))
@@ -119,58 +152,52 @@ namespace FinalProject
                     ship.damage_count++;
                     times_hit++;
                 }
-             }
+            }
+
+        }
+
+        private void CheckBulletCollisions()
+        {
+            // Check for collisions with bullet
             for (int i = 0; i < A_COUNT && bullet != null; i++)
             {
-                        if (asteroids[i].Collides(bullet))
-                        {
-                            GenExplosionField(asteroids[i].position);
-                            Explode = true;
-                            status = "ASTEROID HIT!";
-                        }
-            }
-            if (loop_timer%30 == 0)
-            {
-                ship.col = new Vector3(0, 0, 0);
-                status = "Warning! " + (20 - times_hit) + " hit before crash land";
-                for (int i = 0; i < A_COUNT && bullet != null; i++)
+                if (asteroids[i].Collides(bullet))
                 {
-                            if (asteroids[i].Collides(bullet))
-                            {
-                                audio.PlayCue("flashbang");
-                                asteroids_killed++;
-                                GenAsteroid(i);
-                                asteroids[i].alive = false;
-                                bullet.IsAlive = false;
-                            }
-                }
-                for (int i = 0; i < A_COUNT; i++)
-                {
-                    if (asteroids[i].Collides(ship))
-                        {
-                            
-                            status = "HIT!";
-                            asteroids[i].alive = false;
-                            GenExplosionField(asteroids[i].position);
-                            GenAsteroid(i);
-                            bullet.IsAlive = false;
-                        }     
-                }
-                score = (times_hit * -10) + (asteroids_killed * 30);
-                for (int i = 0; i < 10; i++)
-                    hud.alienPosition[i] = asteroids[i].position;
-            }
-            if (loop_timer%60==0)
-            {
-                
-            }
-            if (loop_timer % 200 == 0)
-                Explode = false;
-            if (score > 10000 || ship.damage_count > 20)
-            { game_over = true; }
-            hud.alienRadarCount = 10;
-            base.Update(gameTime);
+                    audio.PlayCue("explosion");
+                    asteroids_killed++;
+                    GenerateAsteroid(i);
+                    bullet.IsAlive = false;
+                    status = "ASTEROID HIT!";
 
+                    //GenExplosionField(asteroids[i].position);
+                    //Explode = true;
+                }
+            }
+        }
+
+        private void UpdateExplosions(GameTime gameTime)
+        {
+            for (int i = 0; i < B_COUNT; i++)
+            {
+                GenExplosionField(new Vector3(0, 0, 100));
+                if (Explode == true && explosions[i] != null)
+                {
+                    explosions[i].Update(gameTime);
+                }
+            }
+        }
+
+        private void UpdateBullet(GameTime gameTime)
+        {
+            KeyboardState keyboardState = Keyboard.GetState();
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) || Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                audio.PlayCue("laser");
+                CreateBullet();
+            }
+
+            if (bullet != null)
+                bullet.Update(gameTime);
         }
 
         private void CreateBullet()
@@ -190,7 +217,7 @@ namespace FinalProject
 
             DrawBullet();
             DrawAsteroidField();
-            DrawExplosionField();
+            //DrawExplosionField();
             
             ship.Draw(cam);
 
@@ -256,7 +283,7 @@ namespace FinalProject
                 explosions[i] = new Explosions(a2, placement, cam);
             }
         }
-        private void GenAsteroid(int index)
+        private void GenerateAsteroid(int index)
         {
             Vector3 placement;
             
