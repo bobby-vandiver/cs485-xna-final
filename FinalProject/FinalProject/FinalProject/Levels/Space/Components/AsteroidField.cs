@@ -26,10 +26,10 @@ namespace FinalProject
         public Boolean game_over = false;
         
         const int ASTEROID_COUNT = 50;
-        const int SCATTER_COUNT = 10;
+        const int FRAGMENT_COUNT = 10;
         
         public Asteroid[] asteroids;
-        public Explosions[] explosions;
+        public Fragment[] explosions;
         
         Boolean Explode = false;
         Bullet bullet;
@@ -187,7 +187,7 @@ namespace FinalProject
             if (explosions == null)
                 return;
 
-            for (int i = 0; i < SCATTER_COUNT; i++)
+            for (int i = 0; i < FRAGMENT_COUNT; i++)
             {
                 //GenerateExplosionField(new Vector3(0, 0, 100));
                 if (Explode == true && explosions[i] != null)
@@ -269,7 +269,7 @@ namespace FinalProject
 
         private void DrawExplosionField()
         {
-            for (int i = 0; i < SCATTER_COUNT && explosions != null; i++)
+            for (int i = 0; i < FRAGMENT_COUNT && explosions != null; i++)
             {
                 explosions[i].Draw(camera);
             }
@@ -287,11 +287,11 @@ namespace FinalProject
 
         private void GenerateExplosionField(Vector3 startPos)
         {
-            explosions = new Explosions[SCATTER_COUNT + 1];
-            for (int i = 0; i < SCATTER_COUNT; i++)
+            explosions = new Fragment[FRAGMENT_COUNT + 1];
+            for (int i = 0; i < FRAGMENT_COUNT; i++)
             {
                 Vector3 placement = startPos;
-                explosions[i] = new Explosions(largeAsteroidModel, placement, camera);
+                explosions[i] = new Fragment(largeAsteroidModel, placement, camera);
             }
         }
 

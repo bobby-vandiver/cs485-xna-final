@@ -6,54 +6,60 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FinalProject
 {
-    public class Explosions : BasicModel
+    public class Fragment : BasicModel
     {
         public Vector3 position;
-        Vector3 dir;
-        Camera cam;
-        float rot;
-        Vector3 firstPosition;
+        Vector3 initialPosition;
+
+        Vector3 direction;
+
+        float rotationRate;
+        float rotationAngle;
+        
         public BoundingSphere bs;
+        
         float time = 0.0f;
+        const float TIME_TO_LIVE = 10.0f;
+
         float asteroidSpeed = .003f;
-        public Boolean alive;
-        Model model;
-        public Matrix worldHolder = Matrix.Identity;
-        Matrix rotation = Matrix.Identity;
-        public Matrix world = Matrix.Identity;
-        Random r;
-        public Explosions(Model model, Vector3 starting, Camera camera)
+        
+        public Boolean IsAlive;
+
+        public Fragment(Model model, Vector3 starting, Camera camera)
             : base(model)
         {
-            alive = true;
+            this.IsAlive = true;
 
-            this.model = model;
-            position = starting;
-            this.cam = camera;
+            this.initialPosition = starting;
+            this.position = this.initialPosition;
+
             Random r = new Random();
-            Vector3 direction = new Vector3(asteroidSpeed * (float)r.NextDouble(), 
+            this.direction = new Vector3(asteroidSpeed * (float)r.NextDouble(), 
                 asteroidSpeed * (float)r.NextDouble(),
                 asteroidSpeed*(float)r.NextDouble());
-            rot = (float)(position.Y*.001);
-            dir = direction;
-            firstPosition = position;
-            world = Matrix.CreateTranslation(position);
-            bs = new BoundingSphere(firstPosition, 6f);
+            
+            this.rotationRate = (float)(position.Y*.001);
+            this.rotationAngle = 0.0f;
+
+            bs = new BoundingSphere(initialPosition, 6f);
         }
+        
         public override void Update(GameTime gameTime)
         {
-            // TODO: Add your update code here
             time += 5;
-            position+= dir;
-            rotation *= Matrix.CreateFromYawPitchRoll(rot, rot, rot);
-            // Move model
+            if (time > TIME_TO_LIVE)
+                IsAlive = false;
+
+            position+= direction;
+            rotationAngle += rotationRate;
             bs.Center = position;
-            world *= Matrix.CreateTranslation(dir);
+
             base.Update(gameTime);
         }
+        
         public override void Draw(Camera camera)
         {
-            if (alive)
+            if (IsAlive)
             {
                 Matrix[] transforms = new Matrix[Model.Bones.Count];
                 Model.CopyAbsoluteBoneTransformsTo(transforms);
@@ -74,13 +80,16 @@ namespace FinalProject
                 }
             }
         }
+        
         // Returns a matrix for the asteroids current position
         protected override Matrix GetWorld(Matrix meshTransform, Camera camera)
         {
+            Matrix translation = Matrix.CreateTranslation(position);
+            Matrix rotation = Matrix.CreateFromYawPitchRoll(rotationAngle, rotationAngle, rotationAngle);
             Matrix scale = Matrix.CreateScale(.5f);
-            worldHolder = meshTransform * scale * rotation * world;
-            return worldHolder;
+            return meshTransform * scale * rotation * translation;
         }
+
         public bool CollidesWith(BoundingSphere bs)
         {
             // Loop through each ModelMesh in both objects and compare
