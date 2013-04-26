@@ -16,8 +16,6 @@ namespace FinalProject
         float rotationRate;
         float rotationAngle;
         
-        public BoundingSphere bs;
-        
         float time = 0.0f;
         const float TIME_TO_LIVE = 10.0f;
 
@@ -40,8 +38,6 @@ namespace FinalProject
             
             this.rotationRate = (float)(position.Y*.001);
             this.rotationAngle = 0.0f;
-
-            bs = new BoundingSphere(initialPosition, 6f);
         }
         
         public override void Update(GameTime gameTime)
@@ -52,7 +48,6 @@ namespace FinalProject
 
             position+= direction;
             rotationAngle += rotationRate;
-            bs.Center = position;
 
             base.Update(gameTime);
         }

@@ -28,8 +28,6 @@ namespace FinalProject
         // Use this to determine when to have the beam remove itself
         float maxDistance = 30.0f;
 
-        public BoundingSphere bs;
-
         public Bullet(Model model, Vector3 currentPoint, Camera camera)
             : base(model)
         {

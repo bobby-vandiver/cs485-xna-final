@@ -16,8 +16,6 @@ namespace FinalProject
         float rotationRate;
         float rotationAngle;
         
-        public BoundingSphere bs;
-
         float time = 0.0f;
         float asteroidSpeed = .03f;
 
@@ -37,8 +35,6 @@ namespace FinalProject
 
             this.rotationRate = (float)(position.Y * .001);
             this.rotationAngle = 0.0f;
-
-            this.bs = new BoundingSphere(initialPosition, 1.5f);
         }
 
         public override void Update(GameTime gameTime)
@@ -47,8 +43,6 @@ namespace FinalProject
 
             position += direction;
             rotationAngle += rotationRate;
-
-            bs = new BoundingSphere(position, 1.5f);
 
             base.Update(gameTime);
         }
