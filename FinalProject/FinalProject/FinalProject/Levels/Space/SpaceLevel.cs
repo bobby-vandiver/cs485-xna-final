@@ -20,19 +20,20 @@ namespace FinalProject
         SpriteBatch spriteBatch;
         AsteroidField field;
         Texture2D crosshair;
-        SpriteFont font;
         HUD hud;
-        public bool levelOverForVideo;
+
         public SpaceLevel(Game game)
             : base(game)
         {
         }
+
         private void InitializeHud()
         {
-            hud = new HUD(Game, false,1.5f,100);
+            hud = new HUD(Game, false, 1.5f, 100);
             hud.DrawOrder = 4;
             Game.Components.Add(hud);
         }
+
         public override void Initialize()
         {
             InitializeHud();
@@ -40,6 +41,7 @@ namespace FinalProject
             this.DrawOrder = 3;
             base.Initialize();
         }
+
         private AsteroidField InitializeField()
         {
             field = new AsteroidField(Game, camera, 100.0f,hud);
@@ -47,9 +49,9 @@ namespace FinalProject
             Game.Components.Add(field);
             return field;
         }
+
         private void InitializeCamera()
         {
-            
             Vector3 position = new Vector3(0, 40, 5);
             Vector3 direction = new Vector3(0, 0, -1);
             camera = new SpaceCamera(Game, direction, Vector3.Up, position);
@@ -62,10 +64,8 @@ namespace FinalProject
 
         protected override void LoadContent()
         {
-        
             spriteBatch = new SpriteBatch(GraphicsDevice);
             crosshair = Game.Content.Load<Texture2D>(@"Textures\Crosshair");
-            font = Game.Content.Load<SpriteFont>(@"Fonts\GameFont");
             base.LoadContent();
         }
 
@@ -81,23 +81,25 @@ namespace FinalProject
 
         public override void Update(GameTime gameTime)
         {
-                hud = field.GetHud(); 
                 base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
             PrepareGraphicsDeviceForDrawing3D();
+            DrawCrosshair();
             base.Draw(gameTime);
-            spriteBatch.Begin();
+        }
 
-            spriteBatch.Draw(crosshair,
-                new Vector2((Game.Window.ClientBounds.Width / 2)
-                    - (crosshair.Width / 2),
-                    (Game.Window.ClientBounds.Height / 2)
-                    - (crosshair.Height / 2)),
-                    Color.Red);
-            
+        private void DrawCrosshair()
+        {
+            float x = (float)((Game.Window.ClientBounds.Width / 2) - (crosshair.Width / 2));
+            float y = (float)((Game.Window.ClientBounds.Height / 2) - (crosshair.Height / 2));
+
+            Vector2 position = new Vector2(x, y);
+
+            spriteBatch.Begin();
+            spriteBatch.Draw(crosshair, position, Color.Red);
             spriteBatch.End();
         }
 
