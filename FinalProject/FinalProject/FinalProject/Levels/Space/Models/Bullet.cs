@@ -95,17 +95,5 @@ namespace FinalProject
             Matrix translation = Matrix.CreateTranslation(Position);
             return meshTransform * scale * translation;
         }
-
-        public bool CollidesWith(BoundingSphere bs)
-        {
-            if (this.bs.Intersects(bs))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
     }
 }

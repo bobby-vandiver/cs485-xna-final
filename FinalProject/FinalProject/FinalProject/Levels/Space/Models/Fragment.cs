@@ -89,19 +89,5 @@ namespace FinalProject
             Matrix scale = Matrix.CreateScale(.5f);
             return meshTransform * scale * rotation * translation;
         }
-
-        public bool CollidesWith(BoundingSphere bs)
-        {
-            // Loop through each ModelMesh in both objects and compare
-            // all bounding spheres for collisions
-            if (this.bs.Intersects(bs))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
     }
 }
