@@ -250,10 +250,9 @@
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Compile Include="Audio\SnakeAudio.xap">
-      <Name>SnakeAudio</Name>
+    <Compile Include="Audio\FinalProject.xap">
+      <Name>FinalProject</Name>
       <Importer>XactImporter</Importer>
       <Processor>XactProcessor</Processor>
     </Compile>

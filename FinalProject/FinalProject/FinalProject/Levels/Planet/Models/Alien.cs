@@ -50,7 +50,7 @@ namespace FinalProject
         // Offset the terrain boundaries to make "hitting the wall" more natural
         const float MODEL_OFFSET = 5.0f;
 
-        const float BOUNDING_SPHERE_RADIUS = 29.0f;
+        const float BOUNDING_SPHERE_RADIUS = 28.0f;
 
         public Alien(Model model, Vector3 position, Vector3 direction)
             : base(model)

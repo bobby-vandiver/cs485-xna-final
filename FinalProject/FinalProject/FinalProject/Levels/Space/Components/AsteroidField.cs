@@ -49,7 +49,7 @@ namespace FinalProject
         public override void Initialize()
         {
             audio = (Audio)Game.Services.GetService(typeof(Audio));
-            audio.PlayBackgroundMusic("background");
+            audio.PlayBackgroundMusic("ObstacleCourse");
             base.Initialize();
         }
 
@@ -95,7 +95,11 @@ namespace FinalProject
             KeyboardState keyboardState = Keyboard.GetState();
             if (Keyboard.GetState().IsKeyDown(Keys.Space) || Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
+<<<<<<< HEAD
                 
+=======
+                audio.PlayCue("laser");
+>>>>>>> 743c5b2a8d674e5054ab6c85a0915763d36aa750
                 bullets[0] = new Bullet(a2, cam.Position, cam);
                 firstDraw = true;
             }
@@ -104,6 +108,7 @@ namespace FinalProject
             {
                 if (asteroids[i].CollidesWith(ship.bs))
                 {
+                    audio.PlayCue("flashbang");
                     ship.col = new Vector3(1, 0, 0);
                     status = "HIT!";
                     Explode = true;

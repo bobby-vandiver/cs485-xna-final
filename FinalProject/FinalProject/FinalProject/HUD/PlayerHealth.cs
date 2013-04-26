@@ -43,5 +43,10 @@ namespace FinalProject
         {
             playerHealth += amount;
         }
+
+        public bool IsPlayerDead()
+        {
+            return playerHealth <= 0;
+        }
     }
 }

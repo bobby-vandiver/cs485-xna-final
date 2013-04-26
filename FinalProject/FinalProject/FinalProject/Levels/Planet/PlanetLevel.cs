@@ -33,6 +33,8 @@ namespace FinalProject
         //const int MIN_ALIEN_COUNT = 1;
         //const int MAX_ALIEN_COUNT = 1;
 
+        const int ALIEN_DAMAGE = 5;
+
         List<Alien> aliens;
         
 
@@ -68,7 +70,7 @@ namespace FinalProject
         private void StartBackgroundMusic()
         {
             audio = (Audio)Game.Services.GetService(typeof(Audio));
-            audio.PlayBackgroundMusic("background");
+            audio.PlayBackgroundMusic("QuickSilver");
         }
 
         private void InitializeHud()
@@ -116,7 +118,7 @@ namespace FinalProject
             Texture2D smokeTexture = Game.Content.Load<Texture2D>(@"Textures\smoke");
 
             Model BombardmentModel = Game.Content.Load<Model>(@"Models\ammo");
-            bombard = new Bombard(BombardmentModel, terrain, bombTexture, camera, hud, milliseconds, explosionEffect, smokeTexture);
+            bombard = new Bombard(BombardmentModel, terrain, bombTexture, camera, hud, milliseconds, explosionEffect, smokeTexture, audio);
 
             collisionBillboard = new CollisionBillboard(GraphicsDevice, Game.Content,
                        Game.Content.Load<Texture2D>(@"Textures\smoke"), new Vector2(50), bombard.collisionPosition);
@@ -245,6 +247,7 @@ namespace FinalProject
         {
             Model laserBeamModel = Game.Content.Load<Model>(@"Models\Weapons\laserbeam");
             laserBeam = new LaserBeam(laserBeamModel, camera);
+            audio.PlayCue("laser");
         }
 
         private void UpdateAliens()
@@ -270,6 +273,9 @@ namespace FinalProject
                 Alien alien = aliens[i];
                 if (alien.Collides(camera.Position))
                 {
+                    // Player takes damage when the alien "attacks"
+                    hud.DecrementPlayerHealth(ALIEN_DAMAGE);
+
                     // Push the camera back some if it hits an alien
                     camera.Position = camera.Position - 5.0f * camera.Direction;
                 }
@@ -285,7 +291,9 @@ namespace FinalProject
 
                 if (laserBeam.Collides(alien))
                 {
+                    audio.PlayCue("alien");
                     aliens.RemoveAt(i);
+                    hud.RemoveAlienPosition(i);
                     RemoveLaserBeam();
                 }
             }
@@ -327,7 +335,7 @@ namespace FinalProject
         protected override bool LevelOver()
         {
             bool allAliensGone = aliens.Count == 0;
-            return allAliensGone || IsPlayerOffWorld();
+            return allAliensGone || IsPlayerOffWorld() || hud.IsPlayerDead();
         }
 
         private bool IsPlayerOffWorld()
