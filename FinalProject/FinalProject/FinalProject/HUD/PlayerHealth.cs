@@ -13,7 +13,6 @@ namespace FinalProject
     {
         public int playerHealth = 0;
         int maxHealth = 200;
-        int lowHealth = 20;
 
         public PlayerHealth()
         {
