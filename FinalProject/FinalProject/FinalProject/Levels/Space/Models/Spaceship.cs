@@ -40,7 +40,7 @@ namespace FinalProject
                 alive = false;
             }
             position = cam.Position;
-            bs.Center = position;
+            bs.Center = position + new Vector3(0f, -0.25f, -1.0f);
         }
         public override void Draw(Camera camera)
         {

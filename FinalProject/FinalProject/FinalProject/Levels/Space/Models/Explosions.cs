@@ -15,7 +15,7 @@ namespace FinalProject
         Vector3 firstPosition;
         public BoundingSphere bs;
         float time = 0.0f;
-        float asteroidSpeed = .03f;
+        float asteroidSpeed = .003f;
         public Boolean alive;
         Model model;
         public Matrix worldHolder = Matrix.Identity;

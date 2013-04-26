@@ -36,7 +36,7 @@ namespace FinalProject
             dir = direction;
             firstPosition = position;
             world = Matrix.CreateTranslation(position);
-            bs = new BoundingSphere(firstPosition, 5f);
+            bs = new BoundingSphere(firstPosition, 1f);
         }
         public override void Update(GameTime gameTime)
         {

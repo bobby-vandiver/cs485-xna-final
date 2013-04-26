@@ -33,7 +33,7 @@ namespace FinalProject
         Model a2;
         Texture2D backgroundTexture;
         float maxHeight;
-        
+        int bulletCounter = 0;
         Camera cam;
         BasicEffect basicEffect;
         SpriteBatch spriteBatch;
@@ -74,10 +74,13 @@ namespace FinalProject
         public override void Update(GameTime gameTime)
         {
             loop_timer++;
-            if (Explode == true)
+            for (int i = 0; i < B_COUNT; i++)
             {
-                for (int i = 0; i < B_COUNT; i++)
+                GenExplosionField(new Vector3(0,0,100));
+                if (Explode == true && explosions[i] != null)
+                {
                     explosions[i].Update(gameTime);
+                }
             }
             for (int i = 0; i < A_COUNT; i++)
             {
@@ -92,6 +95,7 @@ namespace FinalProject
             KeyboardState keyboardState = Keyboard.GetState();
             if (Keyboard.GetState().IsKeyDown(Keys.Space) || Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
+                
                 bullets[0] = new Bullet(a2, cam.Position, cam);
                 firstDraw = true;
             }
@@ -103,35 +107,41 @@ namespace FinalProject
                     ship.col = new Vector3(1, 0, 0);
                     status = "HIT!";
                     Explode = true;
+                    ship.damage_count++;
+                    times_hit++;
                 }
              }
+            for (int i = 0; i < A_COUNT; i++)
+            {
+                        if (asteroids[i].CollidesWith(bullets[0].bs))
+                        {
+                            GenExplosionField(asteroids[i].position);
+                            Explode = true;
+                        }
+            }
             if (loop_timer%30 == 0)
             {
                 ship.col = new Vector3(0, 0, 0);
-                status = "Warning! " + (10 - times_hit) + " hit before crash land";
+                status = "Warning! " + (20 - times_hit) + " hit before crash land";
                 for (int i = 0; i < A_COUNT; i++)
                 {
-                    if(asteroids[i].CollidesWith(bullets[0].bs))
-                    {
-                        asteroids_killed++;
-                        GenExplosionField(asteroids[i].position);
-                        GenAsteroid(i);
-                        asteroids[i].alive = false;
-                        bullets[0].alive = false;
-                    }
+                            if (asteroids[i].CollidesWith(bullets[0].bs))
+                            {
+                                asteroids_killed++;
+                                GenAsteroid(i);
+                                asteroids[i].alive = false;
+                                bullets[0].alive = false;
+                            }
                 }
-            
                 for (int i = 0; i < A_COUNT; i++)
                 {
                     if (asteroids[i].CollidesWith(ship.bs))
                         {
-                            times_hit++;
+                            
                             status = "HIT!";
                             asteroids[i].alive = false;
                             GenExplosionField(asteroids[i].position);
-                            Explode = true;
                             GenAsteroid(i);
-                            ship.damage_count++;
                             bullets[0].alive = false;
                         }     
                 }
@@ -145,7 +155,7 @@ namespace FinalProject
             }
             if (loop_timer % 200 == 0)
                 Explode = false;
-            if (score > 10000||ship.damage_count>10)
+            if (score > 10000||ship.damage_count>20)
             { game_over = true; }
             hud.alienRadarCount = 10;
             base.Update(gameTime);
@@ -165,6 +175,7 @@ namespace FinalProject
             if (firstDraw)
             {
                 bullets[0].Draw(cam);
+               
             }
         }
         public override void Draw(GameTime gameTime)

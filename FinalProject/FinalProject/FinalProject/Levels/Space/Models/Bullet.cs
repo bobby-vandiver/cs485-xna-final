@@ -55,7 +55,7 @@ namespace FinalProject
                     foreach (BasicEffect basicEffect in mesh.Effects)
                     {
                         basicEffect.EnableDefaultLighting();
-                        basicEffect.EmissiveColor = new Vector3(-1, -.5f, -1);
+                        basicEffect.EmissiveColor = new Vector3(-1, 0, 0);
                         basicEffect.Projection = camera.Projection;
                         basicEffect.View = camera.View;
                         Matrix world = GetWorld(transforms[mesh.ParentBone.Index], camera);
