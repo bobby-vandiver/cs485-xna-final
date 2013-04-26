@@ -14,6 +14,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -244,15 +245,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Audio\crashingAstroid.wav">
-      <Name>crashingAstroid</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
+    <Compile Include="Audio\SnakeAudio.xap">
+      <Name>SnakeAudio</Name>
+      <Importer>XactImporter</Importer>
+      <Processor>XactProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Audio\SnakeAudio.xap">
-      <Name>SnakeAudio</Name>
+    <Compile Include="Audio\AlienPlanetAudio.xap">
+      <Name>AlienPlanetAudio</Name>
       <Importer>XactImporter</Importer>
       <Processor>XactProcessor</Processor>
     </Compile>

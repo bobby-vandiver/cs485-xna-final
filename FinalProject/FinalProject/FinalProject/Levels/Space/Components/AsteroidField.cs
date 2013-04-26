@@ -128,6 +128,7 @@ namespace FinalProject
                             bullets[0].alive = false;
                         }     
                 }
+                crashing(times_hit);
                 score = (times_hit * -10) + (asteroids_killed * 30);
                 for (int i = 0; i < 10; i++)
                     hud.alienPosition[i] = asteroids[i].position;
@@ -146,6 +147,18 @@ namespace FinalProject
             
             base.Update(gameTime);
 
+        }
+
+        private void crashing(int timesHit)
+        {
+            if (timesHit > 5)
+            {
+                //audio.planetPlayCue("crashingsiren");
+            }
+            //if (timesHit > 9) 
+            //{
+            //    audio.planetPlayCue("enterplanet");
+            //}
         }
         public  HUD GetHud()
         {

@@ -218,15 +218,15 @@ Global Settings
 
 Wave Bank
 {
-    Name = Wave Bank;
-    Xbox File = Xbox\Wave Bank.xwb;
-    Windows File = Win\Wave Bank.xwb;
+    Name = planetWaveBank;
+    Xbox File = Xbox\planetWaveBank.xwb;
+    Windows File = Win\planetWaveBank.xwb;
     Xbox Bank Path Edited = 0;
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 3890193440;
-    Bank Last Revised High = 30294671;
+    Bank Last Revised Low = 224940573;
+    Bank Last Revised High = 30294679;
 
     Wave
     {
@@ -507,9 +507,9 @@ Wave Bank
 
 Sound Bank
 {
-    Name = Sound Bank;
-    Xbox File = Xbox\Sound Bank.xsb;
-    Windows File = Win\Sound Bank.xsb;
+    Name = planetSoundBank;
+    Xbox File = Xbox\planetSoundBank.xsb;
+    Windows File = Win\planetSoundBank.xsb;
     Xbox Bank Path Edited = 0;
     Windows Bank Path Edited = 0;
 
@@ -549,7 +549,7 @@ Sound Bank
 
                 Wave Entry
                 {
-                    Bank Name = Wave Bank;
+                    Bank Name = planetWaveBank;
                     Bank Index = 0;
                     Entry Name = aliensnarl2;
                     Entry Index = 1;
@@ -596,7 +596,7 @@ Sound Bank
 
                 Wave Entry
                 {
-                    Bank Name = Wave Bank;
+                    Bank Name = planetWaveBank;
                     Bank Index = 0;
                     Entry Name = crashingastroid;
                     Entry Index = 3;
@@ -643,7 +643,7 @@ Sound Bank
 
                 Wave Entry
                 {
-                    Bank Name = Wave Bank;
+                    Bank Name = planetWaveBank;
                     Bank Index = 0;
                     Entry Name = crashingsiren;
                     Entry Index = 4;
@@ -690,7 +690,7 @@ Sound Bank
 
                 Wave Entry
                 {
-                    Bank Name = Wave Bank;
+                    Bank Name = planetWaveBank;
                     Bank Index = 0;
                     Entry Name = enterplanet;
                     Entry Index = 5;
@@ -737,7 +737,7 @@ Sound Bank
 
                 Wave Entry
                 {
-                    Bank Name = Wave Bank;
+                    Bank Name = planetWaveBank;
                     Bank Index = 0;
                     Entry Name = heavywind;
                     Entry Index = 6;
@@ -784,7 +784,7 @@ Sound Bank
 
                 Wave Entry
                 {
-                    Bank Name = Wave Bank;
+                    Bank Name = planetWaveBank;
                     Bank Index = 0;
                     Entry Name = lasershot;
                     Entry Index = 7;
@@ -831,7 +831,7 @@ Sound Bank
 
                 Wave Entry
                 {
-                    Bank Name = Wave Bank;
+                    Bank Name = planetWaveBank;
                     Bank Index = 0;
                     Entry Name = lowwind;
                     Entry Index = 8;
@@ -878,7 +878,7 @@ Sound Bank
 
                 Wave Entry
                 {
-                    Bank Name = Wave Bank;
+                    Bank Name = planetWaveBank;
                     Bank Index = 0;
                     Entry Name = powerUp;
                     Entry Index = 9;
@@ -925,7 +925,7 @@ Sound Bank
 
                 Wave Entry
                 {
-                    Bank Name = Wave Bank;
+                    Bank Name = planetWaveBank;
                     Bank Index = 0;
                     Entry Name = shot;
                     Entry Index = 10;
@@ -972,7 +972,7 @@ Sound Bank
 
                 Wave Entry
                 {
-                    Bank Name = Wave Bank;
+                    Bank Name = planetWaveBank;
                     Bank Index = 0;
                     Entry Name = stateTransition;
                     Entry Index = 11;
@@ -1019,7 +1019,7 @@ Sound Bank
 
                 Wave Entry
                 {
-                    Bank Name = Wave Bank;
+                    Bank Name = planetWaveBank;
                     Bank Index = 0;
                     Entry Name = background;
                     Entry Index = 2;
@@ -1066,7 +1066,7 @@ Sound Bank
 
                 Wave Entry
                 {
-                    Bank Name = Wave Bank;
+                    Bank Name = planetWaveBank;
                     Bank Index = 0;
                     Entry Name = aliensnarl;
                     Entry Index = 0;

@@ -16,8 +16,6 @@ namespace FinalProject
         float rotationRate;
         float rotationAngle;
         
-        public BoundingSphere bs;
-        
         float time = 0.0f;
         const float TIME_TO_LIVE = 10.0f;
 
@@ -40,8 +38,6 @@ namespace FinalProject
             
             this.rotationRate = (float)(position.Y*.001);
             this.rotationAngle = 0.0f;
-
-            bs = new BoundingSphere(initialPosition, 6f);
         }
         
         public override void Update(GameTime gameTime)
@@ -52,7 +48,6 @@ namespace FinalProject
 
             position+= direction;
             rotationAngle += rotationRate;
-            bs.Center = position;
 
             base.Update(gameTime);
         }
@@ -88,20 +83,6 @@ namespace FinalProject
             Matrix rotation = Matrix.CreateFromYawPitchRoll(rotationAngle, rotationAngle, rotationAngle);
             Matrix scale = Matrix.CreateScale(.5f);
             return meshTransform * scale * rotation * translation;
-        }
-
-        public bool CollidesWith(BoundingSphere bs)
-        {
-            // Loop through each ModelMesh in both objects and compare
-            // all bounding spheres for collisions
-            if (this.bs.Intersects(bs))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
     }
 }

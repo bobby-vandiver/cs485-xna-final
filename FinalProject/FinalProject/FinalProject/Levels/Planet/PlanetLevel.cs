@@ -216,7 +216,8 @@ namespace FinalProject
         {
             if (bombard.newAstroidSound())
             {
-                //audio.PlayCue("crashingAstroid");
+               // audio.planetPlayCue("crashingastroid");
+                
             }
 
             bombard.Update(gameTime);
@@ -297,7 +298,7 @@ namespace FinalProject
 
         private void RemoveLaserBeam()
         {   //takeout take out
-            Console.WriteLine("Removing laser beam...");
+            //Console.WriteLine("Removing laser beam...");
             laserBeam.IsAlive = false;
             laserBeam = null;
         }
