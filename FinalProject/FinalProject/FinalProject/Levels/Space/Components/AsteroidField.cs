@@ -158,7 +158,6 @@ namespace FinalProject
                     times_hit++;
                 }
             }
-
         }
 
         private void CheckBulletCollisions()
