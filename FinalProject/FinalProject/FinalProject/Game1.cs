@@ -51,6 +51,7 @@ namespace FinalProject
             graphics = new GraphicsDeviceManager(this);
             //graphics.PreferredBackBufferWidth = 1600;
             //graphics.PreferredBackBufferHeight = 900;
+            graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
             currentGameState = GameState.Start;
         }
@@ -217,7 +218,7 @@ namespace FinalProject
             switch (currentGameState)
             {
                 case GameState.Start:
-                    message = "Press enter to start.\nMove through the asteroids and kill the aliens!";
+                    message = "Press enter to start.";
                     position = CalculateTextCenterPosition(message);
                     DrawString(message, position);
                     break;
