@@ -102,6 +102,7 @@ namespace FinalProject
                 {
                     ship.col = new Vector3(1, 0, 0);
                     status = "HIT!";
+                    Explode = true;
                 }
              }
             if (loop_timer%30 == 0)
@@ -114,7 +115,6 @@ namespace FinalProject
                     {
                         asteroids_killed++;
                         GenExplosionField(asteroids[i].position);
-                        Explode = true;
                         GenAsteroid(i);
                         asteroids[i].alive = false;
                         bullets[0].alive = false;
