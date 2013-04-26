@@ -18,10 +18,9 @@ namespace FinalProject
         float asteroidSpeed = .03f;
         public Boolean alive;
         Model model;
-        public Matrix worldHolder = Matrix.Identity;
         Matrix rotation = Matrix.Identity;
         public Matrix world = Matrix.Identity;
-        Random r;
+        
         public Asteroid(Model model, Vector3 randomPoint, Camera camera)
             : base(model)
         {
@@ -38,6 +37,7 @@ namespace FinalProject
             world = Matrix.CreateTranslation(position);
             bs = new BoundingSphere(firstPosition, 1.5f);
         }
+
         public override void Update(GameTime gameTime)
         {
             // TODO: Add your update code here
@@ -74,17 +74,19 @@ namespace FinalProject
                 }
             }
         }
+        
         // Returns a matrix for the asteroids current position
         protected override Matrix GetWorld(Matrix meshTransform, Camera camera)
         {
             Matrix scale = Matrix.CreateScale(2f);
-            worldHolder = meshTransform * scale * rotation * world;
-            return worldHolder;
+            return meshTransform * scale * rotation * world;
         }
+
         protected override BoundingSphere GetBoundingSphere()
         {
             return new BoundingSphere(position, 3f);
         }
+
         public bool CollidesWith(BoundingSphere bs)
         {
             // Loop through each ModelMesh in both objects and compare
