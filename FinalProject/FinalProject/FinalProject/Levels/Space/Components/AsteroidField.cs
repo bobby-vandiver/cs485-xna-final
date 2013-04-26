@@ -24,17 +24,23 @@ namespace FinalProject
         string status="";
 
         public Boolean game_over = false;
-        const int A_COUNT = 50;
-        const int B_COUNT = 10;
+        
+        const int ASTEROID_COUNT = 50;
+        const int SCATTER_COUNT = 10;
+        
         public Asteroid[] asteroids;
         public Explosions[] explosions;
+        
         Boolean Explode = false;
         Bullet bullet;
-        Model a1;
-        Model a2;
+
+        Model smallAsteroidModel;
+        Model largeAsteroidModel;
+
         Texture2D backgroundTexture;
         float maxHeight;
-        Camera cam;
+        
+        Camera camera;
 
         BasicEffect basicEffect;
         SpriteBatch spriteBatch;
@@ -42,11 +48,11 @@ namespace FinalProject
         Spaceship ship;
         HUD hud;
 
-        public AsteroidField(Game game,Camera camera, float maxHeight, HUD hud)
+        public AsteroidField(Game game, Camera camera, float maxHeight, HUD hud)
             : base(game)
         {
             this.hud = hud;
-            cam = camera;
+            this.camera = camera;
             this.maxHeight = maxHeight;
         }
         public override void Initialize()
@@ -62,14 +68,14 @@ namespace FinalProject
             font = (SpriteFont)Game.Services.GetService(typeof(SpriteFont));
 
             Model spaceshipmodel = Game.Content.Load<Model>(@"Models\spaceship");
-            ship = new Spaceship(spaceshipmodel, cam);
+            ship = new Spaceship(spaceshipmodel, camera);
 
             // Load textures
             backgroundTexture = Game.Content.Load<Texture2D>(@"Backgrounds\stars");
             
             //load asteroids one for large, one for small
-            a1 = Game.Content.Load<Model>(@"Models\asteroid1");
-            a2 = Game.Content.Load<Model>(@"Models\asteroid");
+            smallAsteroidModel = Game.Content.Load<Model>(@"Models\asteroid1");
+            largeAsteroidModel = Game.Content.Load<Model>(@"Models\asteroid");
             
             GenerateAsteroidField();
             
@@ -122,10 +128,10 @@ namespace FinalProject
 
         private void UpdateAsteroids(GameTime gameTime)
         {
-            for (int i = 0; i < A_COUNT; i++)
+            for (int i = 0; i < ASTEROID_COUNT; i++)
             {
                 asteroids[i].Update(gameTime);
-                if (asteroids[i].world.Translation.Z > (cam.Position.Z + 100))
+                if (asteroids[i].world.Translation.Z > (camera.Position.Z + 100))
                 {
                     asteroids[i].alive = false;
                     GenerateAsteroid(i);
@@ -142,7 +148,7 @@ namespace FinalProject
         private void CheckShipCollisions()
         {
             // Check for collisions with the ship
-            for (int i = 0; i < A_COUNT; i++)
+            for (int i = 0; i < ASTEROID_COUNT; i++)
             {
                 if (asteroids[i].Collides(ship))
                 {
@@ -160,7 +166,7 @@ namespace FinalProject
         private void CheckBulletCollisions()
         {
             // Check for collisions with bullet
-            for (int i = 0; i < A_COUNT && bullet != null; i++)
+            for (int i = 0; i < ASTEROID_COUNT && bullet != null; i++)
             {
                 if (asteroids[i].Collides(bullet))
                 {
@@ -170,7 +176,7 @@ namespace FinalProject
                     bullet.IsAlive = false;
                     status = "ASTEROID HIT!";
 
-                    //GenExplosionField(asteroids[i].position);
+                    //GenerateExplosionField(asteroids[i].position);
                     //Explode = true;
                 }
             }
@@ -178,9 +184,12 @@ namespace FinalProject
 
         private void UpdateExplosions(GameTime gameTime)
         {
-            for (int i = 0; i < B_COUNT; i++)
+            if (explosions == null)
+                return;
+
+            for (int i = 0; i < SCATTER_COUNT; i++)
             {
-                GenerateExplosionField(new Vector3(0, 0, 100));
+                //GenerateExplosionField(new Vector3(0, 0, 100));
                 if (Explode == true && explosions[i] != null)
                 {
                     explosions[i].Update(gameTime);
@@ -204,7 +213,7 @@ namespace FinalProject
         private void CreateBullet()
         {
             if(bullet == null || !bullet.IsAlive)
-                bullet = new Bullet(a2, cam.Position, cam);
+                bullet = new Bullet(largeAsteroidModel, camera.Position, camera);
         }
 
         public override void Draw(GameTime gameTime)
@@ -220,7 +229,7 @@ namespace FinalProject
             DrawAsteroidField();
             //DrawExplosionField();
             
-            ship.Draw(cam);
+            ship.Draw(camera);
 
             base.Draw(gameTime);
         }
@@ -228,7 +237,7 @@ namespace FinalProject
         private void DrawBullet()
         {
             if (bullet != null)
-                bullet.Draw(cam);
+                bullet.Draw(camera);
         }
 
         private void DrawBackground()
@@ -252,44 +261,44 @@ namespace FinalProject
         
         private void DrawAsteroidField()
         {
-            for(int i = 0; i<A_COUNT;i++)
+            for(int i = 0; i<ASTEROID_COUNT;i++)
             {
-                    asteroids[i].Draw(cam);
+                    asteroids[i].Draw(camera);
             }
         }
 
         private void DrawExplosionField()
         {
-            for (int i = 0; i < B_COUNT; i++)
+            for (int i = 0; i < SCATTER_COUNT && explosions != null; i++)
             {
-                explosions[i].Draw(cam);
+                explosions[i].Draw(camera);
             }
         }
 
         private void GenerateAsteroidField()
         {
-            asteroids = new Asteroid[A_COUNT+1];
-            for (int i = 0; i < A_COUNT; i++)
+            asteroids = new Asteroid[ASTEROID_COUNT+1];
+            for (int i = 0; i < ASTEROID_COUNT; i++)
             {
                 Vector3 placement = GetRandomPoint();
-                asteroids[i] = new Asteroid(a2, placement, cam);   
+                asteroids[i] = new Asteroid(largeAsteroidModel, placement, camera);   
             }
         }
 
         private void GenerateExplosionField(Vector3 startPos)
         {
-            explosions = new Explosions[B_COUNT + 1];
-            for (int i = 0; i < B_COUNT; i++)
+            explosions = new Explosions[SCATTER_COUNT + 1];
+            for (int i = 0; i < SCATTER_COUNT; i++)
             {
                 Vector3 placement = startPos;
-                explosions[i] = new Explosions(a2, placement, cam);
+                explosions[i] = new Explosions(largeAsteroidModel, placement, camera);
             }
         }
 
         private void GenerateAsteroid(int index)
         {
             Vector3 placement = GetRandomPoint();
-            asteroids[index] = new Asteroid(a2, placement, cam);
+            asteroids[index] = new Asteroid(largeAsteroidModel, placement, camera);
         }
 
 
@@ -307,8 +316,8 @@ namespace FinalProject
 
             // Set matrices
             basicEffect.World = Matrix.Identity;
-            basicEffect.View = cam.View;
-            basicEffect.Projection = cam.Projection;
+            basicEffect.View = camera.View;
+            basicEffect.Projection = camera.Projection;
             // Enable lighting
             basicEffect.LightingEnabled = true;
 
