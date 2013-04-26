@@ -60,6 +60,12 @@ namespace FinalProject
         Vector3 tempDirection;
         Vector3 tempPosition;
         Vector3 tempUp;
+
+        // Hack to fix the shake bug
+        float tempYaw;
+        float tempPitch;
+        float tempRoll;
+
         bool test = false;
 
         Camera camera;
@@ -123,6 +129,11 @@ namespace FinalProject
                     tempPosition = camera.Position;
                     tempDirection = camera.Direction;
                     tempUp = camera.Up;
+
+                    tempPitch = camera.Pitch;
+                    tempRoll = camera.Roll;
+                    tempYaw = camera.Yaw;
+
                     test = true;
                 }
                 if (intensity > .6f)
@@ -148,9 +159,15 @@ namespace FinalProject
             if ((milliseconds > (previousMilliseconds + 200) && test))
             {
                 audio.PlayCue("explosion");
+
                 camera.Direction = tempDirection;
                 camera.Position = tempPosition;
                 camera.Up = tempUp;
+
+                camera.Yaw = tempYaw;
+                camera.Pitch = tempPitch;
+                camera.Roll = tempRoll;
+
                 test = false;
                 isShaking = false;
                 shake[0] = false;
