@@ -174,8 +174,8 @@ namespace FinalProject
                     bullet.IsAlive = false;
                     status = "ASTEROID HIT!";
 
-                    //GenerateExplosionField(asteroids[i].position);
-                    //Explode = true;
+                    GenerateExplosionField(asteroids[i].position);
+                    Explode = true;
                 }
             }
         }
@@ -187,7 +187,7 @@ namespace FinalProject
 
             for (int i = 0; i < FRAGMENT_COUNT; i++)
             {
-                //GenerateExplosionField(new Vector3(0, 0, 100));
+                GenerateExplosionField(new Vector3(0, 0, 100));
                 if (Explode == true && explosions[i] != null)
                 {
                     explosions[i].Update(gameTime);
@@ -225,7 +225,7 @@ namespace FinalProject
 
             DrawBullet();
             DrawAsteroidField();
-            //DrawExplosionField();
+            DrawExplosionField();
             
             ship.Draw(camera);
 
