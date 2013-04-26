@@ -47,6 +47,7 @@ namespace FinalProject
 
         public Game1()
         {
+            //takeout take out
             graphics = new GraphicsDeviceManager(this);
             //graphics.PreferredBackBufferWidth = 1600;
             //graphics.PreferredBackBufferHeight = 900;
@@ -187,6 +188,9 @@ namespace FinalProject
 
         private void LoadLevel()
         {
+            //takeout take out
+            //currentLevel = 1;
+
             // Not the best way to do this, but for now it works...
             switch (currentLevel)
             {

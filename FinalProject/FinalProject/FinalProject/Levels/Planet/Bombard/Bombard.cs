@@ -24,10 +24,10 @@ namespace FinalProject
         Vector3 location;
         
         //Collision Position 
-        public Vector3[] collisionPosition = new Vector3[5];
+        public Vector3[] collisionPosition = new Vector3[15];
 
         public float intensity;
-
+        Game game;
         //Texture for asteroid ----- might just light and not apply a texture-- in progress
         Texture2D texture;
     
@@ -38,7 +38,7 @@ namespace FinalProject
         float i = 195;
 
         float speed = 10;
-
+        Audio audio;
 
         public float milliseconds;
         float previousMilliseconds;
@@ -49,7 +49,7 @@ namespace FinalProject
 
         //Used for size of the asteroid
         float size = 0;
-
+        public float spreadRadius = 0;
         //For shake function to shake camera and return it back to original position
         bool[] shake = new bool[7];
         int shakeIndex = 1;
@@ -57,7 +57,7 @@ namespace FinalProject
         Vector3 tempPosition;
         Vector3 tempUp;
         bool test = false;
-
+        bool startSound = false;
         Camera camera;
         HUD hud;
         #endregion
@@ -74,11 +74,17 @@ namespace FinalProject
             this.effect = effect;
             this.smokeTexture = smokeTexture;
             Vector3 rand = RandomPosition();
+            audio = new Audio(game);
+
         }
+
+
+        
 
         //Random position for asteroid            
         protected Vector3 RandomPosition()
         {
+           
 
             // Find a random point in the world
             float x = (float)randomNumber.NextDouble() * (terrain.MaxX - terrain.MinX) + terrain.MinX;
@@ -92,24 +98,22 @@ namespace FinalProject
 
 
         }
-        
-        protected void DrawSmoke()
+        public bool newAstroidSound()
         {
-
-            
-            
+            startSound = false;
+            return !startSound;
         }
-        
+             
         //Create new asteroid when hits the ground
         protected void NewAsteroid(Camera camera)
         {
             //Console.WriteLine(intensity);
             if (i < -5)
             {
-                
+                startSound = true;
                 location = RandomPosition();
                 i = 195;
-             
+                spreadRadius = 0;
                 shake[0] = true;
                 shake[1] = true;
                 if (!test)
@@ -119,10 +123,10 @@ namespace FinalProject
                     tempUp = camera.Up;
                     test = true;
                 }
-                if (intensity > .6f)
+                if (intensity > .8f)
                 {
                     hud.RedHealth();
-                    ShakeCamera(camera);
+                   // ShakeCamera(camera);
                 }
              
             }     
@@ -198,9 +202,10 @@ namespace FinalProject
         public void Update(GameTime gameTime)
         {
 
+
             this.milliseconds += gameTime.ElapsedGameTime.Milliseconds;
             NewAsteroid(this.camera);
-            ShakeCamera(this.camera);
+            //ShakeCamera(this.camera);
             intensity = (float)(1 - (Math.Sqrt(Math.Pow(((double)camera.Position.X - (double)collisionPosition[0].X), 2) + Math.Pow(((double)camera.Position.Z - (double)collisionPosition[0].Z), 2)))/600);
             //Console.WriteLine(camera.intensity);
             camera.intensity = intensity;
@@ -208,15 +213,18 @@ namespace FinalProject
             
         }
 
-        private void spreadCollision() 
+
+
+
+        private void spreadCollision()
         {
-              for (int i = 1; i < collisionPosition.Length; i++)
-                collisionPosition[i] =  new Vector3(collisionPosition[0].X +(float)randomNumber.NextDouble(),
-                    (-20),
-                   collisionPosition[0].X +(float)randomNumber.NextDouble()
+            for (int i = 1; i < collisionPosition.Length; i++)
+                collisionPosition[i] = new Vector3(collisionPosition[0].X - 15,
+                    (20)+ (float)randomNumber.NextDouble(),
+                   collisionPosition[0].X - 15
                 );
 
-           
+
         }
 
         public void Draw()
@@ -231,12 +239,26 @@ namespace FinalProject
             Matrix world = Matrix.CreateRotationZ(0) * Matrix.CreateScale(size - (i * .05f)) *
             Matrix.CreateTranslation(location.X - i, i-= x, location.Z - i);
 
-            collisionPosition[0].X = location.X - 15;
-            collisionPosition[0].Y = 25; 
-            collisionPosition[0].Z = location.Z - 15;
-            spreadCollision();
+
+            spreadRadius += 1f;
+
+            for (int ii = 0; ii < collisionPosition.Length; ii++)
+                collisionPosition[ii] = new Vector3(
+                    location.X - 200 + spreadRadius + ((spreadRadius/2) * (float)randomNumber.NextDouble()),
+                    5,
+                    location.Z - 200 + spreadRadius + ((spreadRadius/2) * (float)randomNumber.NextDouble())
+                    );
+
+            Console.WriteLine((float)randomNumber.NextDouble());
+
+
+
+
+
+          
             //transforms camera position in to a Vector4 so the effect file can use
             Vector4 cameraPosition = new Vector4(cPosition, 0);
+
 
             // Set the effect parameters
             effect.Parameters["World"].SetValue(world);
@@ -245,26 +267,7 @@ namespace FinalProject
             effect.Parameters["Texture"].SetValue(texture);
 
         
-            ////draw model 
-            //foreach (ModelMesh modelMesh in model.Meshes)
-            //{
-            //    foreach (ModelMeshPart modelPart in modelMesh.MeshParts)
-            //    {
-            //        modelPart.Effect = effect; // apply your shader code
-            //        modelMesh.Draw();
-            //    }
-            //}
-
-            //if (i < 40)
-            //{
-            //    world = Matrix.CreateRotationZ(0) * Matrix.CreateScale(size - (i * .05f)) *
-            //    Matrix.CreateTranslation(location.X - 15, 20-i, location.Z - 15);
-            //    // Set the effect parameters
-            //    effect.Parameters["World"].SetValue(world);
-            //    effect.Parameters["View"].SetValue(View);
-            //    effect.Parameters["Projection"].SetValue(Projection);
-            //    effect.Parameters["Texture"].SetValue(smokeTexture);
-            //}
+    
 
             //draw model 
             foreach (ModelMesh modelMesh in model.Meshes)

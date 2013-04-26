@@ -214,8 +214,12 @@ namespace FinalProject
 
         private void UpdateBombard(GameTime gameTime)
         {
+            if (bombard.newAstroidSound())
+            {
+                //audio.PlayCue("crashingAstroid");
+            }
+
             bombard.Update(gameTime);
-            collisionBillboard.pos = bombard.collisionPosition[0];
             collisionBillboard = new CollisionBillboard(GraphicsDevice, Game.Content,
                       Game.Content.Load<Texture2D>(@"Textures\smoke"), new Vector2(50), bombard.collisionPosition);
         }
@@ -292,7 +296,7 @@ namespace FinalProject
         }
 
         private void RemoveLaserBeam()
-        {
+        {   //takeout take out
             Console.WriteLine("Removing laser beam...");
             laserBeam.IsAlive = false;
             laserBeam = null;
@@ -323,7 +327,8 @@ namespace FinalProject
         {
             foreach (Alien alien in aliens)
                 alien.Draw(camera);
-        }
+        }
+
         protected override bool LevelOver()
         {
             bool allAliensGone = aliens.Count == 0;

@@ -232,13 +232,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Videos\GameIntro1.wmv">
-      <Name>GameIntro1</Name>
-      <Importer>WmvImporter</Importer>
-      <Processor>VideoProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Models\asteroid1.x">
       <Name>asteroid1</Name>
       <Importer>XImporter</Importer>
@@ -250,7 +243,13 @@
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Audio\crashingAstroid.wav">
+      <Name>crashingAstroid</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Audio\SnakeAudio.xap">
       <Name>SnakeAudio</Name>
