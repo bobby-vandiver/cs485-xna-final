@@ -34,8 +34,7 @@ namespace FinalProject
         Boolean Explode = false;
         Bullet bullet;
 
-        Model smallAsteroidModel;
-        Model largeAsteroidModel;
+        Model asteroidModel;
 
         Texture2D backgroundTexture;
         float maxHeight;
@@ -74,8 +73,7 @@ namespace FinalProject
             backgroundTexture = Game.Content.Load<Texture2D>(@"Backgrounds\stars");
             
             //load asteroids one for large, one for small
-            smallAsteroidModel = Game.Content.Load<Model>(@"Models\asteroid1");
-            largeAsteroidModel = Game.Content.Load<Model>(@"Models\asteroid");
+            asteroidModel = Game.Content.Load<Model>(@"Models\asteroid");
             
             GenerateAsteroidField();
             
@@ -213,7 +211,7 @@ namespace FinalProject
         private void CreateBullet()
         {
             if(bullet == null || !bullet.IsAlive)
-                bullet = new Bullet(largeAsteroidModel, camera.Position, camera);
+                bullet = new Bullet(asteroidModel, camera.Position, camera);
         }
 
         public override void Draw(GameTime gameTime)
@@ -281,7 +279,7 @@ namespace FinalProject
             for (int i = 0; i < ASTEROID_COUNT; i++)
             {
                 Vector3 placement = GetRandomPoint();
-                asteroids[i] = new Asteroid(largeAsteroidModel, placement, camera);   
+                asteroids[i] = new Asteroid(asteroidModel, placement, camera);   
             }
         }
 
@@ -291,14 +289,14 @@ namespace FinalProject
             for (int i = 0; i < FRAGMENT_COUNT; i++)
             {
                 Vector3 placement = startPos;
-                explosions[i] = new Fragment(largeAsteroidModel, placement, camera);
+                explosions[i] = new Fragment(asteroidModel, placement, camera);
             }
         }
 
         private void GenerateAsteroid(int index)
         {
             Vector3 placement = GetRandomPoint();
-            asteroids[index] = new Asteroid(largeAsteroidModel, placement, camera);
+            asteroids[index] = new Asteroid(asteroidModel, placement, camera);
         }
 
 
