@@ -133,7 +133,7 @@ namespace FinalProject
                                 asteroids_killed++;
                                 GenAsteroid(i);
                                 asteroids[i].alive = false;
-                                bullets[0].alive = false;
+                                bullets[0].IsAlive = false;
                             }
                 }
                 for (int i = 0; i < A_COUNT; i++)
@@ -145,7 +145,7 @@ namespace FinalProject
                             asteroids[i].alive = false;
                             GenExplosionField(asteroids[i].position);
                             GenAsteroid(i);
-                            bullets[0].alive = false;
+                            bullets[0].IsAlive = false;
                         }     
                 }
                 score = (times_hit * -10) + (asteroids_killed * 30);
