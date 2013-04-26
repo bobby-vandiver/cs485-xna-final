@@ -102,7 +102,7 @@ namespace FinalProject
             bullets[0].Update(gameTime);
             for (int i = 0; i < A_COUNT; i++)
             {
-                if (asteroids[i].CollidesWith(ship.bs))
+                if (asteroids[i].Collides(ship))
                 {
                     audio.PlayCue("flashbang");
                     ship.col = new Vector3(1, 0, 0);
@@ -114,10 +114,11 @@ namespace FinalProject
              }
             for (int i = 0; i < A_COUNT; i++)
             {
-                        if (asteroids[i].CollidesWith(bullets[0].bs))
+                        if (asteroids[i].Collides(bullets[0]))
                         {
                             GenExplosionField(asteroids[i].position);
                             Explode = true;
+                            status = "ASTEROID HIT!";
                         }
             }
             if (loop_timer%30 == 0)
@@ -126,8 +127,9 @@ namespace FinalProject
                 status = "Warning! " + (20 - times_hit) + " hit before crash land";
                 for (int i = 0; i < A_COUNT; i++)
                 {
-                            if (asteroids[i].CollidesWith(bullets[0].bs))
+                            if (asteroids[i].Collides(bullets[0]))
                             {
+                                audio.PlayCue("flashbang");
                                 asteroids_killed++;
                                 GenAsteroid(i);
                                 asteroids[i].alive = false;
@@ -136,7 +138,7 @@ namespace FinalProject
                 }
                 for (int i = 0; i < A_COUNT; i++)
                 {
-                    if (asteroids[i].CollidesWith(ship.bs))
+                    if (asteroids[i].Collides(ship))
                         {
                             
                             status = "HIT!";
@@ -187,10 +189,7 @@ namespace FinalProject
             PrepareBasicEffectForDrawing3D();
             DrawBullet();
             DrawAsteroidField();
-            if (Explode == true)
-            {
-                DrawExplosionField();
-            }
+            DrawExplosionField();
             ship.Draw(cam);
             base.Draw(gameTime);
         }

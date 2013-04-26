@@ -36,7 +36,7 @@ namespace FinalProject
             dir = direction;
             firstPosition = position;
             world = Matrix.CreateTranslation(position);
-            bs = new BoundingSphere(firstPosition, 1f);
+            bs = new BoundingSphere(firstPosition, 1.5f);
         }
         public override void Update(GameTime gameTime)
         {
@@ -46,7 +46,7 @@ namespace FinalProject
             rotation *= Matrix.CreateFromYawPitchRoll(rot,
                             rot, rot);
             // Move model
-            bs.Center = position;
+            bs = new BoundingSphere(position, 1.5f);
             world *= Matrix.CreateTranslation(dir);
             base.Update(gameTime);
         }
@@ -80,6 +80,10 @@ namespace FinalProject
             Matrix scale = Matrix.CreateScale(2f);
             worldHolder = meshTransform * scale * rotation * world;
             return worldHolder;
+        }
+        protected override BoundingSphere GetBoundingSphere()
+        {
+            return new BoundingSphere(position, 3f);
         }
         public bool CollidesWith(BoundingSphere bs)
         {

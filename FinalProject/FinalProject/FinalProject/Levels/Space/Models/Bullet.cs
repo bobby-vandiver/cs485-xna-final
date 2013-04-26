@@ -34,15 +34,17 @@ namespace FinalProject
             dir = direction;
             firstPosition = position;
             world = Matrix.CreateTranslation(position);
-            bs = new BoundingSphere(firstPosition, 5f);
         }
         public override void Update(GameTime gameTime)
         {
             position += dir;
             rotation *= Matrix.CreateFromYawPitchRoll(0,0,rot);
-            bs.Center = position;
             world *= Matrix.CreateTranslation(dir);
             base.Update(gameTime);
+        }
+        protected override BoundingSphere GetBoundingSphere()
+        {
+            return new BoundingSphere(position, 1f);
         }
         public override void Draw(Camera camera)
         {
