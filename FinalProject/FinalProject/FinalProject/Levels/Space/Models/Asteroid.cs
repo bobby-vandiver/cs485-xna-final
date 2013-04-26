@@ -16,7 +16,6 @@ namespace FinalProject
         float rotationRate;
         float rotationAngle;
         
-        float time = 0.0f;
         float asteroidSpeed = .03f;
 
         public Boolean IsAlive;
@@ -39,8 +38,6 @@ namespace FinalProject
 
         public override void Update(GameTime gameTime)
         {
-            time += 5;
-
             position += direction;
             rotationAngle += rotationRate;
 
