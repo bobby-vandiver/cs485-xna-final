@@ -1,0 +1,94 @@
+======
+Genre:
+======
+
+	- FPS
+
+=======================
+Similar Games in Genre:
+=======================
+
+	- Halo
+
+	- Call of Duty
+
+	- Overwhelming number of the X-Box 360's Library
+
+======================
+Highlight of Features:
+======================
+
+	- Asteroids scatter into multiple smaller asteroids
+
+	- Camera shaking and asteroid bombardment
+
+	- Framework architecture
+
+===========
+Challenges:
+===========
+
+	- Alien model has a single bone making programmatic animation difficult
+
+		+ Simple sine wave movement (the model waddle)
+
+	- Asteroid explosion and scattering
+
+		+ TBD
+
+	- Asteroid bombardment - Getting them to enter world at dodgable pace and still look believable
+
+		+ Scaling and trial and error
+
+	- Manual merge hell
+
+		+ Better once everyone started drinking the Git Kool-aid
+
+==============
+Contributions:
+==============
+
+
+Frank:
+
+	- Asteroid bombardment
+
+		+ Dynamic starting position in the sky
+
+		+ Speed up as they get closer to the terrain
+
+		+ Custom shaders (smoke on the terrain at collision)
+
+	- Implemented camera shaking when asteroids collide near-by
+
+	- Mouse support for camera
+
+	- Implemented HUD (health bar and radar)
+
+	- Intro cut scene video
+
+Anthony:
+
+	- Space ship level
+
+		+ Implemented space ship specific camera functionality
+
+		+ Asteroids explode on collision and scatter smaller asteroids
+
+		+ Asteroids far from the player appear smaller
+
+Bobby:
+
+	- General framework/infrastructure architecture
+
+		+ State transistion hierarchy allows new levels to be easily "plugged in"
+
+	- Planet Level
+
+		+ Terrain generated from height map
+
+		+ Gun mechanics and collision detection
+
+		+ Aliens and (maybe) AI
+
+	
