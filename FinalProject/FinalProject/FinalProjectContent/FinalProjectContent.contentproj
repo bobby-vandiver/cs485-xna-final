@@ -14,7 +14,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -233,6 +232,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Videos\GameIntro1.wmv">
+      <Name>GameIntro1</Name>
+      <Importer>WmvImporter</Importer>
+      <Processor>VideoProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Models\asteroid1.x">
       <Name>asteroid1</Name>
       <Importer>XImporter</Importer>
@@ -245,15 +251,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Audio\AlienPlanetAudio.xap">
-      <Name>AlienPlanetAudio</Name>
-      <Importer>XactImporter</Importer>
-      <Processor>XactProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Audio\SnakeAudio.xap">
-      <Name>SnakeAudio</Name>
+    <Compile Include="Audio\FinalProject.xap">
+      <Name>FinalProject</Name>
       <Importer>XactImporter</Importer>
       <Processor>XactProcessor</Processor>
     </Compile>

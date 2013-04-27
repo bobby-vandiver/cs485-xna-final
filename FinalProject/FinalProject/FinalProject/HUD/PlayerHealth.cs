@@ -13,7 +13,6 @@ namespace FinalProject
     {
         public int playerHealth = 0;
         int maxHealth = 200;
-        int lowHealth = 20;
 
         public PlayerHealth()
         {
@@ -42,6 +41,11 @@ namespace FinalProject
         public void incrementPlayerHealth(int amount)
         {
             playerHealth += amount;
+        }
+
+        public bool IsPlayerDead()
+        {
+            return playerHealth <= 0;
         }
     }
 }

@@ -9,50 +9,43 @@ namespace FinalProject
     public class Asteroid : BasicModel
     {
         public Vector3 position;
-        Vector3 dir;
-        Camera cam;
-        float rot;
-        Vector3 firstPosition;
-        public BoundingSphere bs;
-        float time = 0.0f;
+        Vector3 initialPosition;
+
+        Vector3 direction;
+
+        float rotationRate;
+        float rotationAngle;
+        
         float asteroidSpeed = .03f;
-        public Boolean alive;
-        Model model;
-        public Matrix worldHolder = Matrix.Identity;
-        Matrix rotation = Matrix.Identity;
-        public Matrix world = Matrix.Identity;
-        Random r;
+
+        public Boolean IsAlive;
+        
         public Asteroid(Model model, Vector3 randomPoint, Camera camera)
             : base(model)
         {
-            alive = true;
-            this.model = model;
-            position = randomPoint;
-            this.cam = camera;
+            this.IsAlive = true;
+
+            this.initialPosition = randomPoint;
+            this.position = this.initialPosition;
+
             Random r = new Random();
-            Vector3 direction = new Vector3(0, 0,
-                position.Y*asteroidSpeed*(float)r.NextDouble());
-            rot = (float)(position.Y*.001);
-            dir = direction;
-            firstPosition = position;
-            world = Matrix.CreateTranslation(position);
-            bs = new BoundingSphere(firstPosition, 5f);
+            float randomZ = position.Y * asteroidSpeed * (float)r.NextDouble();
+            this.direction = new Vector3(0, 0, randomZ);
+
+            this.rotationRate = (float)(position.Y * .001);
+            this.rotationAngle = 0.0f;
         }
+
         public override void Update(GameTime gameTime)
         {
-            // TODO: Add your update code here
-            time += 5;
-            position+= dir;
-            rotation *= Matrix.CreateFromYawPitchRoll(rot,
-                            rot, rot);
-            // Move model
-            bs.Center = position;
-            world *= Matrix.CreateTranslation(dir);
+            position += direction;
+            rotationAngle += rotationRate;
+
             base.Update(gameTime);
         }
         public override void Draw(Camera camera)
         {
-            if (alive)
+            if (IsAlive)
             {
                 Matrix[] transforms = new Matrix[Model.Bones.Count];
                 Model.CopyAbsoluteBoneTransformsTo(transforms);
@@ -74,25 +67,14 @@ namespace FinalProject
                 }
             }
         }
+        
         // Returns a matrix for the asteroids current position
         protected override Matrix GetWorld(Matrix meshTransform, Camera camera)
         {
+            Matrix translation = Matrix.CreateTranslation(position);
+            Matrix rotation = Matrix.CreateFromYawPitchRoll(rotationAngle, rotationAngle, rotationAngle);
             Matrix scale = Matrix.CreateScale(2f);
-            worldHolder = meshTransform * scale * rotation * world;
-            return worldHolder;
-        }
-        public bool CollidesWith(BoundingSphere bs)
-        {
-            // Loop through each ModelMesh in both objects and compare
-            // all bounding spheres for collisions
-            if (this.bs.Intersects(bs))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return meshTransform * scale * rotation * translation;
         }
 
         protected override BoundingSphere GetBoundingSphere()

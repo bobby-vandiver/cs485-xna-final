@@ -66,7 +66,7 @@ namespace FinalProject
         {
             Position += Direction * movementSpeed;
             CheckDistanceTraveled();
-            //CheckTerrainCollision(terrain);
+            CheckTerrainCollision(terrain);
         }
         private void CheckDistanceTraveled()
         {
@@ -81,7 +81,7 @@ namespace FinalProject
         private void CheckTerrainCollision(Terrain terrain)
         {
             float minHeightAllowed = terrain.GetHeight(Position.X, Position.Z);
-            if (Position.Y <= minHeightAllowed)
+            if (Position.Y < minHeightAllowed)
             {
                 Console.WriteLine("Collided with the ground...");
                 IsAlive = false;

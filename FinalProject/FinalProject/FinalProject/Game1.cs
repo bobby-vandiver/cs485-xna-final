@@ -37,7 +37,7 @@ namespace FinalProject
 
         #region Level State Variables
         // Each level will use this to communicate its state so the Game object can manage transitions
-        public enum LevelState { Start, Play, End }
+        public enum LevelState { Instructions, Start, Play, End }
         public LevelState CurrentLevelState;
         
         const int LEVEL_COUNT = 2;
@@ -47,11 +47,7 @@ namespace FinalProject
 
         public Game1()
         {
-            //takeout take out
             graphics = new GraphicsDeviceManager(this);
-            //graphics.PreferredBackBufferWidth = 1600;
-            //graphics.PreferredBackBufferHeight = 900;
-            graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
             currentGameState = GameState.Start;
         }
@@ -112,8 +108,14 @@ namespace FinalProject
                     // Wait until the player presses "Enter" to start the first level
                     if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                     {
-                        videoPlayer.Play(video);
-                        videoPlaying = true;
+                        if (!videoPlaying)
+                        {
+                            audio.PlayCue("stateTransition");
+                            audio.PlayBackgroundMusic("DigitalStream");
+
+                            videoPlayer.Play(video);
+                            videoPlaying = true;
+                        }
                     }
 
                     UpdateVideo();
@@ -146,24 +148,32 @@ namespace FinalProject
             videoPlayer.Stop();
             videoPlaying = false;
 
+            audio.StopBackgroundMusic();
+
             // Start the game when the video is over
             currentGameState = GameState.Play;
             currentLevel = 0;
-            CurrentLevelState = LevelState.Start;
-
-            audio.PlayCue("stateTransition");
+            CurrentLevelState = LevelState.Instructions;
         }
 
         private void UpdateLevelState()
         {
             switch (CurrentLevelState)
             {
+                case LevelState.Instructions:
+                    if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                        CurrentLevelState = LevelState.Start;
+                    break;
+
                 case LevelState.Start:
+                    audio.PlayCue("stateTransition");
+
                     // Load the level component
                     LoadLevel();
                     CurrentLevelState = LevelState.Play;
+
                     break;
-                
+
                 case LevelState.Play:
                     //TODO: Add pause support -- maybe
                     break;
@@ -174,7 +184,7 @@ namespace FinalProject
 
                     // Progress to the next level
                     currentLevel++;
-                    CurrentLevelState = LevelState.Start;
+                    CurrentLevelState = LevelState.Instructions;
                     
                     // See if we've reached the end of the game
                     if (currentLevel >= LEVEL_COUNT)
@@ -189,9 +199,6 @@ namespace FinalProject
 
         private void LoadLevel()
         {
-            //takeout take out
-            //currentLevel = 1;
-
             // Not the best way to do this, but for now it works...
             switch (currentLevel)
             {
@@ -224,6 +231,7 @@ namespace FinalProject
                     break;
 
                 case GameState.Play:
+                    DrawLevelMessages();
                     break;
 
                 case GameState.End:
@@ -236,6 +244,22 @@ namespace FinalProject
             DrawVideoFrame();
 
             base.Draw(gameTime);
+        }
+
+        private void DrawLevelMessages()
+        {
+            string[] instructions =
+                {
+                    "Dodge or destroy the asteroids!",
+                    "Kill all the aliens and dodge the falling asteroids!"
+                };
+
+            if (CurrentLevelState == LevelState.Instructions)
+            {
+                string message = instructions[currentLevel];
+                Vector2 position = CalculateTextCenterPosition(message);
+                DrawString(message, position);
+            }
         }
 
         private void StartingMessage()
