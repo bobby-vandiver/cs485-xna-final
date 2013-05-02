@@ -232,13 +232,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Videos\GameIntro1.wmv">
-      <Name>GameIntro1</Name>
-      <Importer>WmvImporter</Importer>
-      <Processor>VideoProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Models\asteroid1.x">
       <Name>asteroid1</Name>
       <Importer>XImporter</Importer>
